@@ -1,0 +1,152 @@
+/* Exercise kinds: grid (robo-), gap (gap-), trace (trace-), blocks (blocks-). Tokens from tokens.css, the code panel from app.css. */
+
+/* Robot board, shared with the explanation visuals */
+.robo-board { align-self: center; width: min(100%, calc(var(--cols) * var(--cell) + 8px)); padding: 4px; border-radius: 14px; background: var(--surface); }
+.robo-grid { position: relative; display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); grid-template-rows: repeat(var(--rows), minmax(0, 1fr)); aspect-ratio: var(--cols) / var(--rows); }
+.robo-cell { position: relative; display: grid; place-items: center; min-width: 0; min-height: 0; }
+.robo-cell > *, .robo-cell::after { grid-area: 1 / 1; }
+.robo-tile { position: absolute; inset: 2px; border-radius: 9px; background: #fff; box-shadow: inset 0 0 0 1px var(--border); transition: background 0.2s, box-shadow 0.2s; }
+.robo-cell > svg, .robo-star { position: relative; }
+.robo-cell.is-wall .robo-tile { background: var(--ink); box-shadow: inset 0 0 0 5px var(--ink), inset 0 0 0 6.5px #ffffff2e; }
+.robo-cell.is-goal .robo-tile { background: var(--accent-soft); box-shadow: inset 0 0 0 1.5px var(--accent-line); }
+.robo-cell.is-trail:not(.is-goal)::after { content: ''; position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--accent-line); animation: robo-dot 0.25s ease-out; }
+@keyframes robo-dot { from { transform: scale(0); } }
+.robo-cell.is-hit .robo-tile { box-shadow: inset 0 0 0 5px var(--ink), 0 0 0 2.5px var(--bad-fill); animation: shake 0.3s; }
+.robo-cell.is-end .robo-tile, .robo-cell.is-miss .robo-tile { background: var(--bad-soft); box-shadow: inset 0 0 0 2px var(--bad-fill); }
+.robo-star { display: grid; place-items: center; width: 100%; height: 100%; transition: transform 0.25s, opacity 0.25s; }
+.robo-star.is-got { transform: scale(0.3); opacity: 0; }
+.robo-board.is-ok .robo-cell.is-trail::after { background: var(--ok-line); }
+.robo-board.is-ok .robo-cell.is-goal .robo-tile { background: var(--ok-soft); box-shadow: inset 0 0 0 2px var(--ok); }
+.robo-board.is-ok .robo-flag-cloth { fill: var(--ok); }
+.robo-board.is-bad .robo-cell.is-trail::after { background: var(--bad-line); }
+
+.robo-bot { position: absolute; left: 0; top: 0; z-index: 2; display: grid; place-items: center; width: calc(100% / var(--cols)); height: calc(100% / var(--rows)); pointer-events: none; transition: transform 0.28s cubic-bezier(.3,.7,.3,1); }
+.robo-bot > * { grid-area: 1 / 1; }
+.robo-body { display: block; width: 68%; height: 68%; }
+.robo-dir { position: relative; width: 100%; height: 100%; transition: transform 0.25s cubic-bezier(.3,.7,.3,1); }
+.robo-dir i { position: absolute; left: 50%; top: 2%; transform: translateX(-50%); width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 6px solid var(--accent-strong); }
+.robo-eyes { transition: transform 0.2s; }
+.robo-bot.is-bump .robo-body { animation: robo-bump 0.34s ease-out; }
+@keyframes robo-bump {
+  35% { transform: translate(calc(var(--bx) * 24%), calc(var(--by) * 24%)); }
+  65% { transform: translate(calc(var(--bx) * -6%), calc(var(--by) * -6%)); }
+}
+.robo-bot.is-win .robo-body { animation: robo-hop 0.36s cubic-bezier(.3,1.5,.5,1); }
+@keyframes robo-hop { 45% { transform: translateY(-16%) scale(1.06); } }
+
+/* Grid exercise */
+.robo { position: relative; display: flex; flex-direction: column; gap: 6px; }
+.task-inner:has(> .robo) { padding: 8px; }
+.task:has(.robo) { gap: 12px; }
+/* Hidden copies of long programs that size the strip; see useBoardSize in grid.tsx. */
+.robo-ghost { position: absolute; top: 0; left: 0; right: 0; visibility: hidden; pointer-events: none; }
+.robo-goal { display: inline-flex; align-items: center; height: 30px; padding: 0 10px; border-radius: 999px; background: var(--surface); color: var(--text-2); font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.robo-goal.is-bad { background: var(--bad-soft); color: var(--bad); }
+.robo-bar { display: flex; align-items: center; gap: 10px; min-height: 44px; }
+.robo-status { flex: 1; min-width: 0; font-size: 14px; font-weight: 500; line-height: 1.35; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.robo-status svg { display: inline-block; vertical-align: -3px; margin-right: 5px; }
+.robo-status .is-ok { color: var(--ok); font-weight: 600; }
+.robo-status .is-bad { color: var(--bad); font-weight: 600; }
+.robo-run { flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 16px 0 12px; border-radius: 12px; border: 1px solid var(--border-deep); background: #fff; color: var(--text); font-size: 14px; font-weight: 600; cursor: pointer; transition: transform 0.08s, background 0.15s; }
+.robo-run svg { color: var(--accent-strong); fill: var(--accent-strong); }
+.robo-run:active { transform: scale(0.97); background: var(--surface); }
+.robo-run:disabled { color: var(--text-3); cursor: default; transform: none; background: #fff; }
+.robo-run:disabled svg { color: var(--text-3); fill: var(--text-3); }
+.robo-run.is-stop { border-color: var(--accent); color: var(--accent-deep); background: var(--accent-soft); }
+.robo-stop { width: 10px; height: 10px; border-radius: 2px; background: currentColor; margin: 0 3px; }
+.robo-prog { display: flex; flex-wrap: wrap; align-content: flex-start; align-items: center; gap: 6px; min-height: 56px; padding: 6px; overflow-y: auto; scrollbar-width: thin; border-radius: 12px; background: var(--surface); cursor: text; }
+.robo-empty { padding: 0 6px; font-size: 14px; color: var(--text-3); }
+.robo-chip { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border-radius: 11px; border: 1px solid var(--border-deep); background: #fff; color: var(--ink); cursor: pointer; transition: transform 0.08s, background 0.15s, border-color 0.15s, color 0.15s; animation: robo-in 0.18s ease-out; }
+@keyframes robo-in { from { transform: scale(0.7); opacity: 0; } }
+.robo-chip:active { transform: scale(0.93); }
+.robo-chip.is-now { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-deep); box-shadow: inset 0 0 0 1px var(--accent); }
+.robo-chip.is-fail { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); box-shadow: inset 0 0 0 1px var(--bad); animation: shake 0.3s; }
+.robo-chip.is-ok { border-color: var(--ok-line); color: var(--ok); }
+.robo-caret { align-self: center; width: 2px; height: 26px; margin: 0 3px; border-radius: 1px; background: var(--accent); }
+.robo-rep { flex: 0 1 auto; max-width: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 4px 4px 4px 8px; border-radius: 12px; border: 1px solid var(--border-deep); border-left: 4px solid var(--ink); background: #fff; cursor: pointer; transition: border-color 0.15s; animation: robo-in 0.18s ease-out; }
+.robo-rep.is-open { border-color: var(--accent); border-left-color: var(--accent); box-shadow: 0 0 0 3px #246fff1f; }
+.robo-rep.is-now { border-color: var(--accent-line); border-left-color: var(--accent); }
+.robo-rep-head { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; font-size: 15px; font-weight: 600; }
+.robo-rep-head > svg { color: var(--text-2); flex: none; }
+.robo-stepper { display: inline-flex; align-items: center; gap: 2px; border-radius: 12px; background: var(--surface); }
+.robo-stepper button { width: 44px; height: 44px; padding: 0; border: 0; border-radius: 11px; background: #fff; box-shadow: inset 0 0 0 1px var(--border-deep); color: var(--text); font-size: 20px; font-weight: 600; line-height: 1; cursor: pointer; }
+.robo-stepper button:disabled { color: var(--text-3); background: transparent; box-shadow: none; cursor: default; }
+.robo-stepper button:not(:disabled):active { background: var(--surface); transform: scale(0.94); }
+.robo-stepper b { min-width: 56px; padding: 0 4px; text-align: center; font-size: 14px; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.robo-stepper b.is-iter { color: var(--accent-deep); }
+.robo-keys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.robo-keys[data-n='5'] { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.robo-key { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; min-height: 46px; padding: 2px; border-radius: 13px; border: 1px solid var(--border-deep); background: #fff; color: var(--text); cursor: pointer; transition: transform 0.08s, background 0.15s, border-color 0.15s; }
+.robo-key span { font-size: 11.5px; line-height: 1.2; font-weight: 500; color: var(--text-2); white-space: nowrap; }
+.robo-key:active { transform: scale(0.95); background: var(--surface); }
+.robo-key:disabled { opacity: 0.4; cursor: default; transform: none; background: #fff; }
+.robo-key.is-on { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-deep); }
+.robo-key.is-on span { color: var(--accent-deep); }
+
+/* Gap: blanks inside the code panel, tokens below */
+.gap { display: flex; flex-direction: column; gap: 14px; }
+.gap-code .code-row.has-blank { align-items: center; min-height: 52px; }
+.gap-blank { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; height: 44px; margin: 0 2px; padding: 0 10px; vertical-align: middle; border-radius: 9px; border: 1.5px dashed #7a82a3; background: #ffffff0a; color: inherit; font: inherit; line-height: 1; cursor: pointer; transition: background 0.15s, border-color 0.15s; }
+.gap-blank:not(.is-empty) { border-style: solid; border-color: #ffffff38; background: #ffffff14; animation: gap-in 0.2s ease-out; }
+@keyframes gap-in { from { transform: scale(0.85); } }
+.gap-blank.is-focus { border-style: solid; border-color: #6f9cff; background: #246fff3d; box-shadow: 0 0 0 3px #246fff2e; }
+.gap-blank.is-ok { border: 1.5px solid #6fd08e; background: #3fb76545; }
+.gap-blank.is-bad { border: 1.5px solid #f3c34b; background: #f3c34b40; animation: shake 0.3s; }
+.gap-bank { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.gap-token { justify-content: center; min-width: 56px; min-height: 44px; transition: transform 0.08s, opacity 0.15s; }
+.gap-token:active { transform: scale(0.95); }
+.gap-token code { font-family: var(--font-code); font-size: 15px; white-space: pre; }
+/* A token in a blank stays in its place as a faint outline, so the bank does not jump. */
+.gap-token.is-taken { background: transparent; border-style: dashed; color: var(--text-3); cursor: default; opacity: 0.55; }
+.gap-token.is-taken:active { transform: none; }
+
+/* Trace: code with the current line, a table of values, number keys */
+.trace { display: flex; flex-direction: column; gap: 12px; }
+.trace-code .code-row { position: relative; margin: 0 -14px; padding: 0 14px; transition: background 0.2s; }
+.trace-code .code-row.is-cur { background: #246fff3d; box-shadow: inset 3px 0 0 #6f9cff; }
+.trace-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; }
+.trace-table th, .trace-table td { padding: 3px 2px; text-align: center; transition: background 0.2s; }
+.trace-table thead th { padding-bottom: 4px; line-height: 1.15; vertical-align: bottom; border-radius: 10px 10px 0 0; }
+.trace-table thead small { display: block; font-size: 11px; font-weight: 500; color: var(--text-3); }
+.trace-table thead b { display: block; font-size: 15px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+.trace-table tbody th { width: 1%; padding: 0 8px 0 2px; text-align: left; white-space: nowrap; }
+.trace-table tbody th code { font-family: var(--font-code); font-size: 15px; font-weight: 600; color: var(--text); }
+.trace-table tbody tr:last-child td { border-radius: 0 0 10px 10px; }
+.trace-table .is-cur { background: var(--accent-soft); }
+.trace-cell { width: 100%; min-width: 44px; max-width: 60px; height: 44px; border-radius: 10px; border: 1.5px solid var(--border-deep); background: #fff; color: var(--text); font-family: var(--font-code); font-size: 17px; font-weight: 600; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s, background 0.15s; }
+.trace-cell.is-empty { border-style: dashed; }
+.trace-cell.is-focus { border: 2px solid var(--accent); box-shadow: 0 0 0 3px #246fff26; }
+.trace-cell.is-ok { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+.trace-cell.is-bad { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); animation: shake 0.3s; }
+.trace-given { display: inline-grid; place-items: center; min-height: 44px; font-family: var(--font-code); font-size: 16px; color: var(--text-3); }
+.trace-given.is-none { font-family: var(--font-body); font-size: 12px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.trace-nums { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.trace-num { min-width: 48px; height: 44px; padding: 0 10px; border-radius: 12px; border: 1px solid var(--border-deep); background: #fff; color: var(--text); font-family: var(--font-code); font-size: 18px; font-weight: 600; cursor: pointer; transition: transform 0.08s, background 0.15s; }
+.trace-num:active { transform: scale(0.94); background: var(--surface); }
+
+/* Blocks: the program as a code panel, the blocks below it */
+.blocks { display: flex; flex-direction: column; gap: 12px; }
+.blocks-prog { display: flex; flex-direction: column; gap: 0; min-height: 64px; padding: 8px 14px; }
+.blocks-line { align-items: center; min-height: 44px; animation: blocks-in 0.2s ease-out; }
+@keyframes blocks-in { from { opacity: 0; transform: translateY(6px); } }
+/* The indent: two characters per level with a thin guide line, in the program and on the blocks. */
+.blocks-text, .blocks-chip code { padding-left: calc(var(--lvl, 0) * 2ch); white-space: pre; background-repeat: no-repeat; background-position: 0.5ch 0; background-size: calc(var(--lvl, 0) * 2ch) 100%; }
+.blocks-text { background-image: repeating-linear-gradient(to right, #ffffff38 0 1.5px, transparent 1.5px 2ch); }
+.blocks-slot { display: flex; align-items: center; gap: 12px; min-height: 44px; }
+.blocks-slot i { width: 14px; flex: none; font-style: normal; text-align: right; color: #9aa1bf; }
+.blocks-slot span { flex: 1; display: flex; align-items: center; height: 32px; padding-left: 10px; border: 1.5px dashed #ffffff33; border-radius: 7px; font-family: var(--font-body); font-size: 13px; color: #9aa3c7; }
+.blocks-bank { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.blocks-chip { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--border-deep); background: #fff; color: var(--text); text-align: left; cursor: pointer; transition: transform 0.08s, background 0.15s; animation: blocks-in 0.2s ease-out; }
+.blocks-chip:active { transform: scale(0.96); background: var(--surface); }
+.blocks-chip code { font-family: var(--font-code); font-size: 14px; line-height: 1.6; background-image: repeating-linear-gradient(to right, var(--border-deep) 0 1.5px, transparent 1.5px 2ch); }
+.blocks-again { margin-left: auto; min-height: 44px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .robo-bot, .robo-dir, .robo-eyes, .robo-star, .robo-tile { transition: none; }
+  .robo-bot .robo-body, .robo-chip, .robo-rep, .robo-cell::after, .robo-cell .robo-tile, .gap-blank, .trace-cell, .blocks-line { animation: none !important; }
+}
+
+/* After the check the task is read-only. */
+.task:is([data-state='ok'], [data-state='bad']) :is(.robo, .gap, .trace, .blocks) button { pointer-events: none; }
+.gap-code, .trace-code { margin: 0; }

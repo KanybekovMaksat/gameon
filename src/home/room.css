@@ -1,0 +1,7 @@
+/* Room home additions. The topic chips fade at an edge where more chips are hidden. */
+.room-topics.is-fade-right { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 44px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 44px), transparent); }
+.room-topics.is-fade-left { -webkit-mask-image: linear-gradient(to right, transparent, #000 44px); mask-image: linear-gradient(to right, transparent, #000 44px); }
+.room-topics.is-fade-left.is-fade-right { -webkit-mask-image: linear-gradient(to right, transparent, #000 44px, #000 calc(100% - 44px), transparent); mask-image: linear-gradient(to right, transparent, #000 44px, #000 calc(100% - 44px), transparent); }
+
+/* Under the floating header, on the left. */
+.isle-back.room-out { top: calc(var(--safe-t, 0px) + 84px); }

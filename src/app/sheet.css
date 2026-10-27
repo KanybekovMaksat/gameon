@@ -1,0 +1,21 @@
+/* The shared bottom sheet. Prefix: sh-. The dim covers the whole screen, the status bar and the home indicator
+   too; the sheet runs to the bottom edge and keeps the home indicator's inset as inner padding. */
+.sh-scrim { position: absolute; inset: 0; z-index: 30; background: #0a102852; }
+.sh-scrim.is-out { pointer-events: none; }
+.sh {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 31;
+  display: flex; flex-direction: column; gap: 8px;
+  max-height: calc(100% - var(--safe-t, 0px) - 10px);
+  padding: 26px 18px max(24px, var(--safe-b, 0px));
+  background: var(--bg); border-radius: 26px 26px 0 0;
+  box-shadow: 0 -10px 30px -18px #0a102840;
+  overscroll-behavior: contain;
+}
+.sh:focus { outline: none; }
+
+/* The grip: a short bar, a 44 px target. */
+.sh-grip { position: absolute; top: 0; left: 50%; z-index: 2; width: 96px; height: 44px; margin-left: -48px; padding: 0; border: 0; background: none; cursor: grab; touch-action: none; }
+.sh-grip::before { content: ''; position: absolute; top: 8px; left: 30px; width: 36px; height: 5px; border-radius: 3px; background: var(--border-deep); transition: background 0.15s, transform 0.15s; }
+.sh-grip:active::before { background: var(--text-3); transform: scaleX(1.2); }
+.sh-grip:focus-visible { outline: none; }
+.sh-grip:focus-visible::before { box-shadow: 0 0 0 2px var(--accent); }

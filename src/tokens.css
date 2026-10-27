@@ -1,0 +1,69 @@
+/* Brand values come from codifylab.com. The UI is near-monochrome; blue marks selection and progress. */
+:root {
+  --navy: #0a1028;
+  --blue: #246fff;
+  --cyan: #00c4fa;
+
+  /* Feedback colors are a proposal: the brand has none. An error is amber, not red: errors are normal. */
+  --ok: #127536;
+  --ok-soft: #e6f6ea;
+  --ok-line: #9fd9b0;
+  --ok-fill: #15803d;
+  --ok-edge: #0f5f2d;
+  --bad: #8a5c00;
+  --bad-soft: #fdf4dc;
+  --bad-line: #efd08a;
+  --bad-fill: #f3c34b;
+  --bad-edge: #d09f22;
+  --bad-on: #4d3500;
+  --coin: #ffc53d;
+  --coin-ring: #e0a100;
+  --coin-mark: #7a4a00;
+
+  --grad: linear-gradient(135deg, #00c4fa 0%, #246fff 100%);
+  --accent: #246fff;
+  /* A deeper shade of the brand blue where blue carries text: white on it, or it on white (contrast 5:1). */
+  --accent-strong: #1f66e5;
+  --accent-deep: #1648b8;
+  --accent-soft: #eef4ff;
+  --accent-line: #b8ccff;
+
+  --ink: #0a1028;
+  --ink-deep: #000000;
+
+  --bg: #ffffff;
+  --surface: #f4f5f7;
+  --card: #ffffff;
+  --border: #e6e7eb;
+  --border-deep: #d4d6dc;
+  --text: #0a1028;
+  --text-2: #0a1028b0;
+  --text-3: #0a10289e;
+
+  --font-body: 'Inter Variable', 'Inter', system-ui, sans-serif;
+  --font-head: 'Inter Variable', 'Inter', system-ui, sans-serif;
+  --font-code: 'JetBrains Mono', ui-monospace, monospace;
+
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --gutter: 16px;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1, h2, h3 { font-family: var(--font-head); line-height: 1.2; margin: 0; letter-spacing: -0.02em; font-weight: 700; }
+
+button { font: inherit; color: inherit; }

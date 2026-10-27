@@ -1,0 +1,137 @@
+/* Lab variant «Блоки руками»: block programming for a thumb. Prefix lp-blocks-. Tokens from tokens.css. */
+.lp-blocks { --rep: var(--ink); position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.lp-blocks-main { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; display: flex; flex-direction: column; gap: 8px; padding: 12px 16px 8px; }
+.lp-blocks-main::-webkit-scrollbar { display: none; }
+
+/* Level, goal, board */
+.lp-blocks-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 28px; }
+.lp-blocks-level { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 600; color: var(--text-2); }
+.lp-blocks-bars { flex: none; display: flex; gap: 4px; }
+.lp-blocks-bars i { width: 20px; height: 6px; border-radius: 3px; background: var(--border); transition: background 0.25s; }
+.lp-blocks-bars i.is-done { background: var(--accent); }
+.lp-blocks-bars i.is-on { background: var(--accent-line); }
+.lp-blocks-count { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 44px; border-radius: 12px; background: var(--surface); color: var(--text-2); font-size: 12px; font-weight: 500; line-height: 1.25; font-variant-numeric: tabular-nums; transition: background 0.2s, color 0.2s; }
+.lp-blocks-count b { font-size: 15px; font-weight: 700; color: var(--text); }
+.lp-blocks-count.is-over b { color: var(--bad); }
+.lp-blocks-count.is-over { background: var(--bad-soft); color: var(--bad); }
+.lp-blocks-goal { margin: 0; font-size: 15px; line-height: 1.4; color: var(--text); text-wrap: pretty; }
+
+.lp-blocks-stage { flex: none; display: flex; justify-content: center; padding: 4px; border-radius: 16px; border: 1.5px solid var(--border-deep); background: var(--surface); transition: background 0.2s, border-color 0.2s; }
+.lp-blocks-stage .robo-board { background: transparent; padding: 0; }
+.lp-blocks[data-state='active'] .lp-blocks-stage { border-color: var(--accent-line); background: var(--accent-soft); }
+.lp-blocks[data-state='ok'] .lp-blocks-stage { border-color: var(--ok-line); background: var(--ok-soft); }
+.lp-blocks[data-state='bad'] .lp-blocks-stage { border-color: var(--bad-line); background: var(--bad-soft); }
+
+/* Palette on the left, program on the right */
+.lp-blocks-work { flex: 1 0 auto; display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 8px; }
+/* The palette and the block count stay in view while the lesson scrolls on a short screen. */
+.lp-blocks-side { position: sticky; top: 0; align-self: start; display: flex; flex-direction: column; gap: 10px; }
+.lp-blocks-pal { display: flex; flex-direction: column; gap: 8px; }
+.lp-blocks-prog { position: relative; container-type: inline-size; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 6px; border-radius: 16px; background: var(--surface); }
+
+.lp-blocks-empty { align-self: stretch; display: grid; place-items: center; min-height: 64px; padding: 0 12px; border-radius: 12px; border: 1.5px dashed var(--border-deep); color: var(--text-3); font-size: 14px; font-weight: 500; text-align: center; transition: border-color 0.15s, background 0.15s, color 0.15s; }
+.lp-blocks-empty.is-hot { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-deep); }
+
+/* A command block */
+.lp-blocks-cmd { display: flex; align-items: center; gap: 8px; height: 44px; min-width: 128px; padding: 0 14px 0 12px; border-radius: 12px; border: 1.5px solid var(--border-deep); background: #fff; color: var(--ink); font-size: 15px; font-weight: 600; white-space: nowrap; cursor: grab; transition: transform 0.12s, background 0.15s, border-color 0.15s, color 0.15s; }
+/* A sideways move lifts a block; a vertical swipe on it scrolls the lesson. */
+.lp-blocks .lp-blocks-cmd { touch-action: pan-y; }
+.lp-blocks-cmd > svg { flex: none; }
+.lp-blocks-cmd:active { transform: scale(0.96); background: var(--surface); }
+.lp-blocks-cmd.is-pal { min-width: 0; width: 100%; gap: 4px; padding: 0 6px 0 8px; font-size: 14px; }
+.lp-blocks-cmd.is-pal > svg { width: 18px; height: 18px; }
+.lp-blocks-cmd.is-now { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-deep); box-shadow: inset 0 0 0 1px var(--accent); }
+.lp-blocks-cmd.is-fail { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); box-shadow: inset 0 0 0 1px var(--bad); animation: shake 0.3s; }
+.lp-blocks-item, .lp-blocks-inner { display: flex; }
+.lp-blocks-item.is-lifted, .lp-blocks-inner.is-lifted, .lp-blocks-rep.is-lifted { display: none; }
+
+/* The repeat block: a C whose mouth holds what repeats. The concave corners are small gradients, so the
+   C reads right on any background. */
+.lp-blocks-rep { display: grid; grid-template-columns: 14px minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; width: max-content; min-width: 188px; max-width: 100%; cursor: grab; }
+.lp-blocks-rep-head { position: relative; grid-column: 1 / -1; display: flex; align-items: center; gap: 6px; height: 48px; padding: 0 3px 0 12px; border-radius: 13px 13px 13px 0; background: var(--rep); color: #fff; font-size: 15px; font-weight: 600; transition: background 0.2s; }
+.lp-blocks-rep-head > svg { flex: none; opacity: 0.85; }
+.lp-blocks-rep-head::after { content: ''; position: absolute; left: 14px; top: 100%; width: 8px; height: 8px; background: radial-gradient(circle at 100% 100%, transparent 7.5px, var(--rep) 8px); transition: background 0.2s; }
+.lp-blocks-rep-word { flex: none; }
+.lp-blocks-spine { grid-column: 1; grid-row: 2; background: var(--rep); transition: background 0.2s; }
+.lp-blocks-mouth { grid-column: 2; grid-row: 2; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-height: 54px; padding: 5px 8px; }
+.lp-blocks-rep-foot { position: relative; grid-column: 1 / -1; height: 16px; border-radius: 0 13px 13px 13px; background: var(--rep); transition: background 0.2s; }
+.lp-blocks-rep-foot::before { content: ''; position: absolute; left: 14px; bottom: 100%; width: 8px; height: 8px; background: radial-gradient(circle at 100% 0, transparent 7.5px, var(--rep) 8px); transition: background 0.2s; }
+.lp-blocks .lp-blocks-rep-head, .lp-blocks .lp-blocks-spine, .lp-blocks .lp-blocks-rep-foot { touch-action: pan-y; }
+.lp-blocks-prog > .lp-blocks-rep { align-self: stretch; width: auto; min-width: 0; }
+.lp-blocks-rep:has(> .lp-blocks-rep-head:active) > :is(.lp-blocks-rep-head, .lp-blocks-spine, .lp-blocks-rep-foot) { --rep: var(--ink-deep); }
+.lp-blocks-rep.is-in { --rep: var(--accent-strong); }
+.lp-blocks-hole { display: grid; place-items: center; height: 44px; min-width: 128px; padding: 0 12px; border-radius: 12px; border: 1.5px dashed var(--border-deep); color: var(--text-3); font-size: 13px; font-weight: 500; transition: border-color 0.15s, background 0.15s, color 0.15s; }
+.lp-blocks-hole.is-hot { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-deep); }
+
+
+/* The count: a slider with a detent per number while building, the pass while the robot runs */
+.lp-blocks-count-slider { position: relative; flex: 1; min-width: 0; margin-left: 6px; display: flex; align-items: center; height: 44px; border-radius: 12px; background: #ffffff1a; cursor: pointer; outline: none; }
+.lp-blocks .lp-blocks-count-slider { touch-action: pan-y; }
+.lp-blocks-count-slider:focus-visible { box-shadow: 0 0 0 2px #fff; }
+.lp-blocks-count-slider i { flex: 1; text-align: center; font-style: normal; font-size: 13px; font-weight: 600; color: #ffffff8c; font-variant-numeric: tabular-nums; }
+.lp-blocks-count-slider b { position: absolute; top: 3px; bottom: 3px; width: 38px; margin-left: -19px; display: grid; place-items: center; border-radius: 10px; background: #fff; color: var(--ink); font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; transition: left 0.15s cubic-bezier(.3,.7,.3,1); pointer-events: none; }
+.lp-blocks-count-slider:active b { transform: scale(1.06); }
+.lp-blocks-count-slider.is-off { cursor: default; }
+.lp-blocks-count-slider.is-off i { opacity: 0.5; }
+.lp-blocks-iter { margin-left: auto; margin-right: 3px; display: inline-flex; align-items: center; height: 32px; padding: 0 11px; border-radius: 999px; background: #fff; color: var(--accent-deep); font-size: 14px; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; animation: lp-blocks-pop 0.2s ease-out; }
+@keyframes lp-blocks-pop { from { transform: scale(0.8); opacity: 0; } }
+
+/* The palette copy of the repeat block and the place to drop a block to remove it */
+.lp-blocks-rep.is-pal { width: 100%; min-width: 0; }
+.lp-blocks-rep.is-pal .lp-blocks-rep-head { height: 44px; gap: 5px; padding: 0 6px 0 8px; font-size: 14px; }
+.lp-blocks-rep.is-pal .lp-blocks-mouth { min-height: 16px; padding: 0; }
+.lp-blocks-rep.is-pal .lp-blocks-rep-foot { height: 12px; }
+.lp-blocks-rep.is-pal:active { transform: scale(0.96); }
+.lp-blocks-rep.is-pal { transition: transform 0.12s; }
+.lp-blocks-pal.is-locked, .lp-blocks-pal.is-full { opacity: 0.4; }
+/* While a program block is dragged, the palette column turns into the place that removes it. */
+.lp-blocks-side.is-trash > :not(.lp-blocks-trash) { visibility: hidden; }
+.lp-blocks-trash { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 8px; border-radius: 14px; border: 1.5px dashed var(--border-deep); background: #fffffff0; color: var(--text-2); font-size: 13px; font-weight: 600; line-height: 1.3; text-align: center; opacity: 0; pointer-events: none; transition: opacity 0.15s, background 0.15s, border-color 0.15s, color 0.15s; }
+.lp-blocks-side.is-trash .lp-blocks-trash { opacity: 1; }
+.lp-blocks-side.is-hot .lp-blocks-trash { border-color: var(--ink); border-style: solid; background: var(--surface); color: var(--ink); }
+
+/* The drag: the block under the finger and the line where it lands */
+.lp-blocks-ghost { position: absolute; left: 0; top: 0; z-index: 30; pointer-events: none; will-change: transform; filter: drop-shadow(0 10px 16px #0a102833); }
+.lp-blocks-ghost .lp-blocks-mouth { background: #f4f5f7d9; }
+.lp-blocks-prog.is-drag { cursor: grabbing; }
+.lp-blocks-line { position: absolute; z-index: 5; height: 3px; margin-top: -1.5px; border-radius: 2px; background: var(--accent); pointer-events: none; transition: top 0.12s ease-out, left 0.12s ease-out, width 0.12s ease-out; }
+.lp-blocks-line::before { content: ''; position: absolute; left: -5px; top: -4px; width: 11px; height: 11px; box-sizing: border-box; border-radius: 50%; border: 3px solid var(--accent); background: #fff; }
+.lp-blocks-line em { position: absolute; right: 0; top: 50%; transform: translateY(-50%); padding: 2px 8px; border-radius: 999px; background: #fff; box-shadow: inset 0 0 0 1.5px var(--accent); color: var(--accent-deep); font-size: 12px; font-style: normal; font-weight: 700; line-height: 16px; white-space: nowrap; }
+.lp-blocks-line.is-in em { background: var(--accent-strong); box-shadow: none; color: #fff; }
+
+/* Footer: the message and the main button */
+.lp-blocks-foot { flex: none; display: flex; flex-direction: column; gap: 10px; padding: 10px 16px max(16px, var(--safe-b, 0px)); }
+/* The card keeps its height in every state, so nothing jumps when a run starts or a result comes. */
+.lp-blocks-msg { min-height: 64px; display: flex; flex-direction: column; }
+.lp-blocks-msg > .lp-blocks-card { flex: 1; }
+.lp-blocks-card.is-note { align-items: center; }
+.lp-blocks-card { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border-radius: 14px; font-size: 14px; line-height: 1.4; animation: lp-blocks-in 0.22s ease-out; }
+.lp-blocks-card > svg { flex: none; margin-top: 1px; }
+.lp-blocks-card b { display: block; font-weight: 600; }
+.lp-blocks-card span { display: block; }
+.lp-blocks-card.is-run { background: var(--accent-soft); color: var(--accent-deep); font-variant-numeric: tabular-nums; }
+.lp-blocks-card.is-ok { background: var(--ok-soft); color: var(--ok); }
+.lp-blocks-card.is-ok span { color: var(--text); }
+.lp-blocks-card.is-bad { background: var(--bad-soft); color: var(--bad); }
+.lp-blocks-card.is-bad span { color: var(--text); }
+@keyframes lp-blocks-in { from { transform: translateY(6px); opacity: 0; } }
+.lp-blocks-stop { width: 10px; height: 10px; border-radius: 2px; background: currentColor; }
+
+/* Finish */
+.lp-blocks-finish-body { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 24px; text-align: center; }
+.lp-blocks-finish-mark { position: relative; width: 88px; height: 88px; margin-bottom: 8px; animation: lp-blocks-pop 0.3s ease-out; }
+.lp-blocks-finish-mark i { position: absolute; right: -6px; bottom: -6px; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; border: 3px solid #fff; background: var(--ok-fill); color: #fff; }
+.lp-blocks-finish-body h2 { font-size: 22px; }
+.lp-blocks-finish-body p { margin: 0; color: var(--text-2); font-size: 15px; line-height: 1.45; max-width: 300px; }
+.lp-blocks-finish-body ul { list-style: none; margin: 12px 0 0; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; border-radius: 16px; background: var(--surface); text-align: left; max-width: 320px; }
+.lp-blocks-finish-body li { display: flex; gap: 10px; font-size: 15px; line-height: 1.4; }
+.lp-blocks-finish-body li svg { flex: none; margin-top: 2px; color: var(--ok); }
+
+@media (max-width: 374px) {
+  .lp-blocks-work { grid-template-columns: 92px minmax(0, 1fr); }
+  .lp-blocks-rep.is-pal .lp-blocks-rep-head > svg { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-blocks, .lp-blocks *, .lp-blocks *::before, .lp-blocks *::after { transition: none !important; animation: none !important; }
+}

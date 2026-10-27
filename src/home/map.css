@@ -1,0 +1,83 @@
+/* Home map: one road through all topics. HomeMap computes the positions; this file draws them. */
+
+.map { position: relative; flex: none; margin-top: 10px; }
+
+/* The road. Walked: a solid navy line. Ahead: a light dotted line. The tail fades out toward new topics. */
+.map-road { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; -webkit-mask-image: linear-gradient(#000 calc(100% - 90px), transparent); mask-image: linear-gradient(#000 calc(100% - 90px), transparent); }
+.map-road path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.map-road-ahead { stroke: var(--border-deep); stroke-width: 7; stroke-dasharray: 0 15; }
+.map-road-walked { stroke: var(--ink); stroke-width: 7; animation: map-draw 0.75s cubic-bezier(.45,0,.2,1) backwards; }
+@keyframes map-draw {
+  from { stroke-dasharray: var(--len) var(--len); stroke-dashoffset: var(--from, var(--len)); }
+  to { stroke-dasharray: var(--len) var(--len); stroke-dashoffset: 0; }
+}
+
+/* Lessons */
+.map-node { position: absolute; transform: translate(-50%, -50%); display: grid; place-items: center; }
+.map-node .node { width: 64px; height: 64px; transition: transform 0.12s, background 0.15s; }
+.map-node .node:active { transform: scale(0.92); }
+.map-node .node.is-locked:active { background: var(--border); }
+.map-node .node.is-now { width: 72px; height: 72px; }
+.map-node .node.is-open { box-shadow: inset 0 0 0 2px var(--accent-line); color: var(--accent-strong); }
+.map-node .node.is-open::before { display: none; }
+.map-node .node.is-locked { box-shadow: inset 0 0 0 1px var(--border); }
+
+/* Topic stations stand on the road; the sign is on the open side. */
+.map-station { position: absolute; transform: translate(-50%, -50%); }
+.map-station .map-icon { width: 44px; height: 44px; border-radius: 14px; background: var(--bg); color: var(--text-2); box-shadow: inset 0 0 0 1.5px var(--border-deep); }
+.map-station.is-reached .map-icon { background: var(--ink); color: #fff; box-shadow: none; }
+.map-label { position: absolute; top: 50%; transform: translateY(-50%); width: max-content; line-height: 1.3; }
+.map-label b { display: flex; align-items: baseline; gap: 8px; font-size: 17px; letter-spacing: -0.01em; }
+.map-label small { display: block; font-size: 13px; color: var(--text-3); margin-top: 1px; }
+.map-count { font-size: 13px; font-weight: 500; letter-spacing: 0; color: var(--text-3); font-variant-numeric: tabular-nums; }
+.map-station.is-right .map-label { left: calc(100% + 12px); }
+.map-station.is-left .map-label { right: calc(100% + 12px); text-align: right; }
+.map-station.is-left .map-label b { justify-content: flex-end; }
+
+/* The office checkpoint, seen from above: a two-leaf gate across the road between two posts.
+   When the office lesson opens the topic, both leaves swing forward and the road runs through. */
+.map-gate { position: absolute; width: 0; height: 0; }
+.map-bar { position: absolute; left: -24px; top: 0; width: 48px; height: 0; }
+.map-bar::before, .map-bar::after { content: ''; position: absolute; top: -6px; width: 12px; height: 12px; border-radius: 50%; background: var(--ink); z-index: 1; }
+.map-bar::before { left: -6px; }
+.map-bar::after { right: -6px; }
+.map-bar i { position: absolute; top: -5px; width: 24px; height: 10px; border-radius: 5px; background: repeating-linear-gradient(-45deg, var(--ink) 0 5px, #fff 5px 10px); box-shadow: 0 0 0 1.5px var(--ink); transition: rotate 0.3s cubic-bezier(.3,.7,.3,1); }
+.map-bar i:first-child { left: 0; transform-origin: 0 50%; }
+.map-bar i:last-child { right: 0; transform-origin: 100% 50%; }
+.map-gate.is-open .map-bar i:first-child { rotate: 90deg; }
+.map-gate.is-open .map-bar i:last-child { rotate: -90deg; }
+.map-gate .map-label b { font-size: 15px; align-items: center; gap: 6px; }
+.map-gate .map-label svg { flex: none; color: var(--text-2); }
+.map-gate.is-right .map-label { left: 40px; }
+.map-gate.is-left .map-label { right: 40px; text-align: right; }
+.map-gate.is-left .map-label b { justify-content: flex-end; }
+
+/* Groupmates online next to their lesson. */
+.map-kids { position: absolute; top: 50%; display: flex; align-items: center; gap: 6px; transform: translateY(-50%); white-space: nowrap; animation: fade 0.3s; }
+.map-kids.is-right { left: calc(100% + 14px); }
+.map-kids.is-left { right: calc(100% + 14px); flex-direction: row-reverse; }
+.map-kids.is-stacked { flex-direction: column; align-items: flex-start; gap: 3px; }
+.map-kids.is-left.is-stacked { align-items: flex-end; }
+.map-kids .stack .avatar { width: 28px; height: 28px; }
+.map-kids .stack .avatar img { box-shadow: 0 0 0 2px var(--bg); }
+.map-kids small { font-size: 12px; font-weight: 500; color: var(--text-2); }
+
+/* You are here: the child's own avatar on a pin above their stop. It lands when the walked line reaches the stop. */
+.map-me { position: absolute; z-index: 2; translate: -50% -100%; transform-origin: 50% 100%; animation: map-me-in 0.28s 0.6s cubic-bezier(.2,.9,.3,1.3) both; }
+@keyframes map-me-in { from { opacity: 0; scale: 0.5; } }
+.map-me-in { position: relative; display: flex; align-items: center; gap: 8px; height: 44px; padding: 5px; border: 0; border-radius: 999px; background: var(--ink); color: #fff; font-size: 15px; font-weight: 600; white-space: nowrap; animation: bob 2s 0.9s ease-in-out infinite; }
+button.map-me-in { padding-right: 16px; cursor: pointer; }
+.map-me-in::after { content: ''; position: absolute; left: 50%; top: calc(100% - 1px); border: 7px solid transparent; border-top-color: var(--ink); border-bottom: 0; transform: translateX(-50%); }
+.map-me .avatar { width: 34px; height: 34px; }
+.map-me .avatar.is-me img { box-shadow: 0 0 0 2px #fff; }
+@keyframes bob { 50% { transform: translateY(-4px); } }
+
+.map-end { text-align: center; color: var(--text-3); font-size: 13px; padding: 0 24px 8px; }
+
+/* Played once; see `played` in HomeMap. */
+.map-road-walked.is-drawn, .map-me.is-drawn { animation: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .map-road-walked, .map-me, .map-me-in, .map-kids, .map-node .node.is-now::before { animation: none; }
+  .map-bar i, .map-node .node { transition: none; }
+}

@@ -1,0 +1,29 @@
+/* Tab bar: the shell around home, tasks, shop and profile. A screen with tabs leaves room at the bottom for it.
+   The bar runs to the bottom edge; the home indicator's inset is its bottom padding. */
+.tabs-host { --tabbar-pad: max(10px, var(--safe-b, 0px)); --tabbar-space: calc(58px + var(--tabbar-pad)); position: relative; flex: 1; min-height: 0; height: 100%; display: flex; flex-direction: column; }
+.tabs-layer > .screen { flex: 1; min-height: 0; height: auto; }
+.tab-pane { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.tab-pane[hidden] { display: none; }
+
+.tabbar {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 20;
+  display: grid; grid-template-columns: repeat(4, 1fr); padding: 6px 12px var(--tabbar-pad);
+  background: #ffffffeb; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 -1px 0 var(--border);
+}
+.tabbar-tab {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 52px;
+  border: 0; background: none; padding: 0; cursor: pointer;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.01em; color: var(--text-3);
+  transition: color 0.15s;
+}
+.tabbar-icon { width: 52px; height: 30px; border-radius: 999px; display: grid; place-items: center; transition: background 0.2s, transform 0.12s; }
+.tabbar-tab.is-on { color: var(--text); }
+.tabbar-tab.is-on .tabbar-icon { background: #0a10280d; }
+.tabbar-tab:active .tabbar-icon { background: #0a102814; transform: scale(0.92); }
+.tabbar-tab:focus-visible { outline: none; }
+.tabbar-tab:focus-visible .tabbar-icon { box-shadow: 0 0 0 2px var(--accent); }
+
+/* Home screens scroll or end above the tab bar. */
+.has-tabs .home-scroll { padding-bottom: calc(var(--tabbar-space) + 28px); }
+.has-tabs .room-sheet { padding-bottom: calc(var(--tabbar-space) + 14px); }

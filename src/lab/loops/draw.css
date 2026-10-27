@@ -1,0 +1,102 @@
+/* «Нарисуй путь»: the lab variant where the path drawn with a finger becomes a program with loops. Prefix lp-draw-. */
+.lp-draw { flex: 1; min-height: 0; display: flex; flex-direction: column; background: var(--bg); user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+.lp-draw-body { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow-y: auto; overscroll-behavior: contain; padding: 12px 16px 8px; scrollbar-width: none; }
+.lp-draw-col { flex: 1 0 auto; display: flex; flex-direction: column; gap: 12px; }
+
+/* Level and goal */
+.lp-draw-head { display: flex; flex-direction: column; gap: 4px; }
+.lp-draw-level { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; font-weight: 500; color: var(--text-3); line-height: 18px; }
+.lp-draw-segs { display: flex; gap: 4px; flex: none; }
+.lp-draw-segs i { width: 20px; height: 4px; border-radius: 2px; background: var(--border-deep); transition: background 0.25s; }
+.lp-draw-segs i.is-on { background: var(--accent); }
+.lp-draw-goal { margin: 0; font-size: 17px; font-weight: 650; line-height: 1.3; letter-spacing: -0.01em; color: var(--text); text-wrap: balance; }
+
+/* Board with the ink layer and, while drawing, the surface that takes the finger */
+/* Space left over on a tall screen goes above the board and below the program: the two stay together in the middle. */
+.lp-draw-board { position: relative; align-self: center; flex: none; max-width: 100%; margin-top: auto; }
+.lp-draw-board > .robo-board { width: 100%; }
+.lp-draw-hit { position: absolute; inset: 4px; z-index: 4; touch-action: none; cursor: crosshair; border-radius: 10px; }
+.lp-draw-ink { position: absolute; inset: 4px; z-index: 3; width: calc(100% - 8px); height: calc(100% - 8px); overflow: visible; pointer-events: none; }
+.lp-draw-ink polyline { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.lp-draw-line { stroke: var(--accent); stroke-width: 0.2; opacity: 0.9; transition: opacity 0.25s, stroke 0.25s; }
+.lp-draw-ink.is-fold .lp-draw-line, .lp-draw-ink.is-bad .lp-draw-line { stroke: var(--accent-line); opacity: 1; }
+/* While the robot runs, its own trail tells the story: the drawn path steps back. */
+.lp-draw-ink.is-run .lp-draw-line, .lp-draw-ink.is-ok .lp-draw-line { opacity: 0.25; }
+/* The reveal on the board: each copy of the repeated piece drawn apart with its number, one after another. */
+.lp-draw-pass-line { stroke: var(--accent); stroke-width: 0.2; }
+.lp-draw-badge { fill: var(--accent-deep); stroke: #fff; stroke-width: 0.04; }
+.lp-draw-badge-n { fill: #fff; font: 700 0.24px var(--font-body); text-anchor: middle; dominant-baseline: central; }
+.lp-draw-pass { animation: lp-draw-count 0.28s cubic-bezier(.3,1.4,.5,1) backwards; animation-delay: calc(var(--i) * 110ms); transform-box: fill-box; transform-origin: center; }
+@keyframes lp-draw-count { from { opacity: 0; transform: scale(0.6); } }
+.lp-draw-pen { fill: #fff; stroke: var(--accent); stroke-width: 0.07; }
+.lp-draw-start { fill: none; stroke: var(--accent); stroke-width: 0.05; opacity: 0.9; }
+.lp-draw-start.is-nudge, .lp-draw-pen.is-nudge { animation: lp-draw-nudge 0.32s ease-out; transform-box: fill-box; transform-origin: center; }
+.lp-draw-bump { fill: none; stroke: var(--bad-fill); stroke-width: 0.08; animation: lp-draw-bump 0.35s ease-out forwards; }
+@keyframes lp-draw-fade { from { opacity: 0; } }
+@keyframes lp-draw-nudge { 40% { transform: scale(1.25); } }
+@keyframes lp-draw-bump { 60% { opacity: 1; } to { opacity: 0; } }
+
+/* The program: a header with the command count, then the chips */
+.lp-draw-prog { display: flex; flex-direction: column; gap: 6px; margin-bottom: auto; }
+.lp-draw-prog-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 26px; font-size: 13px; font-weight: 600; color: var(--text-3); }
+.lp-draw-count { display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 10px; border-radius: 999px; background: var(--surface); color: var(--text); font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; transition: background 0.2s, color 0.2s; }
+.lp-draw-count b { display: inline-block; font-weight: 700; animation: lp-draw-pop 0.25s cubic-bezier(.3,1.5,.5,1); }
+.lp-draw-count s { font-weight: 500; opacity: 0.6; margin-right: 2px; }
+.lp-draw-count.is-ok { background: var(--ok-soft); color: var(--ok); }
+.lp-draw-count.is-bad { background: var(--bad-soft); color: var(--bad); }
+@keyframes lp-draw-pop { from { transform: scale(1.35); } }
+
+.lp-draw-strip { display: flex; flex-wrap: wrap; align-content: flex-start; align-items: center; gap: 4px; padding: 6px 8px; border-radius: 14px; background: var(--surface); box-shadow: inset 0 0 0 1.5px transparent; transition: background 0.2s, box-shadow 0.2s; }
+.lp-draw-prog.is-code .lp-draw-strip { background: #fff; box-shadow: inset 0 0 0 1.5px var(--accent-line); }
+.lp-draw-prog.is-ok .lp-draw-strip { background: var(--ok-soft); box-shadow: inset 0 0 0 1.5px var(--ok-line); }
+.lp-draw-prog.is-bad .lp-draw-strip { background: var(--bad-soft); box-shadow: inset 0 0 0 1.5px var(--bad-line); }
+.lp-draw-empty { align-self: center; margin: auto; padding: 0 12px; font-size: 14px; color: var(--text-3); text-align: center; }
+
+/* A command chip: it only shows the program; the board is where the child acts. Rows are 48 px, the height of a loop block. */
+.lp-draw-strip > .lp-draw-chip { margin-block: 4px; }
+.lp-draw-chip { flex: none; display: grid; place-items: center; width: 35px; height: 40px; border-radius: 10px; border: 1px solid var(--border-deep); background: #fff; color: var(--ink); transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.lp-draw-chip.is-in { animation: lp-draw-in 0.18s ease-out; }
+@keyframes lp-draw-in { from { transform: scale(0.6); opacity: 0; } }
+.lp-draw-chip.is-hot { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-deep); box-shadow: inset 0 0 0 1px var(--accent); }
+.lp-draw-chip.is-ok { border-color: var(--ok-line); color: var(--ok); }
+
+/* The loop the reveal folds the strip into: «повтори N раз», then the commands it repeats. It lands from the width of the copies. */
+.lp-draw-rep { flex: none; display: inline-flex; align-items: center; gap: 4px; height: 48px; padding: 3px 4px 3px 3px; border: 1px solid var(--border-deep); border-radius: 13px; background: #fff; transform-origin: left center; }
+.lp-draw-rep.is-new { animation: lp-draw-fold 0.35s cubic-bezier(.3,1.2,.5,1); }
+@keyframes lp-draw-fold { from { transform: scaleX(2); opacity: 0.2; } }
+.lp-draw-rep.is-ok { border-color: var(--ok-line); }
+.lp-draw-rep-n { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; height: 40px; padding: 0 9px; border-radius: 10px; background: var(--ink); color: #fff; line-height: 1.1; text-align: left; }
+.lp-draw-rep-n small { font-size: 11px; font-weight: 500; opacity: 0.75; }
+.lp-draw-rep-n b { font-size: 14px; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.lp-draw-rep.is-ok .lp-draw-rep-n { background: var(--ok-fill); }
+
+/* Footer: the note (tip, result or choice) and the buttons */
+.lp-draw-foot { flex: none; display: flex; flex-direction: column; gap: 10px; padding: 8px 16px max(16px, var(--safe-b, 0px)); background: var(--bg); }
+.lp-draw-note { display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 8px 12px; border-radius: 14px; background: var(--surface); color: var(--text-2); font-size: 14px; line-height: 1.35; transition: background 0.2s, color 0.2s; }
+.lp-draw-note > svg { flex: none; }
+.lp-draw-note-text { flex: 1; min-width: 0; text-wrap: pretty; }
+.lp-draw-note-text b { display: block; font-weight: 600; }
+.lp-draw-note.is-ok { background: var(--ok-soft); color: var(--ok); }
+.lp-draw-note.is-bad { background: var(--bad-soft); color: var(--text); }
+.lp-draw-note.is-bad > svg, .lp-draw-note.is-bad b { color: var(--bad); }
+.lp-draw-actions { display: flex; gap: 10px; }
+.lp-draw-main { flex: 1; }
+.lp-draw-actions .btn-icon:disabled { box-shadow: inset 0 0 0 1px var(--border); }
+
+/* Finish */
+.lp-draw-fin { align-items: center; justify-content: center; text-align: center; padding: 16px 4px; gap: 10px; }
+.lp-draw-fin-mark { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: var(--ok-soft); color: var(--ok); animation: lp-draw-pop 0.3s cubic-bezier(.3,1.5,.5,1); }
+.lp-draw-fin h2 { font-size: 22px; margin-top: 6px; }
+.lp-draw-fin p { margin: 0; max-width: 32ch; font-size: 15px; line-height: 1.45; color: var(--text-2); }
+.lp-draw-fin-list { list-style: none; margin: 14px 0 0; padding: 0; width: 100%; display: flex; flex-direction: column; gap: 8px; text-align: left; }
+.lp-draw-fin-list li { display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--border); }
+.lp-draw-fin-name { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.lp-draw-fin-name b { font-size: 15px; font-weight: 600; }
+.lp-draw-fin-name small { font-size: 13px; color: var(--text-3); font-variant-numeric: tabular-nums; }
+.lp-draw-fin-bars { position: relative; display: block; height: 6px; }
+.lp-draw-fin-bars i { position: absolute; left: 0; top: 0; height: 6px; border-radius: 3px; background: var(--surface); }
+.lp-draw-fin-bars i.is-to { background: var(--accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-draw *, .lp-draw *::before, .lp-draw *::after { animation: none !important; transition: none !important; }
+}

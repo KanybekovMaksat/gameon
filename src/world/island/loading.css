@@ -1,0 +1,9 @@
+/* Island loading state. Prefix: isle-wait. The shared line and fade come from world.css. */
+.isle-wait { background: #e4f3f8; }
+.isle-wait-map { width: min(58%, 220px); height: auto; }
+.isle-wait-map .is-sand { fill: #f1e6cd; }
+.isle-wait-map .is-grass { fill: #d3e8bf; }
+.isle-wait-map .is-road { fill: none; stroke: #f7f3ea; stroke-width: 9; stroke-linecap: round; }
+.isle-wait-map .is-pad { fill: #b9cbe0; animation: isle-wait-pad 1.2s ease-in-out infinite alternate; }
+@keyframes isle-wait-pad { from { opacity: 0.4; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .isle-wait-map .is-pad { animation: none; } }

@@ -1,0 +1,138 @@
+/* The island home. Prefix: isle-. The 3D scene fills the home; the header, the dock and the pointer float above it. */
+.isle { background: #dcf0f6; overflow: hidden; }
+.isle-stage { position: absolute; inset: 0; }
+/* The 3D area takes every touch for the joystick; this beats the app's `.app-mobile *` pan rule. */
+.app-mobile .isle-stage, .app-mobile .isle-stage *, .isle-stage, .isle-stage canvas { touch-action: none; }
+/* The header floats over the scene below the status bar and keeps one line even at 360 px. */
+.isle .home-top.is-float { top: calc(var(--safe-t, 0px) + 8px); z-index: 12; }
+.isle .home-hello small { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Labels over the scene: fixed size, placed by the scene every frame, shown near the child. */
+.isle-labels { position: absolute; inset: 0; z-index: 3; pointer-events: none; overflow: hidden; }
+/* During the fly-over labels are gone at once, not fading over the sky. */
+.isle-labels.is-off { visibility: hidden; }
+.isle-label {
+  position: absolute; left: 0; top: 0; opacity: 0; transition: opacity 0.2s; will-change: transform;
+}
+.isle-label.is-on { opacity: 1; }
+.isle-label > span {
+  position: absolute; left: 0; bottom: 0; transform: translateX(-50%);
+  display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+  padding: 5px 10px; border-radius: 999px; background: #ffffffeb; color: var(--text);
+  font-size: 13px; font-weight: 600; line-height: 1.25; box-shadow: 0 4px 14px -6px #0a102859;
+}
+.isle-label svg { color: var(--text-2); flex: none; }
+.isle-label.is-sign > span { flex-direction: column; align-items: flex-start; gap: 0; padding: 6px 12px; border-radius: 12px; }
+.isle-label.is-sign b { font-size: 14px; letter-spacing: -0.01em; }
+.isle-label.is-sign small { font-size: 12px; font-weight: 500; color: var(--text-2); }
+.isle-label.is-sign.is-now > span { box-shadow: inset 0 0 0 2px var(--accent), 0 4px 14px -6px #0a102859; }
+.isle-label.is-sign.is-now small { color: var(--accent-strong); }
+.isle-label.is-gate > span { background: var(--ink); color: #fff; }
+.isle-label.is-gate svg { color: #fff; }
+.isle-label.is-tag > span { padding: 3px 9px 3px 7px; }
+.isle-label.is-tag i { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); flex: none; }
+
+/* Floating joystick: shown where the finger went down; the knob turns blue when the child runs. */
+.isle-joy {
+  position: absolute; left: 0; top: 0; width: 124px; height: 124px; margin: -62px 0 0 -62px; border-radius: 50%;
+  background: #ffffff38; box-shadow: inset 0 0 0 2px #ffffffcc, 0 8px 24px -12px #0a102840;
+  opacity: 0; transition: opacity 0.15s; pointer-events: none; z-index: 5;
+}
+.isle-joy.is-on { opacity: 1; }
+.isle-joy i {
+  position: absolute; left: 36px; top: 36px; width: 52px; height: 52px; border-radius: 50%;
+  background: #fff; box-shadow: 0 6px 16px -6px #0a102866; transition: background 0.15s;
+}
+.isle-joy.is-run i { background: var(--accent); }
+
+/* The pointer to the current lesson at the edge of the screen. */
+.isle-edge {
+  position: absolute; left: 0; top: 0; width: 46px; height: 46px; margin: -23px 0 0 -23px; padding: 0; border: 0;
+  border-radius: 50%; background: #fff; color: var(--accent-strong); box-shadow: 0 8px 22px -8px #0a102859;
+  display: grid; place-items: center; cursor: pointer; opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 4;
+}
+.isle-edge.is-on { opacity: 1; pointer-events: auto; }
+.isle-edge span { display: grid; transform: rotate(var(--a, 0rad)); }
+.isle-edge::after {
+  content: ''; position: absolute; inset: -5px; border-radius: 50%; border: 2px solid var(--accent); opacity: 0.35;
+  animation: pulse 2s infinite;
+}
+
+/* The one-line hint how to move, above the dock. */
+.isle-hint {
+  position: absolute; left: 50%; bottom: calc(var(--tabbar-space) + 86px); transform: translateX(-50%); z-index: 10;
+  display: flex; align-items: center; gap: 10px; white-space: nowrap; pointer-events: none;
+  padding: 10px 16px 10px 12px; border-radius: 999px; background: #0a1028d9; color: #fff; font-size: 14px; font-weight: 600;
+  animation: isle-in 0.3s cubic-bezier(.2,.9,.3,1.1);
+}
+.isle-hint-icon { flex: none; overflow: visible; }
+.isle-hint-dot { offset-rotate: 0deg; animation: isle-swipe 1.8s ease-in-out infinite; }
+@keyframes isle-swipe {
+  0%, 15% { offset-distance: 0%; opacity: 1; }
+  70% { offset-distance: 100%; opacity: 1; }
+  85% { offset-distance: 100%; opacity: 0; }
+  100% { offset-distance: 0%; opacity: 0; }
+}
+@keyframes isle-in { from { opacity: 0; transform: translate(-50%, 8px); } }
+
+/* The dock sits above the tab bar: «К уроку» or the card of what the child stands near. */
+.isle-dock {
+  position: absolute; left: 10px; right: 10px; bottom: calc(var(--tabbar-space) + 10px); z-index: 10;
+  display: flex; flex-direction: column; align-items: center; gap: 10px; pointer-events: none;
+}
+.isle-dock > * { pointer-events: auto; }
+.isle-go {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 22px 0 18px; border: 0; border-radius: 999px;
+  background: #fff; color: var(--text); font: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
+  box-shadow: 0 10px 28px -12px #0a102866, 0 0 0 1px #0a10280d; animation: isle-rise 0.25s cubic-bezier(.2,.9,.3,1.1);
+}
+.isle-go svg { color: var(--accent-strong); }
+.isle-go:active { transform: scale(0.97); }
+.isle-go.is-small { min-height: 44px; font-size: 14px; padding: 0 18px 0 14px; }
+.isle-go.is-on { cursor: default; padding-right: 6px; }
+.isle-go.is-on:active { transform: none; }
+.isle-stop { width: 44px; height: 44px; margin: -2px -4px -2px 4px; border: 0; border-radius: 50%; background: var(--surface); color: var(--text-2); display: grid; place-items: center; cursor: pointer; }
+.isle-stop:active { background: var(--border); }
+.isle-second { min-height: 44px; }
+.isle-toast {
+  position: absolute; left: 50%; top: calc(var(--safe-t, 0px) + 96px); transform: translateX(-50%); z-index: 12;
+  padding: 9px 14px; border-radius: 999px; background: #0a1028d9; color: #fff; font-size: 14px; font-weight: 600; white-space: nowrap;
+  animation: isle-in 0.25s cubic-bezier(.2,.9,.3,1.1); pointer-events: none;
+}
+.isle-card {
+  width: 100%; max-width: 440px; background: var(--bg); border-radius: 22px; padding: 16px 16px 16px;
+  display: flex; flex-direction: column; gap: 6px; box-shadow: 0 16px 40px -16px #0a102873, 0 0 0 1px #0a10280a;
+  animation: isle-rise 0.26s cubic-bezier(.2,.9,.3,1.1);
+}
+.isle-card h3 { font-size: 20px; }
+.isle-card > .t-small { margin: 0 0 8px; }
+.isle-card .btn { margin-top: 4px; }
+.isle-place { display: flex; gap: 12px; align-items: flex-start; }
+.isle-place .ai-face { width: 40px; height: 40px; flex: none; }
+.isle-place b { display: block; font-size: 17px; letter-spacing: -0.01em; line-height: 1.3; }
+.isle-place p { margin: 2px 0 0; font-size: 14px; color: var(--text-2); line-height: 1.4; }
+.isle-place small { display: block; margin-top: 4px; font-size: 13px; color: var(--text-3); line-height: 1.4; }
+.isle-quest { width: 100%; max-width: 440px; animation: isle-rise 0.26s cubic-bezier(.2,.9,.3,1.1); }
+.isle-quest .card { box-shadow: 0 16px 40px -16px #0a102873; border-color: transparent; }
+@keyframes isle-rise { from { opacity: 0; transform: translateY(10px); } }
+
+/* A groupmate's card: the room's card, placed in the dock. */
+.isle-pop { position: static; transform: none; animation: isle-rise 0.22s cubic-bezier(.2,.9,.3,1.2); }
+
+/* Inside the school: the class room over the island, with a way back. */
+.isle-class { position: absolute; inset: 0; z-index: 14; display: flex; flex-direction: column; background: #eef1f6; animation: isle-enter 0.32s cubic-bezier(.2,.8,.2,1); }
+.isle-class.is-out { opacity: 0; transform: scale(1.02); transition: opacity 0.2s, transform 0.2s; }
+@keyframes isle-enter { from { opacity: 0; transform: scale(1.04); } }
+.isle-back {
+  position: absolute; left: 12px; top: calc(var(--safe-t, 0px) + 10px); z-index: 3; display: inline-flex; align-items: center; gap: 6px; min-height: 44px;
+  padding: 0 16px 0 10px; border: 0; border-radius: 999px; background: #ffffffeb; color: var(--text); font: inherit;
+  font-size: 15px; font-weight: 600; cursor: pointer; box-shadow: 0 8px 24px -12px #0a102859;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .isle-edge::after { animation: none; }
+  .isle-hint-dot { animation: none; offset-distance: 60%; }
+  .isle-card, .isle-go, .isle-quest, .isle-class, .isle-pop, .isle-hint, .isle-toast { animation-duration: 0.01s; }
+  .isle-label { transition: none; }
+}

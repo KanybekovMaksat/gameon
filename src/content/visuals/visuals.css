@@ -1,0 +1,107 @@
+/* Explanation visuals (vis-). They sit in .explain-visual: a light grey panel. Tokens from tokens.css. */
+
+.vis { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+
+/* Controls */
+.vis-bar { display: flex; align-items: center; gap: 10px; }
+.vis-icon { flex: none; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border-radius: 12px; border: 1px solid var(--border-deep); background: #fff; color: var(--text-2); cursor: pointer; transition: transform 0.08s, opacity 0.15s; }
+.vis-icon:active { transform: scale(0.95); }
+.vis-icon:disabled { opacity: 0.4; cursor: default; transform: none; }
+.vis-count { flex: 1; display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.vis-count.is-result { color: var(--ok); font-weight: 600; }
+.vis-next { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--border-deep); background: #fff; color: var(--text); font-size: 15px; font-weight: 600; cursor: pointer; transition: transform 0.08s; }
+.vis-next svg { color: var(--accent-strong); }
+.vis-next:active { transform: scale(0.97); }
+.vis-wide { width: 100%; }
+.vis-switch { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; padding: 4px; border-radius: 13px; background: #0a10280d; }
+.vis-switch button { min-height: 44px; padding: 0 6px; border: 0; border-radius: 10px; background: transparent; color: var(--text-2); font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s, box-shadow 0.15s, color 0.15s; }
+.vis-switch button.is-on { background: #fff; color: var(--text); box-shadow: 0 1px 2px #0a10281a, 0 0 0 1px #0a10280d; }
+.vis-switch button:not(.is-on):active { background: #0a10280d; }
+.vis-switch button:active { transform: scale(0.97); }
+
+/* Code panel with a running line */
+.vis-code { margin: 0; }
+.vis-code .code-row { position: relative; align-items: center; margin: 0 -14px; padding: 0 14px; transition: background 0.2s, opacity 0.2s; }
+.vis-code .code-row.is-cur { background: #246fff3d; box-shadow: inset 3px 0 0 #6f9cff; }
+.vis-code .code-row.is-loop { background: #246fff17; }
+.vis-code .code-row.is-skip { opacity: 0.35; }
+.vis-iter { margin-left: auto; padding: 0 8px; border-radius: 999px; background: #246fff; color: #fff; font-family: var(--font-body); font-size: 12px; font-weight: 600; line-height: 22px; white-space: nowrap; animation: vis-pop 0.25s cubic-bezier(.3,1.5,.5,1); }
+.vis-note { margin: 0; min-height: 2.9em; font-size: 15px; line-height: 1.45; color: var(--text-2); }
+
+/* Robot */
+.vis-robot { display: flex; flex-direction: column; gap: 12px; }
+.vis-robot.is-side { flex-direction: row; align-items: center; gap: 14px; }
+.vis-robot.is-side > .robo-board { flex: none; }
+.vis-robot.is-side > .vis-code { flex: 1; min-width: 0; align-self: center; }
+.vis-cmds { flex: 1; min-width: 0; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.vis-cmds li { display: flex; align-items: center; gap: 8px; min-height: 30px; padding: 0 10px; border-radius: 9px; font-size: 15px; font-weight: 500; color: var(--text); transition: background 0.2s, color 0.2s; }
+.vis-cmds li b { width: 14px; font-size: 13px; font-weight: 600; color: var(--text-3); font-variant-numeric: tabular-nums; }
+.vis-cmds li svg { flex: none; color: var(--text-2); }
+.vis-cmds li.is-cur { background: #fff; color: var(--accent-deep); box-shadow: inset 0 0 0 1.5px var(--accent); }
+.vis-cmds li.is-cur svg, .vis-cmds li.is-cur b { color: var(--accent-strong); }
+.vis-cmds li.is-done { color: var(--text-3); }
+
+/* Variables as labeled boxes */
+.vis-state { display: flex; align-items: stretch; gap: 12px; }
+.vis-state > .vis-screen { flex: 1; min-width: 0; }
+.vis-state:has(.vis-boxes) > .vis-screen { margin-top: 10px; }
+.vis-boxes { flex: 1; display: flex; justify-content: center; gap: 12px; }
+.vis-state:has(.vis-screen) .vis-boxes { flex: none; }
+.vis-box { position: relative; display: grid; place-items: center; width: 80px; height: 64px; margin-top: 10px; border-radius: 14px; border: 1.5px solid var(--border-deep); background: #fff; transition: border-color 0.2s, box-shadow 0.2s; }
+.vis-box.is-hot { border-color: var(--accent); box-shadow: 0 0 0 3px #246fff26; }
+.vis-box.is-empty { border-style: dashed; background: transparent; }
+.vis-box-name { position: absolute; top: -11px; left: 50%; transform: translateX(-50%); padding: 1px 8px; border-radius: 7px; background: var(--ink); color: #fff; font-family: var(--font-code); font-size: 13px; font-weight: 600; line-height: 20px; }
+.vis-box-val { font-family: var(--font-code); font-size: 26px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+.vis-box-val.is-new { animation: vis-drop 0.3s cubic-bezier(.3,1.4,.5,1); }
+@keyframes vis-drop { from { transform: translateY(-14px); opacity: 0; } }
+@keyframes vis-pop { from { transform: scale(0.6); opacity: 0; } }
+
+/* Screen: what the program prints */
+.vis-screen { display: flex; flex-direction: column; gap: 0; min-height: 64px; padding: 8px 12px 10px; border-radius: 12px; border: 1px solid var(--border); background: #fff; }
+.vis-screen small { font-size: 12px; font-weight: 500; color: var(--text-3); }
+.vis-out { font-family: var(--font-code); font-size: 15px; line-height: 1.4; color: var(--text); animation: vis-drop 0.25s ease-out; }
+.vis-out.is-empty { color: var(--text-3); animation: none; }
+
+/* Fork */
+.vis-fork { display: block; width: 100%; height: auto; overflow: visible; }
+.vis-road { fill: none; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.2s; }
+.vis-road.is-on { stroke: var(--accent); stroke-width: 3; stroke-dasharray: 1; animation: vis-draw 0.35s ease-out; }
+.vis-road.is-off { stroke: var(--border-deep); stroke-width: 2; stroke-dasharray: 0.02 0.025; }
+@keyframes vis-draw { from { stroke-dashoffset: 1; } }
+.vis-node { fill: #fff; stroke: var(--border-deep); stroke-width: 1.5; transition: fill 0.2s, stroke 0.2s; }
+.vis-node.is-on { stroke: var(--accent); fill: var(--accent-soft); }
+.vis-fork-text { font-family: var(--font-body); font-size: 13px; font-weight: 600; fill: var(--text); transition: fill 0.2s; }
+.vis-fork-text.is-off { fill: var(--text-3); }
+.vis-fork-tag { font-family: var(--font-body); font-size: 12px; font-weight: 600; fill: var(--text-3); }
+
+/* if / else */
+.vis-ifelse-top { display: flex; align-items: center; gap: 10px; }
+.vis-num-label { font-size: 16px; font-weight: 600; }
+.vis-num-label code { font-family: var(--font-code); }
+.vis-num { display: inline-flex; align-items: center; gap: 2px; padding: 3px; border-radius: 12px; background: #fff; border: 1px solid var(--border-deep); }
+.vis-num button { width: 44px; height: 44px; padding: 0; border: 0; border-radius: 9px; background: var(--surface); color: var(--text); font-size: 20px; font-weight: 600; cursor: pointer; }
+.vis-num button:disabled { opacity: 0.35; cursor: default; }
+.vis-num b { min-width: 34px; text-align: center; font-family: var(--font-code); font-size: 20px; animation: vis-pop 0.2s ease-out; }
+.vis-cond { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 10px; background: #fff; border: 1px solid var(--border-deep); font-size: 14px; font-weight: 600; color: var(--text-2); animation: vis-pop 0.2s ease-out; }
+.vis-cond code { font-family: var(--font-code); color: var(--text); font-weight: 500; }
+.vis-cond.is-yes { border-color: var(--accent); color: var(--accent-deep); background: var(--accent-soft); }
+
+/* range on a number line */
+.vis-line { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; padding: 4px 0 18px; }
+.vis-dot { position: relative; display: grid; place-items: center; aspect-ratio: 1; max-width: 42px; width: 100%; justify-self: center; border-radius: 50%; background: #fff; border: 1.5px solid var(--border-deep); color: var(--text-3); font-family: var(--font-code); font-size: 16px; }
+.vis-dot.is-in { border-color: var(--accent-strong); background: var(--accent-strong); color: #fff; animation: vis-pop 0.25s cubic-bezier(.3,1.5,.5,1) both; }
+.vis-dot.is-stop { border-style: dashed; border-color: var(--text-2); color: var(--text); }
+.vis-dot small { position: absolute; top: calc(100% + 3px); font-family: var(--font-body); font-size: 12px; font-weight: 500; color: var(--text-2); white-space: nowrap; }
+
+/* Order of steps */
+.vis-order { display: flex; flex-direction: column; gap: 10px; }
+.vis-step { position: relative; display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--border-deep); background: #fff; font-size: 16px; font-weight: 500; animation: vis-drop 0.3s ease-out both; }
+.vis-step b { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 7px; background: var(--surface); color: var(--text-3); font-size: 13px; }
+.vis-step + .vis-step::before { content: ''; position: absolute; left: 25px; top: -11px; width: 2px; height: 10px; background: var(--border-deep); }
+.vis-result { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border-radius: 12px; font-size: 15px; font-weight: 600; animation: vis-pop 0.25s ease-out 0.15s both; }
+.vis-result.is-ok { background: var(--ok-soft); color: var(--ok); }
+.vis-result.is-bad { background: var(--bad-soft); color: var(--bad); }
+
+@media (prefers-reduced-motion: reduce) {
+  .vis *, .vis *::before { animation: none !important; transition: none !important; }
+}

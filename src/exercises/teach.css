@@ -1,0 +1,38 @@
+/* Научи Робика: a small chat with the AI student inside the task card. */
+.teach { display: flex; flex-direction: column; gap: 12px; }
+.teach-task small, .teach-result small { display: block; font-size: 12px; font-weight: 500; color: var(--text-3); margin-bottom: 6px; }
+.teach-log { display: flex; flex-direction: column; gap: 8px; max-height: 260px; overflow-y: auto; scrollbar-width: none; }
+.teach-msg { display: flex; gap: 8px; align-items: flex-end; animation: msg 0.2s; }
+.teach-msg p { margin: 0; padding: 9px 13px; font-size: 15px; line-height: 1.45; border-radius: 16px 16px 16px 5px; background: var(--surface); max-width: 85%; }
+.teach-msg.is-me { justify-content: flex-end; }
+.teach-msg.is-me p { background: var(--ink); color: #fff; border-radius: 16px 16px 5px 16px; }
+.teach-msg .robik-mark { flex: none; }
+.teach-typing { display: flex; gap: 5px; padding: 13px 15px !important; }
+.teach-typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--text-3); animation: dot 1s infinite; }
+.teach-typing i:nth-child(2) { animation-delay: 0.15s; }
+.teach-typing i:nth-child(3) { animation-delay: 0.3s; }
+.teach-input { display: flex; align-items: center; gap: 8px; height: 52px; padding: 0 4px 0 14px; border-radius: 999px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--border); }
+.teach-input input { flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 16px; outline: none; color: var(--text); }
+.teach-input input::placeholder { color: var(--text-3); }
+/* Above the keyboard the field keeps the count of explanations under it in view. */
+.teach-input { transition: box-shadow 0.15s, background 0.15s; scroll-margin-bottom: 32px; }
+.teach-input:focus-within { background: #fff; box-shadow: inset 0 0 0 2px var(--accent); }
+.teach-input button { width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--ink); color: #fff; display: grid; place-items: center; cursor: pointer; flex: none; }
+.teach-input button:disabled { opacity: 0.25; cursor: default; }
+.teach-left { font-size: 12px; color: var(--text-3); text-align: right; margin-top: -4px; }
+.teach-result { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: var(--r-md); animation: rise 0.3s; }
+.teach-result b { font-family: var(--font-code); font-size: 18px; }
+.teach-result small { margin: 0; }
+.teach-result-icon { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: #fff; flex: none; }
+.teach-result.is-solved { background: var(--ok-soft); }
+.teach-result.is-solved .teach-result-icon { background: var(--ok); }
+.teach-result.is-wrong { background: var(--bad-soft); }
+.teach-result.is-wrong .teach-result-icon { background: var(--bad); }
+.teach-more { margin-left: auto; font-size: 13px; font-weight: 600; color: var(--bad); }
+.teach-log { mask-image: linear-gradient(to bottom, transparent 0, #000 16px); padding-top: 8px; }
+.teach-msg .inline-code { background: #ffffff; }
+.teach-msg.is-me .inline-code { background: #ffffff26; border-color: transparent; color: #fff; }
+.teach-result { scroll-margin-bottom: 24px; }
+.teach-result.is-pending { background: var(--surface); }
+.teach-left { scroll-margin-bottom: 24px; }
+.teach-result.is-pending .teach-more { color: var(--text-2); }

@@ -1,0 +1,127 @@
+/* Shop: desk items, characters, real prizes and the purchase sheet. Prefix: shop-. */
+.shop { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.shop-scroll { flex: 1; overflow-y: auto; padding: 0 16px calc(var(--tabbar-space, 0px) + 28px); scrollbar-width: none; }
+.shop button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Sticky top: title, balance, section chips */
+.shop-top { position: sticky; top: 0; z-index: 5; margin: 0 -16px; padding: 6px 16px 10px; background: var(--bg); transition: box-shadow 0.2s; }
+.shop-top.is-stuck { box-shadow: 0 1px 0 var(--border); }
+.shop-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px; }
+.shop-head h1 { font-size: 26px; letter-spacing: -0.03em; }
+.shop-balance { position: relative; display: inline-flex; align-items: center; gap: 7px; height: 40px; padding: 0 14px 0 9px; border-radius: 999px; background: var(--surface); font-size: 17px; font-variant-numeric: tabular-nums; }
+.shop-balance b { font-weight: 700; letter-spacing: -0.01em; }
+.shop-spent {
+  position: absolute; right: 12px; top: 100%; margin-top: 4px; font-style: normal; font-size: 13px; font-weight: 600; color: var(--text-2);
+  font-variant-numeric: tabular-nums; pointer-events: none; animation: shop-spent-in 0.3s both, shop-spent-out 0.25s 1.4s forwards;
+}
+@keyframes shop-spent-in { from { opacity: 0; transform: translateY(-6px); } }
+@keyframes shop-spent-out { to { opacity: 0; transform: translateY(4px); } }
+
+.shop-nav { display: flex; gap: 8px; margin-top: 6px; }
+.shop-chip {
+  position: relative; height: 44px; padding: 0 16px; border: 0; border-radius: 999px; cursor: pointer;
+  background: var(--surface); color: var(--text-2); font-size: 14px; font-weight: 600; white-space: nowrap; transition: background 0.2s, color 0.2s, transform 0.08s;
+}
+.shop-chip.is-on { background: var(--accent-soft); color: var(--accent-strong); }
+.shop-chip:active { transform: scale(0.96); }
+
+.shop-earn { text-wrap: pretty; display: flex; gap: 10px; align-items: flex-start; margin: 6px 0 0; padding: 12px 14px; border-radius: var(--r-md); background: var(--surface); font-size: 14px; line-height: 1.4; color: var(--text-2); }
+.shop-earn svg { flex: none; margin-top: 1px; }
+
+/* Sections */
+.shop-sec { padding-top: 26px; scroll-margin-top: 118px; }
+.shop-sec h2 { font-size: 21px; letter-spacing: -0.02em; }
+.shop-sec > p { margin: 3px 0 14px; font-size: 14px; color: var(--text-2); }
+
+.shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 12px; }
+.shop-grid.is-3 { grid-template-columns: repeat(3, 1fr); gap: 16px 10px; }
+.shop-card { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; min-width: 0; padding: 0; border: 0; background: none; text-align: left; cursor: pointer; }
+.shop-card b { font-size: 15px; font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; }
+.shop-pic {
+  position: relative; width: 100%; aspect-ratio: 6 / 5; margin-bottom: 7px; border-radius: 18px; background: var(--surface);
+  display: grid; place-items: center; overflow: hidden; transition: transform 0.15s, background 0.2s, box-shadow 0.2s;
+}
+.shop-pic img { position: absolute; inset: 7%; width: 86%; height: 86%; object-fit: contain; display: block; }
+.shop-card:active .shop-pic { transform: scale(0.97); }
+.shop-card.is-on .shop-pic { background: var(--accent-soft); box-shadow: inset 0 0 0 2px var(--accent); }
+.shop-char .shop-pic { aspect-ratio: 7 / 8; border-radius: 16px; }
+.shop-char .shop-pic img { inset: 0; width: 100%; height: 100%; }
+.shop-char b { font-size: 14px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.shop-check { position: absolute; top: 7px; right: 7px; width: 24px; height: 24px; border-radius: 50%; background: var(--accent-strong); color: #fff; display: grid; place-items: center; }
+.shop-check svg { stroke-width: 2.6; }
+
+.shop-price { display: inline-flex; align-items: center; gap: 5px; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--text); }
+.shop-price svg { flex: none; }
+.shop-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 600; color: var(--text-2); }
+.shop-tag svg { stroke-width: 2.4; }
+.shop-tag.is-on { color: var(--accent-strong); }
+
+/* Real prizes: a row each, with the way to the goal */
+.shop-prizes { display: grid; gap: 10px; }
+.shop-prize {
+  display: grid; grid-template-columns: 76px 1fr; gap: 14px; align-items: center; width: 100%; padding: 12px 14px 12px 12px;
+  border: 1px solid var(--border); border-radius: var(--r-lg); background: var(--card); text-align: left; cursor: pointer; transition: transform 0.15s;
+}
+.shop-prize:active { transform: scale(0.99); }
+.shop-prize-art { width: 76px; height: 76px; border-radius: 16px; background: var(--surface); padding: 6px; display: block; }
+.shop-prize-body { display: flex; flex-direction: column; min-width: 0; }
+.shop-prize-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.shop-prize-top b { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.3; }
+.shop-prize-body small { font-size: 13px; color: var(--text-2); line-height: 1.35; margin-top: 2px; }
+.shop-prize-goal { display: grid; grid-template-columns: 1fr 80px; align-items: center; gap: 10px; margin-top: 9px; min-height: 18px; }
+.shop-prize-goal .progress { height: 6px; }
+.shop-prize-goal i { display: inline-flex; align-items: center; justify-content: flex-end; gap: 3px; font-style: normal; font-size: 12px; font-weight: 600; color: var(--text-3); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.shop-prize-goal .shop-tag { grid-column: 1 / -1; }
+.shop-prize-goal .shop-tag { font-size: 13px; }
+
+/* Purchase sheet (the shared sheet, app/Sheet.tsx). It scrolls when the phone is short. */
+.sh.shop-sheet { overflow-y: auto; scrollbar-width: none; gap: 0; padding: 22px 16px max(22px, var(--safe-b)); }
+.shop-x { position: absolute; top: 24px; right: 24px; width: 44px; height: 44px; margin: -6px; border: 0; border-radius: 50%; background: none; color: var(--text-2); display: grid; place-items: center; cursor: pointer; }
+.shop-x::before { content: ''; position: absolute; inset: 6px; border-radius: 50%; background: #ffffffd9; box-shadow: 0 1px 2px #0a10281a; transition: background 0.15s, transform 0.12s; }
+.shop-x:active::before { background: var(--surface); transform: scale(0.92); }
+.shop-x svg { position: relative; }
+
+.shop-hero { position: relative; flex: none; height: 208px; border-radius: 20px; background: var(--surface); display: grid; place-items: center; overflow: hidden; }
+.shop-hero > img { width: 180px; height: 180px; object-fit: contain; }
+.shop-hero.is-character > img { width: 182px; height: 208px; }
+.shop-hero-art { width: 164px; height: 164px; display: block; }
+.shop-hero-face { position: absolute; left: 12px; bottom: 12px; display: flex; align-items: center; gap: 8px; padding: 4px 12px 4px 4px; border-radius: 999px; background: #fff; box-shadow: 0 1px 2px #0a10281a; }
+.shop-hero-face img { width: 36px; height: 36px; border-radius: 50%; display: block; background: var(--surface); }
+.shop-hero-face small { font-size: 13px; font-weight: 600; color: var(--text-2); }
+.shop-done { position: absolute; top: 12px; left: 12px; width: 34px; height: 34px; border-radius: 50%; background: var(--ok); color: #fff; display: grid; place-items: center; box-shadow: 0 0 0 4px #ffffffb3; }
+.shop-done svg { stroke-width: 2.6; }
+.shop-done.is-pop { animation: shop-pop 0.32s cubic-bezier(.2,.9,.3,1.4); }
+@keyframes shop-pop { from { transform: scale(0.3); opacity: 0; } }
+
+.shop-kind { margin-top: 14px; font-size: 13px; font-weight: 500; color: var(--text-3); }
+.shop-sheet h3 { font-size: 23px; letter-spacing: -0.025em; margin-top: 2px; }
+.shop-text { margin: 4px 0 0; font-size: 15px; color: var(--text-2); }
+
+.shop-wallet { margin: 14px 0 0; font-size: 14px; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.shop-wallet b { display: inline-flex; align-items: center; gap: 4px; vertical-align: -3px; color: var(--text); font-weight: 600; }
+.shop-short { margin-top: 14px; padding: 12px 14px 13px; border-radius: var(--r-md); background: var(--surface); display: flex; flex-direction: column; gap: 9px; }
+.shop-short-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; font-size: 15px; }
+.shop-short-row b { font-weight: 600; }
+.shop-short-row span { font-size: 13px; color: var(--text-3); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.shop-short .progress { flex: none; height: 6px; }
+.shop-short p { margin: 0; font-size: 13px; line-height: 1.4; color: var(--text-2); text-wrap: pretty; }
+.shop-state { display: flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 15px; font-weight: 600; color: var(--text-2); }
+.shop-state svg { stroke-width: 2.4; }
+.shop-state.is-on { color: var(--accent-strong); }
+.shop-ok { display: flex; align-items: center; gap: 12px; margin-top: 14px; padding: 10px 14px 10px 10px; border-radius: var(--r-md); background: var(--ok-soft); animation: shop-rise 0.3s both; }
+.shop-ok > span { width: 32px; height: 32px; flex: none; border-radius: 50%; background: var(--ok); color: #fff; display: grid; place-items: center; }
+.shop-ok > span svg { stroke-width: 2.6; }
+.shop-ok b { display: block; font-size: 15px; color: var(--ok); line-height: 1.3; }
+.shop-ok small { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; color: var(--text-2); font-variant-numeric: tabular-nums; }
+@keyframes shop-rise { from { opacity: 0; transform: translateY(6px); } }
+.shop-order { display: flex; align-items: center; gap: 12px; margin-top: 10px; padding: 12px 14px; border-radius: var(--r-md); border: 1px solid var(--border); }
+.shop-order > svg { flex: none; color: var(--text-2); }
+.shop-order b { display: block; font-size: 15px; line-height: 1.3; }
+.shop-order span { font-size: 13px; color: var(--text-2); }
+.shop-actions { display: flex; flex-direction: column; gap: 6px; margin-top: 18px; }
+.shop-actions .btn svg { margin: 0 -3px 0 1px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .shop *, .shop *::before { animation: none !important; transition: none !important; }
+}
+@media (max-width: 370px) { .shop-char b { font-size: 13px; letter-spacing: -0.02em; } }

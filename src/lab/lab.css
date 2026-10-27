@@ -1,0 +1,40 @@
+/* The lab: forms of interaction for one topic. The phone screen and the panel beside it on a wide screen. */
+.lab { flex: 1; min-height: 0; display: flex; flex-direction: column; background: var(--bg); }
+.lab-top { display: flex; align-items: center; gap: 10px; padding: 10px 16px 6px; }
+.lab-title { flex: 1; min-width: 0; line-height: 1.25; }
+.lab-title b { display: block; font-size: 17px; letter-spacing: -0.01em; }
+.lab-title small { color: var(--text-3); font-size: 13px; }
+.lab-info { width: 44px; height: 44px; border: 0; border-radius: 12px; background: var(--surface); color: var(--text-2); display: grid; place-items: center; cursor: pointer; }
+.lab-info:active { transform: scale(0.94); }
+.lab-chips { display: flex; gap: 6px; overflow-x: auto; padding: 4px 16px 10px; scrollbar-width: none; flex: none; }
+.lab-chip { flex: none; display: inline-flex; align-items: center; gap: 7px; min-height: 36px; padding: 0 12px 0 6px; border: 1px solid var(--border); border-radius: 999px; background: #fff; font: inherit; font-size: 14px; font-weight: 600; color: var(--text-2); cursor: pointer; transition: background 0.15s, border-color 0.15s, transform 0.12s; position: relative; }
+.lab-chip::after { content: ''; position: absolute; inset: -4px 0; }
+.lab-chip:active { transform: scale(0.96); }
+.lab-chip i { font-style: normal; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; background: var(--surface); }
+.lab-chip.is-on { background: var(--ink); border-color: var(--ink); color: #fff; }
+.lab-chip.is-on i { background: #ffffff26; }
+/* A variant fills the stage: it keeps its own scroll area and its own footer. */
+.lab-stage { flex: 1; min-height: 0; display: flex; flex-direction: column; border-top: 1px solid var(--border); }
+.lab-empty { margin: auto; color: var(--text-3); font-size: 15px; padding: 24px; text-align: center; }
+.lab-about { margin: 12px 0 0; display: grid; gap: 2px; }
+.lab-about dt { font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 6px; }
+.lab-about dd { margin: 0; font-size: 13px; line-height: 1.4; color: var(--text-2); }
+.sh .lab-about dd { font-size: 14px; }
+
+/* The panel for a talk: short sections, the list of forms in the middle; on a short screen the pane scrolls and the phone stays. */
+.lab-panel { gap: 16px; }
+.lab-sec h4 { margin: 0 0 6px; font-size: 12px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; }
+.lab-sec ul { margin: 0; padding: 0 0 0 14px; display: grid; gap: 3px; font-size: 13px; line-height: 1.4; color: var(--text-2); }
+.lab-sec ul li::marker { color: var(--text-3); }
+.lab-list { list-style: none; margin: 0; padding: 2px; display: flex; flex-direction: column; gap: 2px; }
+.lab-list li { border-radius: 14px; padding: 2px; }
+.lab-list li.is-on { background: #fff; box-shadow: 0 0 0 1px #0a10280d, 0 1px 2px #0a10281a; padding: 2px 2px 10px; }
+.lab-list button { display: flex; gap: 10px; align-items: flex-start; width: 100%; border: 0; background: none; text-align: left; padding: 6px 10px; border-radius: 12px; cursor: pointer; font: inherit; color: inherit; }
+.lab-list button:hover { background: #0a10280a; }
+.lab-list li.is-on button:hover { background: none; }
+.lab-list i { font-style: normal; width: 24px; height: 24px; border-radius: 50%; flex: none; display: grid; place-items: center; font-size: 12px; font-weight: 600; background: #0a10280f; color: var(--text-2); margin-top: 1px; }
+.lab-list li.is-on i { background: var(--ink); color: #fff; }
+.lab-list b { display: block; font-size: 14px; font-weight: 600; }
+.lab-list small { display: block; font-size: 12px; color: var(--text-3); line-height: 1.4; margin-top: 2px; }
+.lab-list .lab-about { margin: 0 12px 0 44px; }
+.lab-list .lab-about dt:first-child { margin-top: 0; }

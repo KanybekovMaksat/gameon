@@ -1,0 +1,134 @@
+/* «Ритм»: loops you can hear. A strip of the target and the child's rhythm, a step grid inside a loop block. */
+.lp-rhythm { flex: 1; min-height: 0; display: flex; flex-direction: column; background: var(--bg); }
+.lp-rhythm-scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 10px 16px 16px; scrollbar-width: none; }
+.lp-rhythm-foot { position: relative; flex: none; display: flex; flex-direction: column; gap: 10px; padding: 10px 16px max(16px, var(--safe-b, 0px)); background: var(--bg); }
+/* Content that scrolls under the footer fades out instead of being cut. */
+.lp-rhythm-foot::before { content: ''; position: absolute; left: 0; right: 0; bottom: 100%; height: 20px; background: linear-gradient(to bottom, #ffffff00, var(--bg)); pointer-events: none; }
+.lp-rhythm-in { animation: lp-rhythm-in 0.28s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes lp-rhythm-in { from { opacity: 0; transform: translateY(8px); } }
+
+/* Level line */
+.lp-rhythm-head { display: flex; align-items: center; gap: 10px; min-height: 32px; }
+.lp-rhythm-level { flex: 1; min-width: 0; font-size: 13px; font-weight: 600; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lp-rhythm-dots { flex: none; display: flex; gap: 4px; }
+.lp-rhythm-dots i { width: 18px; height: 4px; border-radius: 2px; background: var(--border-deep); transition: background 0.2s; }
+.lp-rhythm-dots i.is-done { background: var(--ink); }
+.lp-rhythm-dots i.is-now { background: var(--accent); }
+.lp-rhythm-sound { flex: none; width: 44px; height: 44px; margin: -6px -10px -6px -4px; border: 0; border-radius: 12px; background: transparent; color: var(--text-2); display: grid; place-items: center; cursor: pointer; transition: background 0.15s, transform 0.12s; }
+.lp-rhythm-sound:active { background: var(--surface); transform: scale(0.94); }
+.lp-rhythm-sound[aria-pressed='true'] { color: var(--text-3); }
+.lp-rhythm-sound:disabled { cursor: default; background: transparent; transform: none; }
+.lp-rhythm-title { font-size: 22px; margin-top: 4px; }
+.lp-rhythm-goal { margin: 2px 0 10px; font-size: 15px; line-height: 1.45; color: var(--text-2); text-wrap: pretty; }
+
+/* The two strips: the target and the child's rhythm, step under step. */
+.lp-rhythm-strips { border: 1px solid var(--border); border-radius: 16px; padding: 6px 10px 10px; background: var(--card); }
+.lp-rhythm-strip-head { display: flex; align-items: center; gap: 8px; min-height: 38px; }
+.lp-rhythm-strip-head + .lp-rhythm-roll { margin-top: 2px; }
+.lp-rhythm-roll + .lp-rhythm-strip-head { margin-top: 4px; min-height: 22px; }
+.lp-rhythm-strip-head b { font-size: 14px; font-weight: 600; }
+.lp-rhythm-strip-head small { font-size: 12px; color: var(--text-3); font-variant-numeric: tabular-nums; }
+.lp-rhythm-strip-head .lp-rhythm-play { margin-left: auto; }
+
+.lp-rhythm-roll { display: flex; gap: 4px; }
+.lp-rhythm-roll-keys { flex: none; width: 10px; display: flex; flex-direction: column; justify-content: space-between; gap: 2px; padding: 4px 0; color: var(--text-3); }
+.lp-rhythm-roll-keys svg { height: 7px; }
+.lp-rhythm-bar { min-width: 0; display: flex; gap: 2px; padding: 4px 3px; border-radius: 6px; background: var(--surface); }
+.lp-rhythm-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; border-radius: 3px; transition: background 0.12s, box-shadow 0.12s; }
+.lp-rhythm-col i { display: block; height: 7px; border-radius: 2.5px; background: #0a102814; transition: background 0.2s; }
+.lp-rhythm-col i.is-hit { background: var(--ink); }
+.is-mine .lp-rhythm-col i.is-hit { background: var(--accent-strong); }
+/* A step one rhythm has and the other does not. */
+.lp-rhythm-col.is-void { box-shadow: inset 0 0 0 1px var(--border-deep); }
+.lp-rhythm-col.is-void i { background: transparent; }
+/* The closing step after the loop. */
+.lp-rhythm-col.is-tail { box-shadow: 0 0 0 1.5px var(--text-3); }
+.lp-rhythm-col.is-head { background: var(--accent-soft); box-shadow: 0 0 0 2px var(--accent); }
+.lp-rhythm-col.is-diff { background: var(--bad-soft); box-shadow: 0 0 0 1.5px var(--bad-edge); }
+.lp-rhythm-roll.is-ok .lp-rhythm-col i.is-hit { background: var(--ok-fill); transition-delay: calc(var(--i) * 14ms); }
+
+/* The task card: blue while the child works, green when right, amber when wrong. */
+.lp-rhythm-card { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; padding: 6px; border-radius: 18px; border: 1.5px solid var(--border-deep); background: var(--surface); transition: background 0.2s, border-color 0.2s; }
+.lp-rhythm-card[data-state='active'] { border-color: var(--accent-line); background: var(--accent-soft); }
+.lp-rhythm-card[data-state='ok'] { border-color: var(--ok-line); background: var(--ok-soft); }
+.lp-rhythm-card[data-state='bad'] { border-color: var(--bad-line); background: var(--bad-soft); }
+.lp-rhythm-loop, .lp-rhythm-after { background: var(--card); border-radius: 12px; padding: 8px 10px 10px; transition: box-shadow 0.12s; }
+.lp-rhythm-loop-head { display: flex; align-items: center; gap: 8px; min-height: 38px; color: var(--text-2); }
+.lp-rhythm-status { font-size: 15px; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
+.lp-rhythm-status.is-live { color: var(--accent-strong); }
+.lp-rhythm-loop-head .lp-rhythm-play { margin-left: auto; }
+.lp-rhythm-play.is-on { --b-fg: var(--accent-strong); box-shadow: inset 0 0 0 1.5px var(--accent); }
+.lp-rhythm-play.is-on:active { box-shadow: inset 0 0 0 1.5px var(--accent); }
+
+/* The repeat count, which is also the repeat counter while the loop plays. */
+.lp-rhythm-count { display: grid; grid-template-columns: repeat(6, minmax(44px, 1fr)); gap: 4px; margin: 4px 0 8px; }
+.lp-rhythm-rep { min-height: 44px; min-width: 44px; padding: 0; border-radius: 11px; border: 1px solid var(--border-deep); background: var(--card); color: var(--text-2); font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; cursor: pointer; transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.12s; }
+.lp-rhythm-rep small { font-size: 13px; font-weight: 500; opacity: 0.7; margin-right: 1px; }
+.lp-rhythm-rep:active:not(:disabled) { transform: scale(0.93); }
+.lp-rhythm-rep.is-on { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent-deep); }
+.lp-rhythm-rep.is-n, .lp-rhythm-rep.is-now { background: var(--accent-strong); border-color: var(--accent-strong); color: #fff; }
+.lp-rhythm-rep.is-now { transform: scale(1.06); }
+.lp-rhythm-rep:disabled { cursor: default; }
+.lp-rhythm-card[data-state='ok'] .lp-rhythm-rep.is-on { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
+.lp-rhythm-card[data-state='ok'] .lp-rhythm-rep.is-n { background: var(--ok-fill); border-color: var(--ok-fill); color: #fff; }
+
+/* The step grid: a tap toggles, a sideways drag paints a row, a vertical swipe scrolls the page. */
+.lp-rhythm .lp-rhythm-grid { touch-action: pan-y; display: grid; grid-template-columns: auto repeat(4, minmax(44px, 1fr)); gap: 5px 6px; align-items: center; }
+.lp-rhythm-num-label { font-size: 11px; color: var(--text-3); line-height: 1; }
+.lp-rhythm-num { text-align: center; font-size: 11px; font-weight: 500; color: var(--text-3); font-variant-numeric: tabular-nums; line-height: 1; transition: color 0.12s; }
+.lp-rhythm-num.is-head { color: var(--accent-strong); }
+.lp-rhythm-name { display: flex; align-items: center; gap: 6px; padding-right: 2px; font-size: 13px; font-weight: 500; color: var(--text-2); white-space: nowrap; }
+.lp-rhythm-name .lp-rhythm-mark, .lp-rhythm-hitchip .lp-rhythm-mark { color: var(--text-3); flex: none; }
+.lp-rhythm-cell { height: 48px; padding: 0; border-radius: 12px; border: 1px solid var(--border-deep); background: var(--card); color: #0a10281f; display: grid; place-items: center; cursor: pointer; transition: background 0.1s, border-color 0.1s, color 0.1s, transform 0.1s, box-shadow 0.12s; }
+.lp-rhythm-grid[data-rows='3'] .lp-rhythm-cell { height: 44px; }
+.lp-rhythm-cell.is-on { background: var(--accent-strong); border-color: var(--accent-strong); color: #fff; }
+.lp-rhythm-cell.is-head { box-shadow: 0 0 0 2px var(--accent-line); }
+.lp-rhythm-cell.is-head:not(.is-on) { background: var(--accent-soft); }
+.lp-rhythm-cell.is-on.is-head { transform: scale(1.06); box-shadow: 0 0 0 3px var(--accent-line); }
+.lp-rhythm-cell.is-press { transform: scale(0.92); }
+.lp-rhythm-cell:disabled { cursor: default; }
+.lp-rhythm-card[data-state='ok'] .lp-rhythm-cell.is-on { background: var(--ok-fill); border-color: var(--ok-fill); }
+.lp-rhythm-cell:focus-visible, .lp-rhythm-rep:focus-visible, .lp-rhythm-hitchip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* The closing step: it sits outside the loop block, like a line without indent after «повтори». */
+.lp-rhythm-after { display: flex; align-items: center; gap: 6px; padding: 6px 8px 6px 10px; }
+.lp-rhythm-after.is-head { box-shadow: 0 0 0 2px var(--accent); }
+.lp-rhythm-after-label { flex: none; font-size: 15px; font-weight: 600; padding-right: 2px; }
+.lp-rhythm-hitchip { flex: 1; min-width: 0; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 0 4px; border-radius: 12px; border: 1px solid var(--border-deep); background: var(--card); font-size: 13px; font-weight: 600; color: var(--text-2); cursor: pointer; transition: background 0.1s, border-color 0.1s, color 0.1s, transform 0.1s; }
+.lp-rhythm-hitchip:active:not(:disabled) { transform: scale(0.95); }
+.lp-rhythm-hitchip.is-on { background: var(--accent-strong); border-color: var(--accent-strong); color: #fff; }
+.lp-rhythm-hitchip.is-on .lp-rhythm-mark { color: #fff; }
+.lp-rhythm-hitchip:disabled { cursor: default; }
+.lp-rhythm-card[data-state='ok'] .lp-rhythm-hitchip.is-on { background: var(--ok-fill); border-color: var(--ok-fill); }
+
+
+/* Feedback above the main button */
+.lp-rhythm-fb { padding: 10px 14px; border-radius: 14px; animation: lp-rhythm-fb 0.22s cubic-bezier(.2,.8,.2,1) both; }
+.lp-rhythm-fb b { display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600; line-height: 1.3; }
+.lp-rhythm-fb b svg { flex: none; }
+.lp-rhythm-fb p { margin: 2px 0 0; font-size: 14px; line-height: 1.4; color: var(--text); text-wrap: pretty; }
+.lp-rhythm-fb.is-ok { background: var(--ok-soft); }
+.lp-rhythm-fb.is-ok b { color: var(--ok); }
+.lp-rhythm-fb.is-bad { background: var(--bad-soft); }
+.lp-rhythm-fb.is-bad b { color: var(--bad); }
+.lp-rhythm-fb.is-hint { background: var(--surface); animation: none; }
+.lp-rhythm-fb.is-hint b { color: var(--text-2); }
+@keyframes lp-rhythm-fb { from { opacity: 0; transform: translateY(6px); } }
+
+/* Finish */
+.lp-rhythm-finish { display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: 28px; }
+.lp-rhythm-finish-icon { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; background: var(--ok-fill); color: #fff; margin-bottom: 14px; }
+.lp-rhythm-finish .lp-rhythm-goal { max-width: 32ch; margin-bottom: 20px; }
+.lp-rhythm-recap { list-style: none; margin: 0; padding: 0; width: 100%; display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 16px; text-align: left; }
+.lp-rhythm-recap li { display: flex; align-items: center; gap: 12px; padding: 12px 14px; }
+.lp-rhythm-recap li + li { border-top: 1px solid var(--border); }
+.lp-rhythm-recap i { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--ok-soft); color: var(--ok); }
+.lp-rhythm-recap span { flex: 1; min-width: 0; }
+.lp-rhythm-recap b { display: block; font-size: 15px; font-weight: 600; }
+.lp-rhythm-recap small { display: block; font-size: 13px; color: var(--text-3); }
+.lp-rhythm-recap em { font-style: normal; font-family: var(--font-code); font-size: 14px; color: var(--text-2); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-rhythm *, .lp-rhythm *::before, .lp-rhythm *::after { animation: none !important; transition: none !important; }
+  .lp-rhythm-rep.is-now, .lp-rhythm-cell.is-on.is-head, .lp-rhythm-cell.is-press { transform: none; }
+}

@@ -1,0 +1,136 @@
+/* «Живой цикл» (lp-dial-): the repeat block with a count slider, the path on the board and the loop as code. */
+.lp-dial { flex: 1; min-height: 0; display: flex; flex-direction: column; -webkit-user-select: none; user-select: none; }
+.lp-dial-scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 10px 16px 8px; scrollbar-width: none; }
+.lp-dial-level { display: flex; flex-direction: column; gap: 8px; animation: lp-dial-in 0.28s cubic-bezier(.3,.7,.3,1); }
+@keyframes lp-dial-in { from { opacity: 0; transform: translateY(8px); } }
+
+/* Level: pips, number, topic, then the goal */
+.lp-dial-head { display: flex; align-items: center; gap: 10px; min-height: 20px; }
+.lp-dial-pips { display: flex; gap: 4px; flex: none; margin-left: auto; }
+.lp-dial-pips i { width: 18px; height: 4px; border-radius: 2px; background: var(--border-deep); transition: background 0.25s, width 0.25s; }
+.lp-dial-pips i.is-done { background: var(--ink); }
+.lp-dial-pips i.is-now { width: 28px; background: var(--accent); }
+.lp-dial-step { min-width: 0; font-size: 13px; font-weight: 600; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lp-dial-goal { margin: 0; font-size: 17px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; text-wrap: pretty; }
+
+/* The card: blue while the child works, green when right, amber when wrong */
+.lp-dial-card { display: flex; flex-direction: column; gap: 6px; padding: 6px; border-radius: 16px; border: 1.5px solid var(--accent-line); background: var(--accent-soft); transition: background 0.2s, border-color 0.2s; }
+.lp-dial-card[data-state='ok'] { border-color: var(--ok-line); background: var(--ok-soft); }
+.lp-dial-card[data-state='bad'] { border-color: var(--bad-line); background: var(--bad-soft); }
+
+.lp-dial-viz { display: flex; flex-direction: column; gap: 6px; }
+.lp-dial-viz.is-side { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(118px, 1fr); align-items: stretch; }
+/* The board fills its column; the path is drawn over its grid (the board has a 4 px padding). */
+.lp-dial-board { position: relative; isolation: isolate; align-self: start; }
+.lp-dial-board .robo-board { width: 100%; }
+.lp-dial-board .robo-bot { z-index: 2; }
+
+.lp-dial-ghost { position: absolute; inset: 4px; z-index: 1; pointer-events: none; transition: opacity 0.2s; }
+.lp-dial-ghost.is-dim { opacity: 0.28; }
+.lp-dial-ghost svg { display: block; overflow: visible; }
+.lp-dial-path { fill: none; stroke: var(--accent); stroke-width: 0.075; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 0.001 0.16; }
+.lp-dial-ring { fill: none; stroke: var(--accent); stroke-width: 0.06; }
+.lp-dial-cross circle { fill: #fff; stroke: var(--accent-deep); stroke-width: 0.05; }
+.lp-dial-cross path { stroke: var(--accent-deep); stroke-width: 0.055; stroke-linecap: round; }
+.lp-dial-pass circle { fill: var(--accent-strong); }
+.lp-dial-pass text { fill: #fff; font-family: var(--font-body); font-size: 0.22px; font-weight: 700; text-anchor: middle; dominant-baseline: central; font-variant-numeric: tabular-nums; }
+.lp-dial-shade { position: absolute; display: grid; place-items: center; opacity: 0.38; transition: left 0.18s cubic-bezier(.3,.7,.3,1), top 0.18s cubic-bezier(.3,.7,.3,1); }
+.lp-dial-shade > svg { width: 54% !important; height: 54% !important; }
+
+/* The loop as code */
+.lp-dial-code-wrap { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.lp-dial-code.code { flex: 1; margin: 0; padding: 10px 10px 10px 12px; font-size: 13px; line-height: 1.75; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; }
+.lp-dial-line { display: block; margin: 0 -6px; padding: 0 6px; border-radius: 6px; white-space: pre; transition: background 0.15s; }
+.lp-dial-line.is-in { padding-left: calc(6px + 2ch); background-image: linear-gradient(#ffffff26, #ffffff26); background-size: 1px 100%; background-position: calc(6px + 0.5ch) 0; background-repeat: no-repeat; }
+.lp-dial-line.is-now { background-color: #246fff4d; box-shadow: inset 0 0 0 1px #6f9cff; }
+.lp-dial-num { display: inline-block; border-radius: 4px; animation: lp-dial-flash 0.3s ease-out; }
+@keyframes lp-dial-flash { from { background: #f5c46b59; } }
+.lp-dial-flat { margin: 0; font-size: 12px; color: var(--text-2); line-height: 1.3; padding: 0 2px; }
+.lp-dial-flat b { font-variant-numeric: tabular-nums; color: var(--text); }
+.lp-dial-viz:not(.is-side) .lp-dial-code-wrap { flex-direction: row; align-items: center; gap: 12px; }
+.lp-dial-viz:not(.is-side) .lp-dial-code.code { flex: 1; }
+.lp-dial-viz:not(.is-side) .lp-dial-flat { width: 76px; flex: none; }
+
+/* Marks in the message line: the dashed path, the running robot */
+.lp-dial-dash { width: 18px; height: 4px; flex: none; }
+.lp-dial-dash path { stroke: var(--accent); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 0.01 5; }
+.lp-dial-dot { width: 8px; height: 8px; flex: none; margin: 0 5px; border-radius: 50%; background: var(--accent); }
+
+/* The repeat block: navy edge like the lesson's block, the count on top, the commands indented under it */
+.lp-dial-rep { display: flex; flex-direction: column; gap: 2px; padding: 6px 6px 6px 10px; border-radius: 12px; border: 1px solid var(--border-deep); border-left: 4px solid var(--ink); background: #fff; transition: border-color 0.2s; }
+.lp-dial-rep.is-busy { border-left-color: var(--accent); }
+.lp-dial-rep-head { display: flex; align-items: center; gap: 7px; min-height: 24px; font-size: 16px; font-weight: 600; }
+.lp-dial-rep-head > svg { color: var(--text-2); flex: none; }
+.lp-dial-count { display: inline-block; min-width: 1ch; font-variant-numeric: tabular-nums; }
+.lp-dial-tag { margin-left: auto; display: inline-flex; align-items: center; gap: 4px; height: 24px; padding: 0 8px; border-radius: 999px; background: var(--surface); color: var(--text-2); font-size: 12px; font-weight: 600; white-space: nowrap; }
+
+/* Count slider: the drag surface is the whole strip */
+.lp-dial .lp-dial-track { position: relative; height: 58px; margin: 0 -2px; cursor: pointer; touch-action: pan-y; outline: none; border-radius: 12px; }
+.lp-dial-track:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
+.lp-dial-track.is-locked, .lp-dial-track.is-busy { cursor: default; }
+.lp-dial-rail { position: absolute; left: 16px; right: 16px; top: 17px; height: 6px; border-radius: 3px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--border); }
+.lp-dial-rail > span { position: absolute; left: 4px; top: 0; bottom: 0; border-radius: inherit; background: var(--accent); transition: width 0.18s cubic-bezier(.3,.7,.3,1), opacity 0.18s; }
+.lp-dial-tick { position: absolute; top: 0; width: 34px; height: 58px; margin-left: -17px; display: flex; flex-direction: column; align-items: center; }
+.lp-dial-tick i { margin-top: 17px; width: 6px; height: 6px; border-radius: 50%; background: var(--border-deep); transition: background 0.15s; }
+.lp-dial-tick.is-in i { background: #fff; }
+.lp-dial-tick b { margin-top: 19px; font-size: 13px; font-weight: 500; line-height: 16px; color: var(--text-3); font-variant-numeric: tabular-nums; transition: color 0.15s; }
+.lp-dial-tick.is-val b { color: var(--text); font-weight: 700; }
+.lp-dial-track.is-busy .lp-dial-tick.is-in b { color: var(--accent-deep); font-weight: 700; }
+.lp-dial-thumb { position: absolute; top: 0; width: 40px; height: 40px; margin-left: -20px; display: grid; place-items: center; border-radius: 50%; background: var(--ink); color: #fff; font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; box-shadow: 0 0 0 3px #fff; transition: left 0.16s cubic-bezier(.3,.7,.3,1), transform 0.12s, background 0.15s; }
+.lp-dial-track:active .lp-dial-thumb, .lp-dial-track.is-drag .lp-dial-thumb { transform: scale(1.1); background: var(--accent-strong); }
+.lp-dial-track.is-locked .lp-dial-thumb, .lp-dial-track.is-busy .lp-dial-thumb { transform: none; }
+.lp-dial-track.is-locked .lp-dial-thumb { background: #fff; color: var(--text); box-shadow: 0 0 0 3px #fff, inset 0 0 0 1.5px var(--border-deep); }
+.lp-dial-track.is-locked .lp-dial-rail > span { background: var(--border-deep); }
+.lp-dial-track.is-locked .lp-dial-tick.is-in i { background: #fff; }
+.lp-dial-track.is-busy:not(.is-locked) .lp-dial-thumb { background: var(--ink); }
+
+/* The commands inside the block, indented like the code */
+.lp-dial-inside { display: flex; flex-direction: column; gap: 6px; margin-left: 10px; }
+.lp-dial .lp-dial-body { display: flex; align-items: center; gap: 6px; min-height: 56px; padding: 6px; border-radius: 12px; background: var(--surface); touch-action: pan-y; }
+.lp-dial-chip { position: relative; flex: none; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border-radius: 11px; border: 1px solid var(--border-deep); background: #fff; color: var(--ink); cursor: grab; transition: background 0.15s, border-color 0.15s, color 0.15s; animation: lp-dial-pop 0.18s ease-out; }
+@keyframes lp-dial-pop { from { transform: scale(0.7); opacity: 0; } }
+.lp-dial-chip:active { background: var(--surface); transform: scale(0.93); }
+.lp-dial-body.is-dragging .lp-dial-chip:not(.is-lift) { transition: transform 0.16s cubic-bezier(.3,.7,.3,1), background 0.15s; }
+.lp-dial-chip.is-lift { z-index: 2; cursor: grabbing; border-color: var(--accent); color: var(--accent-deep); background: #fff; box-shadow: inset 0 0 0 1px var(--accent); }
+.lp-dial-chip.is-now { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-deep); box-shadow: inset 0 0 0 1px var(--accent); }
+.lp-dial-chip.is-fixed { cursor: default; }
+.lp-dial-chip.is-fixed:active { transform: none; background: #fff; }
+.lp-dial-chip.is-fixed.is-now:active { background: var(--accent-soft); }
+.lp-dial-slot { flex: none; width: 44px; height: 44px; border-radius: 11px; border: 1.5px dashed var(--border-deep); }
+.lp-dial-empty { font-size: 14px; color: var(--text-3); padding: 0 4px; }
+
+.lp-dial-keys { margin-top: 4px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.lp-dial-key { min-width: 0; display: flex; align-items: center; justify-content: center; gap: 5px; min-height: 48px; padding: 0 4px; border-radius: 12px; border: 1px solid var(--border-deep); background: #fff; color: var(--ink); cursor: pointer; transition: transform 0.08s, background 0.15s, opacity 0.15s; }
+.lp-dial-key span { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lp-dial-key svg { flex: none; }
+.lp-dial-key:active { transform: scale(0.95); background: var(--surface); }
+.lp-dial-key:disabled { opacity: 0.4; cursor: default; transform: none; background: #fff; }
+
+/* Footer: the feedback above the main button */
+.lp-dial-foot { flex: none; display: flex; flex-direction: column; gap: 10px; padding: 10px 16px max(16px, var(--safe-b, 0px)); background: var(--bg); border-top: 1px solid var(--border); }
+.lp-dial-fb { display: flex; flex-direction: column; justify-content: center; gap: 2px; min-height: 78px; padding: 8px 12px; border-radius: var(--r-md); background: var(--accent-soft); transition: background 0.2s; }
+.lp-dial-fb b { display: flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 600; line-height: 1.35; }
+.lp-dial-fb b svg { flex: none; }
+.lp-dial-fb p { margin: 0; font-size: 14px; line-height: 1.4; color: var(--text-2); text-wrap: pretty; }
+.lp-dial-fb em { font-style: normal; font-weight: 600; color: var(--accent-deep); }
+.lp-dial-fb.is-ok { background: var(--ok-soft); }
+.lp-dial-fb.is-ok b { color: var(--ok); }
+.lp-dial-fb.is-bad { background: var(--bad-soft); }
+.lp-dial-fb.is-bad b { color: var(--bad); }
+.lp-dial-fb.is-ok p, .lp-dial-fb.is-bad p { color: var(--text); }
+.lp-dial-stop { width: 12px; height: 12px; border-radius: 3px; background: currentColor; }
+
+/* Finish */
+.lp-dial-finish { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 28px 4px 8px; animation: lp-dial-in 0.3s cubic-bezier(.3,.7,.3,1); }
+.lp-dial-finish-bot { width: 88px; height: 88px; margin-bottom: 6px; animation: lp-dial-hop 0.5s 0.15s cubic-bezier(.3,1.5,.5,1) both; }
+@keyframes lp-dial-hop { from { transform: translateY(10px) scale(0.85); opacity: 0; } }
+.lp-dial-finish h2 { font-size: 24px; }
+.lp-dial-finish-lead { margin: 0; max-width: 30ch; font-size: 15px; line-height: 1.45; color: var(--text-2); text-wrap: pretty; }
+.lp-dial-finish ul { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; width: 100%; text-align: left; }
+.lp-dial-finish li { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border-radius: var(--r-md); border: 1px solid var(--border); font-size: 14px; line-height: 1.45; color: var(--text-2); }
+.lp-dial-finish li b { color: var(--text); font-weight: 600; }
+.lp-dial-finish li i { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-size: 12px; font-weight: 700; background: var(--accent-soft); color: var(--accent-deep); }
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-dial *, .lp-dial *::before, .lp-dial *::after { animation: none !important; transition: none !important; }
+}

@@ -19,8 +19,8 @@
 }
 .tabbar-icon { width: 52px; height: 30px; border-radius: 999px; display: grid; place-items: center; transition: background 0.2s, transform 0.12s; }
 .tabbar-tab.is-on { color: var(--text); }
-.tabbar-tab.is-on .tabbar-icon { background: #0a10280d; }
-.tabbar-tab:active .tabbar-icon { background: #0a102814; transform: scale(0.92); }
+.tabbar-tab.is-on .tabbar-icon { background: #122a2e0d; }
+.tabbar-tab:active .tabbar-icon { background: #122a2e14; transform: scale(0.92); }
 .tabbar-tab:focus-visible { outline: none; }
 .tabbar-tab:focus-visible .tabbar-icon { box-shadow: 0 0 0 2px var(--accent); }
 

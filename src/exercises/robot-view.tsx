@@ -22,15 +22,15 @@ export function RobotMark({ dir = 1 }: { dir?: Dir }) {
     <svg viewBox="0 0 48 48" width="100%" height="100%" aria-hidden>
       <defs>
         <linearGradient id={id} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#00c4fa" />
-          <stop offset="1" stopColor="#246fff" />
+          <stop offset="0" stopColor="#3fd6b0" />
+          <stop offset="1" stopColor="#0f9180" />
         </linearGradient>
       </defs>
       <rect x="2" y="2" width="44" height="44" rx="15" fill={`url(#${id})`} />
       <rect x="9" y="12" width="30" height="23" rx="8.5" fill="#fff" />
       <g className="robo-eyes" style={{ transform: `translate(${dx * 3}px, ${dy * 2.5}px)` }}>
-        <rect x="17" y="19.5" width="4.2" height="8.5" rx="2.1" fill="#0a1028" />
-        <rect x="26.8" y="19.5" width="4.2" height="8.5" rx="2.1" fill="#0a1028" />
+        <rect x="17" y="19.5" width="4.2" height="8.5" rx="2.1" fill="#122a2e" />
+        <rect x="26.8" y="19.5" width="4.2" height="8.5" rx="2.1" fill="#122a2e" />
       </g>
     </svg>
   )
@@ -39,7 +39,7 @@ export function RobotMark({ dir = 1 }: { dir?: Dir }) {
 export function FlagMark() {
   return (
     <svg viewBox="0 0 24 24" width="62%" height="62%" aria-hidden>
-      <path d="M7 21V4" stroke="#0a1028" strokeWidth="2.2" strokeLinecap="round" />
+      <path d="M7 21V4" stroke="#122a2e" strokeWidth="2.2" strokeLinecap="round" />
       <path className="robo-flag-cloth" d="M7.5 4.5h10.2l-2.4 3.9 2.4 3.9H7.5z" fill="var(--accent)" />
     </svg>
   )

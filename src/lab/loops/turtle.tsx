@@ -137,15 +137,15 @@ function TurtleMark({ pos, h, size }: { pos: Pt; h: number; size: number }) {
       <g transform={`scale(${k}) translate(-24 -24)`}>
         <defs>
           <linearGradient id={id} x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#00c4fa" />
-            <stop offset="1" stopColor="#246fff" />
+            <stop offset="0" stopColor="#3fd6b0" />
+            <stop offset="1" stopColor="#0f9180" />
           </linearGradient>
         </defs>
         <rect x="2" y="2" width="44" height="44" rx="15" fill={`url(#${id})`} />
         <rect x="9" y="12" width="30" height="23" rx="8.5" fill="#fff" />
         <g transform={`translate(${Math.sin(r) * 3} ${-Math.cos(r) * 2.5})`}>
-          <rect x="17" y="19.5" width="4.2" height="8.5" rx="2.1" fill="#0a1028" />
-          <rect x="26.8" y="19.5" width="4.2" height="8.5" rx="2.1" fill="#0a1028" />
+          <rect x="17" y="19.5" width="4.2" height="8.5" rx="2.1" fill="#122a2e" />
+          <rect x="26.8" y="19.5" width="4.2" height="8.5" rx="2.1" fill="#122a2e" />
         </g>
       </g>
     </g>

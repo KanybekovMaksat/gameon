@@ -4,13 +4,13 @@ import { createRoot } from 'react-dom/client'
 import { CanvasTexture, SRGBColorSpace } from 'three'
 import { Icon, type IconName } from '../../components'
 
-// Text and glyphs on the island are drawn on canvases: the app's own icons and Inter, so signs match the UI.
-const FONT = '"Inter Variable", Inter, system-ui, sans-serif'
-const INK = '#0a1028'
-export const BLUE = '#246fff'
+// Text and glyphs on the island are drawn on canvases: the app's own icons and Nunito, so signs match the UI.
+const FONT = '"Nunito Variable", Nunito, system-ui, sans-serif'
+const INK = '#122a2e'
+export const BLUE = '#0f9180'
 
 const ICONS: IconName[] = ['check', 'lock', 'building', 'loop', 'math', 'book', 'scroll', 'globe', 'leaf', 'atom', 'flag', 'trophy', 'users', 'spark']
-const COLORS = ['#ffffff', BLUE, '#1f66e5', '#8a909e', INK]
+const COLORS = ['#ffffff', BLUE, '#0b7a6c', '#8a909e', INK]
 
 // The markup of each icon, rendered once with React when this chunk loads (outside any render).
 const SVG = new Map<IconName, string>()

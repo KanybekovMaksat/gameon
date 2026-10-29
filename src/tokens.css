@@ -1,8 +1,8 @@
-/* BilimQuest brand values. The UI is near-monochrome; blue marks selection and progress. */
+/* BilimQuest brand values: island teal on warm paper. Teal marks actions, selection and progress; amber is XP. */
 :root {
-  --navy: #0a1028;
-  --blue: #246fff;
-  --cyan: #00c4fa;
+  --navy: #122a2e;
+  --blue: #0f9180;
+  --cyan: #3fd6b0;
 
   /* Feedback colors are a proposal: the brand has none. An error is amber, not red: errors are normal. */
   --ok: #127536;
@@ -20,33 +20,33 @@
   --xp-ring: #e0a100;
   --xp-mark: #7a4a00;
 
-  --grad: linear-gradient(135deg, #00c4fa 0%, #246fff 100%);
-  --accent: #246fff;
-  /* A deeper shade of the brand blue where blue carries text: white on it, or it on white (contrast 5:1). */
-  --accent-strong: #1f66e5;
-  --accent-deep: #1648b8;
-  --accent-soft: #eef4ff;
-  --accent-line: #b8ccff;
+  --grad: linear-gradient(135deg, #3fd6b0 0%, #0f9180 100%);
+  --accent: #0f9180;
+  /* A deeper shade of the brand teal where teal carries text: white on it, or it on white (contrast 5:1). */
+  --accent-strong: #0b7a6c;
+  --accent-deep: #086356;
+  --accent-soft: #e9f7f3;
+  --accent-line: #a6dccf;
 
-  --ink: #0a1028;
+  --ink: #122a2e;
   --ink-deep: #000000;
 
   --bg: #ffffff;
-  --surface: #f4f5f7;
+  --surface: #f6f3ea;
   --card: #ffffff;
-  --border: #e6e7eb;
-  --border-deep: #d4d6dc;
-  --text: #0a1028;
-  --text-2: #0a1028b0;
-  --text-3: #0a10289e;
+  --border: #e9e4d8;
+  --border-deep: #d9d1c0;
+  --text: #122a2e;
+  --text-2: #122a2eb0;
+  --text-3: #122a2e9e;
 
-  --font-body: 'Inter Variable', 'Inter', system-ui, sans-serif;
-  --font-head: 'Inter Variable', 'Inter', system-ui, sans-serif;
+  --font-body: 'Nunito Variable', 'Nunito', system-ui, sans-serif;
+  --font-head: 'Nunito Variable', 'Nunito', system-ui, sans-serif;
   --font-code: 'JetBrains Mono', ui-monospace, monospace;
 
-  --r-sm: 10px;
-  --r-md: 14px;
-  --r-lg: 20px;
+  --r-sm: 12px;
+  --r-md: 18px;
+  --r-lg: 24px;
   --gutter: 16px;
 }
 
@@ -64,6 +64,6 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-h1, h2, h3 { font-family: var(--font-head); line-height: 1.2; margin: 0; letter-spacing: -0.02em; font-weight: 700; }
+h1, h2, h3 { font-family: var(--font-head); line-height: 1.2; margin: 0; letter-spacing: -0.01em; font-weight: 800; }
 
 button { font: inherit; color: inherit; }

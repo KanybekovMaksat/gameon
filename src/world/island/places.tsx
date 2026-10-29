@@ -211,7 +211,7 @@ export function Office() {
 
 // The rewards pavilion: a counter with desk items the achievements bring, a striped awning and an XP medal turning above.
 export function Kiosk() {
-  const sign = useMemo(() => glyphTexture('trophy', '#26304f'), [])
+  const sign = useMemo(() => glyphTexture('trophy', '#1f3b40'), [])
   useEffect(() => () => sign.dispose(), [sign])
   const coin = useRef<Group>(null)
   useFrame(() => {
@@ -283,7 +283,7 @@ export function Kiosk() {
 
 // The class quest board: the group's mark and a 3D bar that fills toward the goal; its title and count are a label.
 export function QuestBoard({ quest }: { quest: number }) {
-  const tex = useMemo(() => glyphTexture('users', '#26304f'), [])
+  const tex = useMemo(() => glyphTexture('users', '#1f3b40'), [])
   useEffect(() => () => tex.dispose(), [tex])
   const fill = useRef<Mesh>(null)
   const shown = useRef(0)
@@ -314,7 +314,7 @@ export function QuestBoard({ quest }: { quest: number }) {
         </mesh>
         <mesh position={[0.22, -0.46, 0.05]}>
           <boxGeometry args={[TRACK, 0.14, 0.03]} />
-          <meshStandardMaterial color="#e6e7eb" />
+          <meshStandardMaterial color="#e9e4d8" />
         </mesh>
         <mesh userData={DYN} ref={fill} position={[0.22 - TRACK / 2, -0.46, 0.062]}>
           <boxGeometry args={[TRACK, 0.14, 0.03]} />
@@ -402,7 +402,7 @@ export function Fountain() {
 // The lighthouse at the end of the road, where the next topics will come; its light turns slowly.
 export function Lighthouse() {
   const beam = useRef<Group>(null)
-  const sign = useMemo(() => glyphTexture('flag', '#26304f'), [])
+  const sign = useMemo(() => glyphTexture('flag', '#1f3b40'), [])
   useEffect(() => () => sign.dispose(), [sign])
   useFrame(() => { if (beam.current) beam.current.rotation.y = time.value * 0.8 })
   const end = roadAt(ROAD_LEN)

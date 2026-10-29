@@ -39,7 +39,7 @@
 .prof-skill-top span { font-size: 13px; color: var(--text-3); font-variant-numeric: tabular-nums; }
 .prof-skill-top strong { color: var(--text); font-weight: 600; }
 .prof-skill-top em { min-width: 30px; text-align: right; font-style: normal; font-size: 13px; font-weight: 600; color: var(--accent-strong); font-variant-numeric: tabular-nums; }
-.prof-bar { height: 6px; border-radius: 3px; background: #0a10280a; overflow: hidden; }
+.prof-bar { height: 6px; border-radius: 3px; background: #122a2e0a; overflow: hidden; }
 .prof-bar + .prof-bar { margin-top: 3px; }
 .prof-bar i { display: block; height: 100%; border-radius: inherit; transform-origin: left; animation: prof-grow 0.35s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i, 0) * 40ms); }
 .prof-bar.is-now i { animation-delay: calc(var(--i, 0) * 40ms + 120ms); }

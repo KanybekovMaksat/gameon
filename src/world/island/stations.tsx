@@ -15,9 +15,9 @@ import { BLUE, codeTexture, glyphTexture, signTexture } from './textures'
 // and the gate before a subject that waits for the lesson with the teacher.
 
 export const WHITE = '#fbfcfe'
-export const NAVY = '#26304f'
+export const NAVY = '#1f3b40'
 export const STONE = '#eceff4'
-const LINE = '#b8ccff'
+const LINE = '#a6dccf'
 // Marks a part that moves or changes, so Merged leaves it drawing on its own.
 const DYN = { dynamic: true }
 const GREY = '#e1e3e9'
@@ -52,11 +52,11 @@ export function Sign({ station, topic, current }: { station: Station; topic: Top
 }
 
 const PAD_LOOK: Record<LessonState, { top: string; rim: string; glyph: string }> = {
-  done: { top: '#1b2442', rim: '#7fa7ff', glyph: '#ffffff' },
+  done: { top: '#16302f', rim: '#5fd9be', glyph: '#ffffff' },
   now: { top: '#ffffff', rim: BLUE, glyph: BLUE },
-  open: { top: '#ffffff', rim: LINE, glyph: '#1f66e5' },
-  locked: { top: GREY, rim: '#d4d6dc', glyph: '#8a909e' },
-  office: { top: GREY, rim: '#d4d6dc', glyph: '#8a909e' },
+  open: { top: '#ffffff', rim: LINE, glyph: '#0b7a6c' },
+  locked: { top: GREY, rim: '#d9d1c0', glyph: '#8a909e' },
+  office: { top: GREY, rim: '#d9d1c0', glyph: '#8a909e' },
 }
 
 function padGlyph(state: LessonState, icon: IconName): IconName {
@@ -477,7 +477,7 @@ export function Gate({ station, open, sim }: { station: Station; open: boolean; 
   const board = useRef<Group>(null)
   const ring = useRef<Mesh>(null)
   const st = useRef({ v: open ? 1 : 0, delay: 0, pulse: -1, announce: false, was: open })
-  const lockTex = useMemo(() => glyphTexture('building', '#26304f'), [])
+  const lockTex = useMemo(() => glyphTexture('building', '#1f3b40'), [])
   useDispose(lockTex)
   useFrame((_, delta) => {
     const dt = Math.min(delta, 0.1)

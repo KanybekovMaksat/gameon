@@ -19,13 +19,13 @@
   position: absolute; left: 0; bottom: 0; transform: translateX(-50%);
   display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
   padding: 5px 10px; border-radius: 999px; background: #ffffffeb; color: var(--text);
-  font-size: 13px; font-weight: 600; line-height: 1.25; box-shadow: 0 4px 14px -6px #0a102859;
+  font-size: 13px; font-weight: 600; line-height: 1.25; box-shadow: 0 4px 14px -6px #122a2e59;
 }
 .isle-label svg { color: var(--text-2); flex: none; }
 .isle-label.is-sign > span { flex-direction: column; align-items: flex-start; gap: 0; padding: 6px 12px; border-radius: 12px; }
 .isle-label.is-sign b { font-size: 14px; letter-spacing: -0.01em; }
 .isle-label.is-sign small { font-size: 12px; font-weight: 500; color: var(--text-2); }
-.isle-label.is-sign.is-now > span { box-shadow: inset 0 0 0 2px var(--accent), 0 4px 14px -6px #0a102859; }
+.isle-label.is-sign.is-now > span { box-shadow: inset 0 0 0 2px var(--accent), 0 4px 14px -6px #122a2e59; }
 .isle-label.is-sign.is-now small { color: var(--accent-strong); }
 .isle-label.is-gate > span { background: var(--ink); color: #fff; }
 .isle-label.is-gate svg { color: #fff; }
@@ -35,20 +35,20 @@
 /* Floating joystick: shown where the finger went down; the knob turns blue when the child runs. */
 .isle-joy {
   position: absolute; left: 0; top: 0; width: 124px; height: 124px; margin: -62px 0 0 -62px; border-radius: 50%;
-  background: #ffffff38; box-shadow: inset 0 0 0 2px #ffffffcc, 0 8px 24px -12px #0a102840;
+  background: #ffffff38; box-shadow: inset 0 0 0 2px #ffffffcc, 0 8px 24px -12px #122a2e40;
   opacity: 0; transition: opacity 0.15s; pointer-events: none; z-index: 5;
 }
 .isle-joy.is-on { opacity: 1; }
 .isle-joy i {
   position: absolute; left: 36px; top: 36px; width: 52px; height: 52px; border-radius: 50%;
-  background: #fff; box-shadow: 0 6px 16px -6px #0a102866; transition: background 0.15s;
+  background: #fff; box-shadow: 0 6px 16px -6px #122a2e66; transition: background 0.15s;
 }
 .isle-joy.is-run i { background: var(--accent); }
 
 /* The pointer to the current lesson at the edge of the screen. */
 .isle-edge {
   position: absolute; left: 0; top: 0; width: 46px; height: 46px; margin: -23px 0 0 -23px; padding: 0; border: 0;
-  border-radius: 50%; background: #fff; color: var(--accent-strong); box-shadow: 0 8px 22px -8px #0a102859;
+  border-radius: 50%; background: #fff; color: var(--accent-strong); box-shadow: 0 8px 22px -8px #122a2e59;
   display: grid; place-items: center; cursor: pointer; opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 4;
 }
 .isle-edge.is-on { opacity: 1; pointer-events: auto; }
@@ -62,7 +62,7 @@
 .isle-hint {
   position: absolute; left: 50%; bottom: calc(var(--tabbar-space) + 86px); transform: translateX(-50%); z-index: 10;
   display: flex; align-items: center; gap: 10px; white-space: nowrap; pointer-events: none;
-  padding: 10px 16px 10px 12px; border-radius: 999px; background: #0a1028d9; color: #fff; font-size: 14px; font-weight: 600;
+  padding: 10px 16px 10px 12px; border-radius: 999px; background: #122a2ed9; color: #fff; font-size: 14px; font-weight: 600;
   animation: isle-in 0.3s cubic-bezier(.2,.9,.3,1.1);
 }
 .isle-hint-icon { flex: none; overflow: visible; }
@@ -84,7 +84,7 @@
 .isle-go {
   display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 22px 0 18px; border: 0; border-radius: 999px;
   background: #fff; color: var(--text); font: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
-  box-shadow: 0 10px 28px -12px #0a102866, 0 0 0 1px #0a10280d; animation: isle-rise 0.25s cubic-bezier(.2,.9,.3,1.1);
+  box-shadow: 0 10px 28px -12px #122a2e66, 0 0 0 1px #122a2e0d; animation: isle-rise 0.25s cubic-bezier(.2,.9,.3,1.1);
 }
 .isle-go svg { color: var(--accent-strong); }
 .isle-go:active { transform: scale(0.97); }
@@ -96,12 +96,12 @@
 .isle-second { min-height: 44px; }
 .isle-toast {
   position: absolute; left: 50%; top: calc(var(--safe-t, 0px) + 96px); transform: translateX(-50%); z-index: 12;
-  padding: 9px 14px; border-radius: 999px; background: #0a1028d9; color: #fff; font-size: 14px; font-weight: 600; white-space: nowrap;
+  padding: 9px 14px; border-radius: 999px; background: #122a2ed9; color: #fff; font-size: 14px; font-weight: 600; white-space: nowrap;
   animation: isle-in 0.25s cubic-bezier(.2,.9,.3,1.1); pointer-events: none;
 }
 .isle-card {
   width: 100%; max-width: 440px; background: var(--bg); border-radius: 22px; padding: 16px 16px 16px;
-  display: flex; flex-direction: column; gap: 6px; box-shadow: 0 16px 40px -16px #0a102873, 0 0 0 1px #0a10280a;
+  display: flex; flex-direction: column; gap: 6px; box-shadow: 0 16px 40px -16px #122a2e73, 0 0 0 1px #122a2e0a;
   animation: isle-rise 0.26s cubic-bezier(.2,.9,.3,1.1);
 }
 .isle-card h3 { font-size: 20px; }
@@ -113,7 +113,7 @@
 .isle-place p { margin: 2px 0 0; font-size: 14px; color: var(--text-2); line-height: 1.4; }
 .isle-place small { display: block; margin-top: 4px; font-size: 13px; color: var(--text-3); line-height: 1.4; }
 .isle-quest { width: 100%; max-width: 440px; animation: isle-rise 0.26s cubic-bezier(.2,.9,.3,1.1); }
-.isle-quest .card { box-shadow: 0 16px 40px -16px #0a102873; border-color: transparent; }
+.isle-quest .card { box-shadow: 0 16px 40px -16px #122a2e73; border-color: transparent; }
 @keyframes isle-rise { from { opacity: 0; transform: translateY(10px); } }
 
 /* A groupmate's card: the room's card, placed in the dock. */
@@ -126,7 +126,7 @@
 .isle-back {
   position: absolute; left: 12px; top: calc(var(--safe-t, 0px) + 10px); z-index: 3; display: inline-flex; align-items: center; gap: 6px; min-height: 44px;
   padding: 0 16px 0 10px; border: 0; border-radius: 999px; background: #ffffffeb; color: var(--text); font: inherit;
-  font-size: 15px; font-weight: 600; cursor: pointer; box-shadow: 0 8px 24px -12px #0a102859;
+  font-size: 15px; font-weight: 600; cursor: pointer; box-shadow: 0 8px 24px -12px #122a2e59;
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
 }
 

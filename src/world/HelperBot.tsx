@@ -12,9 +12,9 @@ import { Vector3, type Group, type Mesh, type MeshBasicMaterial } from 'three'
 // Brand blue and its deeper shade, the navy of the app. The eyes glow in a light brand cyan; the pink cheeks
 // are the one color only the robot has, it makes the face read as friendly.
 const SHELL = '#ffffff'
-const BLUE = '#246fff'
-const DEEP = '#1f66e5'
-const SCREEN = '#0a1028'
+const BLUE = '#0f9180'
+const DEEP = '#0b7a6c'
+const SCREEN = '#122a2e'
 const EYE = '#7ee8ff'
 const CHEEK = '#ff9db8'
 
@@ -131,7 +131,7 @@ export function HelperBot({ height = 1, motion, wave, onClick, faceCamera }: Pro
       {/* Above the island's plaza and road surfaces, which rise up to 0.02 above the ground. */}
       <mesh ref={shadow} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.03, 0]}>
         <circleGeometry args={[0.26, 24]} />
-        <meshBasicMaterial ref={shadowMat} color="#0a1028" transparent opacity={0.18} depthWrite={false} />
+        <meshBasicMaterial ref={shadowMat} color="#122a2e" transparent opacity={0.18} depthWrite={false} />
       </mesh>
       <group ref={turn}>
       <group ref={body}>

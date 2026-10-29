@@ -91,8 +91,8 @@
 .lp-blocks-side.is-hot .lp-blocks-trash { border-color: var(--ink); border-style: solid; background: var(--surface); color: var(--ink); }
 
 /* The drag: the block under the finger and the line where it lands */
-.lp-blocks-ghost { position: absolute; left: 0; top: 0; z-index: 30; pointer-events: none; will-change: transform; filter: drop-shadow(0 10px 16px #0a102833); }
-.lp-blocks-ghost .lp-blocks-mouth { background: #f4f5f7d9; }
+.lp-blocks-ghost { position: absolute; left: 0; top: 0; z-index: 30; pointer-events: none; will-change: transform; filter: drop-shadow(0 10px 16px #122a2e33); }
+.lp-blocks-ghost .lp-blocks-mouth { background: #f6f3ead9; }
 .lp-blocks-prog.is-drag { cursor: grabbing; }
 .lp-blocks-line { position: absolute; z-index: 5; height: 3px; margin-top: -1.5px; border-radius: 2px; background: var(--accent); pointer-events: none; transition: top 0.12s ease-out, left 0.12s ease-out, width 0.12s ease-out; }
 .lp-blocks-line::before { content: ''; position: absolute; left: -5px; top: -4px; width: 11px; height: 11px; box-sizing: border-box; border-radius: 50%; border: 3px solid var(--accent); background: #fff; }

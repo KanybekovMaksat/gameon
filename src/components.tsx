@@ -123,14 +123,14 @@ export function HelperMark() {
     <svg viewBox="0 0 48 48" width="100%" height="100%" role="img" aria-label="Робик">
       <defs>
         <linearGradient id={id} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#00c4fa" />
-          <stop offset="1" stopColor="#246fff" />
+          <stop offset="0" stopColor="#3fd6b0" />
+          <stop offset="1" stopColor="#0f9180" />
         </linearGradient>
       </defs>
       <rect width="48" height="48" rx="16" fill={`url(#${id})`} />
       <rect x="10" y="13" width="28" height="22" rx="8" fill="#fff" />
-      <rect x="17.5" y="20" width="4" height="8" rx="2" fill="#0a1028" />
-      <rect x="26.5" y="20" width="4" height="8" rx="2" fill="#0a1028" />
+      <rect x="17.5" y="20" width="4" height="8" rx="2" fill="#122a2e" />
+      <rect x="26.5" y="20" width="4" height="8" rx="2" fill="#122a2e" />
     </svg>
   )
 }

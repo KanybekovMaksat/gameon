@@ -35,7 +35,7 @@
 .lp-rhythm-roll-keys svg { height: 7px; }
 .lp-rhythm-bar { min-width: 0; display: flex; gap: 2px; padding: 4px 3px; border-radius: 6px; background: var(--surface); }
 .lp-rhythm-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; border-radius: 3px; transition: background 0.12s, box-shadow 0.12s; }
-.lp-rhythm-col i { display: block; height: 7px; border-radius: 2.5px; background: #0a102814; transition: background 0.2s; }
+.lp-rhythm-col i { display: block; height: 7px; border-radius: 2.5px; background: #122a2e14; transition: background 0.2s; }
 .lp-rhythm-col i.is-hit { background: var(--ink); }
 .is-mine .lp-rhythm-col i.is-hit { background: var(--accent-strong); }
 /* A step one rhythm has and the other does not. */
@@ -79,7 +79,7 @@
 .lp-rhythm-num.is-head { color: var(--accent-strong); }
 .lp-rhythm-name { display: flex; align-items: center; gap: 6px; padding-right: 2px; font-size: 13px; font-weight: 500; color: var(--text-2); white-space: nowrap; }
 .lp-rhythm-name .lp-rhythm-mark, .lp-rhythm-hitchip .lp-rhythm-mark { color: var(--text-3); flex: none; }
-.lp-rhythm-cell { height: 48px; padding: 0; border-radius: 12px; border: 1px solid var(--border-deep); background: var(--card); color: #0a10281f; display: grid; place-items: center; cursor: pointer; transition: background 0.1s, border-color 0.1s, color 0.1s, transform 0.1s, box-shadow 0.12s; }
+.lp-rhythm-cell { height: 48px; padding: 0; border-radius: 12px; border: 1px solid var(--border-deep); background: var(--card); color: #122a2e1f; display: grid; place-items: center; cursor: pointer; transition: background 0.1s, border-color 0.1s, color 0.1s, transform 0.1s, box-shadow 0.12s; }
 .lp-rhythm-grid[data-rows='3'] .lp-rhythm-cell { height: 44px; }
 .lp-rhythm-cell.is-on { background: var(--accent-strong); border-color: var(--accent-strong); color: #fff; }
 .lp-rhythm-cell.is-head { box-shadow: 0 0 0 2px var(--accent-line); }

@@ -75,14 +75,14 @@
 /* Reward sheet (the shared sheet, app/Sheet.tsx). It scrolls when the phone is short. */
 .sh.rw-sheet { overflow-y: auto; scrollbar-width: none; gap: 0; padding: 22px 16px max(22px, var(--safe-b)); }
 .rw-x { position: absolute; top: 24px; right: 24px; width: 44px; height: 44px; margin: -6px; border: 0; border-radius: 50%; background: none; color: var(--text-2); display: grid; place-items: center; cursor: pointer; }
-.rw-x::before { content: ''; position: absolute; inset: 6px; border-radius: 50%; background: #ffffffd9; box-shadow: 0 1px 2px #0a10281a; transition: background 0.15s, transform 0.12s; }
+.rw-x::before { content: ''; position: absolute; inset: 6px; border-radius: 50%; background: #ffffffd9; box-shadow: 0 1px 2px #122a2e1a; transition: background 0.15s, transform 0.12s; }
 .rw-x:active::before { background: var(--surface); transform: scale(0.92); }
 .rw-x svg { position: relative; }
 
 .rw-hero { position: relative; flex: none; height: 208px; border-radius: 20px; background: var(--surface); display: grid; place-items: center; overflow: hidden; }
 .rw-hero > img { width: 180px; height: 180px; object-fit: contain; }
 .rw-hero.is-character > img { width: 182px; height: 208px; }
-.rw-hero-face { position: absolute; left: 12px; bottom: 12px; display: flex; align-items: center; gap: 8px; padding: 4px 12px 4px 4px; border-radius: 999px; background: #fff; box-shadow: 0 1px 2px #0a10281a; }
+.rw-hero-face { position: absolute; left: 12px; bottom: 12px; display: flex; align-items: center; gap: 8px; padding: 4px 12px 4px 4px; border-radius: 999px; background: #fff; box-shadow: 0 1px 2px #122a2e1a; }
 .rw-hero-face img { width: 36px; height: 36px; border-radius: 50%; display: block; background: var(--surface); }
 .rw-hero-face small { font-size: 13px; font-weight: 600; color: var(--text-2); }
 .rw-done { position: absolute; top: 12px; left: 12px; width: 34px; height: 34px; border-radius: 50%; background: var(--ok); color: #fff; display: grid; place-items: center; box-shadow: 0 0 0 4px #ffffffb3; }

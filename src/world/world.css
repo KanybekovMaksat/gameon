@@ -8,11 +8,11 @@
 .world-wait-room .is-floor { fill: #e2e6f8; }
 .world-wait-room .is-wall { fill: #d8def6; }
 .world-wait-room .is-side { fill: #d1d8f3; }
-.world-wait-room .is-board { fill: #0a1028; opacity: 0.12; }
+.world-wait-room .is-board { fill: #122a2e; opacity: 0.12; }
 .world-wait-room .is-desk { fill: #c9d1ee; animation: world-wait-desk 1.2s ease-in-out infinite alternate; }
-.world-wait-room .is-desk .is-front { fill: #bcc5e6; }
+.world-wait-room .is-desk .is-front { fill: #c4d9d3; }
 @keyframes world-wait-desk { from { opacity: 0.45; } to { opacity: 1; } }
-.world-wait-bar { width: 132px; height: 4px; border-radius: 2px; background: #0a102814; overflow: hidden; }
+.world-wait-bar { width: 132px; height: 4px; border-radius: 2px; background: #122a2e14; overflow: hidden; }
 .world-wait-bar i { display: block; height: 100%; width: 8%; border-radius: inherit; background: var(--accent); transition: width 0.3s ease-out; }
 .world-wait-bar.is-idle i { width: 36%; animation: world-wait-run 1.1s ease-in-out infinite; }
 @keyframes world-wait-run { from { transform: translateX(-100%); } to { transform: translateX(280%); } }

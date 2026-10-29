@@ -37,13 +37,13 @@ const SAMPLES: Exercise[] = LESSONS.flatMap(({ lesson }) => lesson.practice)
   .filter((ex, i, all) => all.findIndex((x) => x.kind === ex.kind) === i)
 
 const COLORS: [string, string][] = [
-  ['Текст и кнопки', '#0a1028'],
-  ['Синий: выбор, прогресс', '#246fff'],
-  ['Синий для текста и кнопок', '#1f66e5'],
-  ['Голубой', '#00c4fa'],
+  ['Текст и кнопки', '#122a2e'],
+  ['Синий: выбор, прогресс', '#0f9180'],
+  ['Синий для текста и кнопок', '#0b7a6c'],
+  ['Голубой', '#3fd6b0'],
   ['Фон', '#ffffff'],
-  ['Поверхность', '#f4f5f7'],
-  ['Рамка', '#e6e7eb'],
+  ['Поверхность', '#f6f3ea'],
+  ['Рамка', '#e9e4d8'],
   ['Верно', '#15803d'],
   ['Ошибка', '#f3c34b'],
   ['Кодкоин', '#ffc53d'],
@@ -73,7 +73,7 @@ export default function DesignPage() {
           <p className="lead">Бренд BilimQuest: градиент от бирюзового острова к синему. Он остаётся для знаков бренда, в интерфейсе его нет.</p>
           <div className="panel colors">
             <div className="brand-bar" />
-              <div className="brand-caption">Градиент бренда: #00c4fa → #246fff</div>
+              <div className="brand-caption">Градиент бренда: #3fd6b0 → #0f9180</div>
             <div className="color-list">
               {COLORS.map(([name, hex]) => (
                 <div key={hex} className="color"><i style={{ background: hex }} /><div>{name}<code>{hex}</code></div></div>
@@ -84,7 +84,7 @@ export default function DesignPage() {
 
         <section className="section">
           <h2>Шрифты</h2>
-          <p className="lead">Inter, как на сайте. Код набран JetBrains Mono.</p>
+          <p className="lead">Nunito: круглый и дружелюбный. Код набран JetBrains Mono.</p>
           <div className="panel">
             <div className="type-row"><small>Крупный</small><span className="t-display">Циклы: повтори 3 раза</span></div>
             <div className="type-row"><small>Заголовок</small><span className="t-h1">Тема 2. Условия</span></div>

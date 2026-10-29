@@ -18,8 +18,8 @@ export type DeskNews = { items: string[]; character: boolean }
 type Props = { selected: string | null; onSelect: (name: string | null) => void; inset?: number; takeNews?: () => DeskNews | null }
 type V3 = [number, number, number]
 
-const ACCENT = '#246fff'
-const ACCENT_2 = '#00c4fa'
+const ACCENT = '#0f9180'
+const ACCENT_2 = '#3fd6b0'
 const M = '/models/'
 
 const KID_HEIGHT = 1.5
@@ -37,12 +37,12 @@ const C = { bg: '#eef1f6', floor: '#e8ebff', wall: '#dde2ff', sky: '#bfefff' }
 type Placed = { file: string; height?: number; width?: number; at: [number, number, number]; turn?: number; paint?: Record<string, string>; glow?: string }
 const TOP = 0.75
 const FACE_CAMERA = Math.PI / 4
-const NAVY = '#26304f'
+const NAVY = '#1f3b40'
 const DESK_PROPS: Record<string, Placed[]> = {
   lamp: [{ file: 'lampRoundTable', height: 0.86, at: [-0.5, TOP, 0.32], glow: '#ffc94d' }],
   books: [{ file: 'books', height: 0.34, at: [-0.48, TOP, 0.84], turn: 0.3 }],
   speaker: [{ file: 'speakerSmall', height: 0.52, at: [0.6, TOP, 0.28], turn: FACE_CAMERA, paint: { wood: NAVY } }],
-  cactus: [{ file: 'plantSmall2', height: 0.64, at: [0.52, TOP, 0.84], paint: { wood: '#246fff' } }],
+  cactus: [{ file: 'plantSmall2', height: 0.64, at: [0.52, TOP, 0.84], paint: { wood: '#0f9180' } }],
   // The bear hangs on the front of the desk, facing the room.
   bear: [{ file: 'bear', height: 0.52, at: [0.3, 0.12, 0.93], paint: { fur: '#8a5a36', wood: '#ffffff' } }],
   radio: [{ file: 'radio', height: 0.62, at: [1.1, 0, 0.5], turn: FACE_CAMERA, paint: { wood: '#ffc53d' } }],
@@ -182,7 +182,7 @@ function Seat({ index, character, desk, spot, selected, onSelect }: { index: num
       {!has('monitor') && <Prop file="laptop" height={0.26} position={[0, 0.75, 0.6]} rotation={[0, Math.PI, 0]} />}
       {has('chair')
         ? <PopIn at={CHAIR_AT} since={chairSince}><Prop file="loungeChair" height={0.95} /></PopIn>
-        : <Prop file="chairDesk" height={0.95} tint="#9dbcff" position={[0, 0, -0.15]} />}
+        : <Prop file="chairDesk" height={0.95} tint="#8fd3c4" position={[0, 0, -0.15]} />}
       {chairSince != null && <PulseRing at={ringAt(CHAIR_AT)} radius={0.7} since={chairSince} />}
       {DESK_ORDER.filter(has).map((id) => {
         const t = since(id)
@@ -253,11 +253,11 @@ function Room() {
       <mesh position={[0, 1.6, -3.6]} receiveShadow><boxGeometry args={[9.2, 3.2, 0.2]} /><meshStandardMaterial color={C.wall} /></mesh>
       <mesh position={[-4.6, 1.6, 0.2]} receiveShadow><boxGeometry args={[0.2, 3.2, 7.6]} /><meshStandardMaterial color={C.wall} /></mesh>
 
-      <Prop file="rugRectangle" width={5.2} tint="#cddcff" position={[0, 0.005, 0.9]} />
+      <Prop file="rugRectangle" width={5.2} tint="#cfeee6" position={[0, 0.005, 0.9]} />
 
       {/* board */}
       <RoundedBox args={[4, 1.8, 0.1]} radius={0.06} position={[0.3, 1.75, -3.45]}>
-        <meshStandardMaterial color="#0a1028" roughness={0.6} />
+        <meshStandardMaterial color="#122a2e" roughness={0.6} />
       </RoundedBox>
       {([[-1.1, 0.5, 1.4, ACCENT_2], [-0.7, 0.2, 1.8, '#fbbf24'], [-0.7, -0.1, 1.2, '#ffffff'], [-1.1, -0.4, 1.0, ACCENT_2]] as const).map(([x, y, w, col], i) => (
         <mesh key={i} position={[0.3 + x + w / 2, 1.75 + y, -3.39]}>
@@ -402,7 +402,7 @@ export default function ClassRoom({ selected, onSelect, inset = 0, takeNews }: P
         <OrthographicCamera makeDefault position={[12, 12, 12]} near={0.1} far={100} />
         <CameraRig inset={inset} ready={ready} takeNews={takeNews} onSpot={setSpot} />
         <PauseWhenHidden />
-        <hemisphereLight args={['#ffffff', '#c9d3ff', 1.1]} />
+        <hemisphereLight args={['#ffffff', '#cfe7e0', 1.1]} />
         <directionalLight
           position={[5, 9, 6]}
           intensity={1.8}

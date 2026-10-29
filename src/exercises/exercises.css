@@ -64,7 +64,7 @@
 .robo-chip.is-ok { border-color: var(--ok-line); color: var(--ok); }
 .robo-caret { align-self: center; width: 2px; height: 26px; margin: 0 3px; border-radius: 1px; background: var(--accent); }
 .robo-rep { flex: 0 1 auto; max-width: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 4px 4px 4px 8px; border-radius: 12px; border: 1px solid var(--border-deep); border-left: 4px solid var(--ink); background: #fff; cursor: pointer; transition: border-color 0.15s; animation: robo-in 0.18s ease-out; }
-.robo-rep.is-open { border-color: var(--accent); border-left-color: var(--accent); box-shadow: 0 0 0 3px #246fff1f; }
+.robo-rep.is-open { border-color: var(--accent); border-left-color: var(--accent); box-shadow: 0 0 0 3px #0f91801f; }
 .robo-rep.is-now { border-color: var(--accent-line); border-left-color: var(--accent); }
 .robo-rep-head { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; font-size: 15px; font-weight: 600; }
 .robo-rep-head > svg { color: var(--text-2); flex: none; }
@@ -89,7 +89,7 @@
 .gap-blank { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; height: 44px; margin: 0 2px; padding: 0 10px; vertical-align: middle; border-radius: 9px; border: 1.5px dashed #7a82a3; background: #ffffff0a; color: inherit; font: inherit; line-height: 1; cursor: pointer; transition: background 0.15s, border-color 0.15s; }
 .gap-blank:not(.is-empty) { border-style: solid; border-color: #ffffff38; background: #ffffff14; animation: gap-in 0.2s ease-out; }
 @keyframes gap-in { from { transform: scale(0.85); } }
-.gap-blank.is-focus { border-style: solid; border-color: #6f9cff; background: #246fff3d; box-shadow: 0 0 0 3px #246fff2e; }
+.gap-blank.is-focus { border-style: solid; border-color: #3fd6b0; background: #0f91803d; box-shadow: 0 0 0 3px #0f91802e; }
 .gap-blank.is-ok { border: 1.5px solid #6fd08e; background: #3fb76545; }
 .gap-blank.is-bad { border: 1.5px solid #f3c34b; background: #f3c34b40; animation: shake 0.3s; }
 .gap-bank { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
@@ -103,7 +103,7 @@
 /* Trace: code with the current line, a table of values, number keys */
 .trace { display: flex; flex-direction: column; gap: 12px; }
 .trace-code .code-row { position: relative; margin: 0 -14px; padding: 0 14px; transition: background 0.2s; }
-.trace-code .code-row.is-cur { background: #246fff3d; box-shadow: inset 3px 0 0 #6f9cff; }
+.trace-code .code-row.is-cur { background: #0f91803d; box-shadow: inset 3px 0 0 #3fd6b0; }
 .trace-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; }
 .trace-table th, .trace-table td { padding: 3px 2px; text-align: center; transition: background 0.2s; }
 .trace-table thead th { padding-bottom: 4px; line-height: 1.15; vertical-align: bottom; border-radius: 10px 10px 0 0; }
@@ -115,7 +115,7 @@
 .trace-table .is-cur { background: var(--accent-soft); }
 .trace-cell { width: 100%; min-width: 44px; max-width: 60px; height: 44px; border-radius: 10px; border: 1.5px solid var(--border-deep); background: #fff; color: var(--text); font-family: var(--font-code); font-size: 17px; font-weight: 600; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s, background 0.15s; }
 .trace-cell.is-empty { border-style: dashed; }
-.trace-cell.is-focus { border: 2px solid var(--accent); box-shadow: 0 0 0 3px #246fff26; }
+.trace-cell.is-focus { border: 2px solid var(--accent); box-shadow: 0 0 0 3px #0f918026; }
 .trace-cell.is-ok { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
 .trace-cell.is-bad { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); animation: shake 0.3s; }
 .trace-given { display: inline-grid; place-items: center; min-height: 44px; font-family: var(--font-code); font-size: 16px; color: var(--text-3); }

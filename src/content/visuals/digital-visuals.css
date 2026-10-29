@@ -7,10 +7,10 @@
 .dv-note { margin: 0; min-height: 42px; text-align: center; font-size: 14px; line-height: 1.45; color: var(--text-2); font-weight: 500; }
 
 /* Segmented control */
-.dv-seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; width: 100%; max-width: 300px; background: #0a10280f; border-radius: 14px; }
+.dv-seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; width: 100%; max-width: 300px; background: #122a2e0f; border-radius: 14px; }
 .dv-seg button { min-height: 44px; border: 0; border-radius: 10px; background: transparent; font-size: 15px; font-weight: 600; color: var(--text-2); cursor: pointer; transition: background 0.15s, box-shadow 0.15s, color 0.15s; }
 .dv-seg button.is-on { background: #fff; color: var(--text); box-shadow: 0 0 0 1px var(--border); }
-.dv-seg button:not(.is-on):active { background: #0a10280d; }
+.dv-seg button:not(.is-on):active { background: #122a2e0d; }
 .dv-seg button:active { transform: scale(0.97); }
 
 /* A switch and a lamp: the meaning of 0 and 1 */

@@ -1,21 +1,21 @@
-import { algorithms } from './algorithms'
-import { binary } from './binary'
-import { conditions } from './conditions'
-import { logic } from './logic'
-import { loops } from './loops'
-import { sorting } from './sorting'
+import { biology } from './biology'
+import { geography } from './geography'
+import { history } from './history'
+import { informatics } from './informatics'
+import { math } from './math'
+import { physics } from './physics'
+import { russian } from './russian'
 import type { Lesson, Topic } from './types'
-import { variables } from './variables'
 
-// Topics in the order of the path. One line per topic.
+// Subjects in the order of the island's road: one building and one station per subject. One line per subject.
 export const TOPICS: Topic[] = [
-  algorithms,
-  loops,
-  conditions,
-  variables,
-  logic,
-  binary,
-  sorting,
+  math,
+  informatics,
+  russian,
+  history,
+  geography,
+  biology,
+  physics,
 ]
 
 // All lessons in path order; a lesson opens when the one before it is done.

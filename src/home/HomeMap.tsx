@@ -135,14 +135,14 @@ function StationSign({ stop, done }: { stop: Station; done: number }) {
   )
 }
 
-// The office lesson is a checkpoint on the road: the gate stays shut until the office lesson opens the topic.
+// The lesson with the teacher is a checkpoint on the road: the gate stays shut until that lesson opens the subject.
 function OfficeGate({ stop }: { stop: Gate }) {
   return (
     <div className={'map-gate is-' + stop.side + (stop.open ? ' is-open' : '')} style={{ left: stop.x, top: stop.y }}>
       <span className="map-bar"><i /><i /></span>
       <div className="map-label">
-        <b><Icon name="building" size={16} />Урок в офисе</b>
-        <small>{stop.open ? 'Тема открыта' : 'После него откроется тема'}</small>
+        <b><Icon name="building" size={16} />Урок с учителем</b>
+        <small>{stop.open ? 'Предмет открыт' : 'После него откроется предмет'}</small>
       </div>
     </div>
   )

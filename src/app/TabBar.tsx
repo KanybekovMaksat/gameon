@@ -3,13 +3,13 @@ import { navigate } from './router'
 import { sfx } from './sfx'
 import './tabbar.css'
 
-const TABS: [string, string, IconName][] = [['/', 'Учёба', 'home'], ['/tasks', 'Задания', 'play'], ['/shop', 'Магазин', 'bag'], ['/profile', 'Профиль', 'user']]
+const TABS: [string, string, IconName][] = [['/', 'Остров', 'home'], ['/tasks', 'Миссии', 'play'], ['/rewards', 'Награды', 'trophy'], ['/profile', 'Профиль', 'user']]
 
 // A tap on the open tab brings its page back to the top, as on a phone. On home it also steps out of the class
 // room back to the island (`home-reselect`).
 function toTop() {
   dispatchEvent(new Event('home-reselect'))
-  const box = document.querySelector('.tab-pane:not([hidden]) :is(.home-scroll, .tasks-scroll, .shop-scroll, .prof-scroll)')
+  const box = document.querySelector('.tab-pane:not([hidden]) :is(.home-scroll, .tasks-scroll, .rw-scroll, .prof-scroll)')
   box?.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
 }
 

@@ -46,7 +46,7 @@ export function DemoControls({ lastTitle = 'Демо' }: { lastTitle?: string })
         <Seg<HomeVersion>
           value={s.home}
           onChange={(home) => { s.set({ home }); navigate('/') }}
-          options={[['world', 'Мир', 'Остров с темами'], ['map', 'Карта тем', 'Путь по урокам'], ['room', 'Класс', 'Комната с группой']]}
+          options={[['world', 'Остров', '3D-остров знаний'], ['map', 'Карта', 'Путь по предметам'], ['room', 'Класс', 'Комната с классом']]}
         />
       </div>
 
@@ -62,11 +62,11 @@ export function DemoControls({ lastTitle = 'Демо' }: { lastTitle?: string })
 
       {officeTopics.length > 0 && (
         <div className="demo-group">
-          <h4>Офис и телефон</h4>
+          <h4>Учитель и остров</h4>
           {officeTopics.map((t) => (
             <label key={t.id} className="demo-check">
               <input type="checkbox" checked={!!s.officeDone[t.id]} onChange={() => s.toggleOffice(t.id)} />
-              Урок в офисе по теме «{t.title}» прошёл
+              Урок с учителем по предмету «{t.title}» прошёл
             </label>
           ))}
         </div>
@@ -83,9 +83,9 @@ export function DemoControls({ lastTitle = 'Демо' }: { lastTitle?: string })
           Звук
         </label>
         <div className="demo-links">
-          <a href="/mentor" target="_blank" rel="noreferrer"><Icon name="users" size={16} />Экран ментора</a>
+          <a href="/teacher" target="_blank" rel="noreferrer"><Icon name="users" size={16} />Кабинет учителя</a>
           <ResetButton onReset={() => { s.reset(); navigate('/') }} />
-          <button onClick={() => navigate('/lab/loops')}><Icon name="loop" size={16} />Задачи на циклы: формы</button>
+          <button onClick={() => navigate('/lab/loops')}><Icon name="loop" size={16} />Информатика: формы миссий</button>
           <a href="/design" target="_blank" rel="noreferrer"><Icon name="spark" size={16} />Дизайн-система</a>
         </div>
       </div>
@@ -101,23 +101,23 @@ function useScenes(): Scene[] {
   const open = (path: string) => navigate(path)
   return [
     // Island scenes set the island up from any state: the class room closes, walks and cards end.
-    { title: 'Мир', note: 'Остров: пролёт камеры, ребёнок у дороги тем.', go: () => { s.set({ home: 'world' }); playScene('world'); open('/') } },
-    { title: 'Путь по темам', note: 'Одногруппники у своих уроков, квест класса.', go: () => { s.set({ home: 'map' }); open('/') } },
-    { title: 'Урок: сначала попытка', note: 'Сначала пробует сам, потом объяснение.', go: () => { s.set({ session: 'try' }); open('/lesson/loops-1') } },
-    { title: 'Помощник', note: 'Ответь неверно и нажми «Подсказка».', go: () => { s.set({ session: 'explain' }); open('/lesson/loops-1?at=gap') } },
+    { title: 'Остров знаний', note: 'Пролёт камеры над островом, здания предметов.', go: () => { s.set({ home: 'world' }); playScene('world'); open('/') } },
+    { title: 'Карта предметов', note: 'Одноклассники у своих уроков, квест класса.', go: () => { s.set({ home: 'map' }); open('/') } },
+    { title: 'Миссия: сначала попытка', note: 'Сначала пробует сам, потом объяснение.', go: () => { s.set({ session: 'try' }); open('/lesson/loops-1') } },
+    { title: 'Робик помогает', note: 'Ответь неверно и нажми «Подсказка».', go: () => { s.set({ session: 'explain' }); open('/lesson/loops-1?at=gap') } },
     { title: 'Научи Робика', note: 'Робик решает задачу по словам ребёнка.', go: () => open('/lesson/loops-1?at=teach') },
-    { title: 'Экран ментора', note: 'Новая вкладка, обновляется вживую.', go: () => window.open('/mentor', '_blank') },
-    { title: 'Класс', note: 'Ребёнок заходит в школу, группа за партами.', go: () => { s.set({ home: 'world' }); playScene('class'); open('/') } },
-    { title: 'Магазин', note: 'Вещи на парту и призы в офисе.', go: () => open('/shop') },
-    { title: 'Офис и телефон', note: 'Неделя в телефоне и урок в офисе открывают «Условия».', go: () => {
-      // The week in the phone is done (both loop lessons) and the office lesson took place: «Условия» opens.
+    { title: 'Кабинет учителя', note: 'Новая вкладка, обновляется вживую.', go: () => window.open('/teacher', '_blank') },
+    { title: 'Класс', note: 'Ребёнок заходит в школу, класс за партами.', go: () => { s.set({ home: 'world' }); playScene('class'); open('/') } },
+    { title: 'XP и достижения', note: 'Уровень, достижения и вещи на парту.', go: () => open('/rewards') },
+    { title: 'Учитель и остров', note: 'Информатика пройдена, урок с учителем открывает «Русский язык».', go: () => {
+      // Informatics is done on the island and the lesson with the teacher took place: «Русский язык» opens.
       // The island shows the child at the gate as it opens.
-      useApp.setState((st) => ({ done: { ...st.done, 'loops-1': true, 'loops-2': true }, officeDone: { ...st.officeDone, conditions: true } }))
+      useApp.setState((st) => ({ done: { ...st.done, 'loops-1': true, 'loops-2': true }, officeDone: { ...st.officeDone, russian: true } }))
       s.set({ home: 'world' })
       playScene('gate')
       open('/')
     } },
-    { title: 'Задачи на циклы', note: 'Шесть форм, блоки как основа.', go: () => open('/lab/loops') },
+    { title: 'Формы миссий', note: 'Шесть форм задач по информатике.', go: () => open('/lab/loops') },
   ]
 }
 
@@ -145,8 +145,8 @@ export function DemoPanel() {
       <div className="demo-brand">
         <img src="/logo-gradient.png" alt="" />
         <div>
-          <b>Codify</b>
-          <small>Прототип приложения</small>
+          <b>BilimQuest</b>
+          <small>Преврати учёбу в приключение</small>
         </div>
       </div>
       <div className="demo-tabs" role="tablist">

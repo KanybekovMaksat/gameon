@@ -10,7 +10,7 @@ import { PLANTS, PROPS } from './scatter'
 // the child is near. The scene reads it every frame and moves its models.
 
 const RADIUS = 0.3
-// «К уроку» is a brisk run.
+// «К миссии» is a brisk run.
 const AUTO = 6.4
 // The camera looks from this direction (y rotation around the child): from the south east.
 export const YAW = 0.62
@@ -134,7 +134,7 @@ export class Sim {
   keys = new Set<string>()
   path: P[] = []
   pathRun = false
-  // «К уроку» walks on its own; cards wait until the child arrives.
+  // «К миссии» walks on its own; cards wait until the child arrives.
   auto = false
   onArrive: (() => void) | null = null
   private onBlocked: (() => void) | null = null

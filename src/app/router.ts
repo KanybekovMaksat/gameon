@@ -157,7 +157,7 @@ export function useHref() {
   return useSyncExternalStore(subscribe, () => location.pathname + location.search)
 }
 
-// `/shop#character`: a tab that stays mounted reacts to the part after `#`.
+// `/rewards#character`: a tab that stays mounted reacts to the part after `#`.
 export function useHash() {
   return useSyncExternalStore(subscribe, () => location.hash)
 }

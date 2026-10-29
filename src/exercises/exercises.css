@@ -150,3 +150,14 @@
 /* After the check the task is read-only. */
 .task:is([data-state='ok'], [data-state='bad']) :is(.robo, .gap, .trace, .blocks) button { pointer-events: none; }
 .gap-code, .trace-code { margin: 0; }
+
+/* gap in a plain sentence: light card, blanks on white */
+.gap-prose { margin: 0; font-size: 18px; line-height: 2.2; text-align: center; }
+.gap.is-prose .gap-blank { border-color: var(--border-deep); background: var(--surface); color: var(--text); }
+.gap.is-prose .gap-blank:not(.is-empty) { border-color: var(--accent-line); background: var(--accent-soft); }
+.gap.is-prose .gap-blank.is-focus { border-color: var(--accent); background: var(--accent-soft); }
+.gap.is-prose .gap-blank.is-ok { border-color: var(--ok); background: var(--ok-soft); }
+.gap.is-prose .gap-blank.is-bad { border-color: var(--bad); background: var(--bad-soft); }
+
+/* choice: the thing the question is about, large */
+.choice-card { margin: 0; padding: 10px 4px; text-align: center; font-size: 22px; font-weight: 600; line-height: 1.35; }

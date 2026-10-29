@@ -75,7 +75,7 @@
 }
 @keyframes isle-in { from { opacity: 0; transform: translate(-50%, 8px); } }
 
-/* The dock sits above the tab bar: «К уроку» or the card of what the child stands near. */
+/* The dock sits above the tab bar: «К миссии» or the card of what the child stands near. */
 .isle-dock {
   position: absolute; left: 10px; right: 10px; bottom: calc(var(--tabbar-space) + 10px); z-index: 10;
   display: flex; flex-direction: column; align-items: center; gap: 10px; pointer-events: none;

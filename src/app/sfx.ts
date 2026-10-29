@@ -21,7 +21,7 @@ function tone(freq: number, start: number, dur: number, gain = 0.08, type: Oscil
 const SOUNDS = {
   ok: () => { tone(660, 0, 0.18); tone(990, 0.09, 0.28) },
   bad: () => { tone(220, 0, 0.22, 0.07, 'triangle') },
-  coin: () => { tone(1320, 0, 0.12, 0.05); tone(1760, 0.06, 0.16, 0.05) },
+  xp: () => { tone(1320, 0, 0.12, 0.05); tone(1760, 0.06, 0.16, 0.05) },
   tap: () => { tone(880, 0, 0.05, 0.03) },
   // A detent or a snap: a soft click with a short buzz, for sliders, dials and blocks that land.
   tick: () => { tone(1500, 0, 0.025, 0.02, 'square') },

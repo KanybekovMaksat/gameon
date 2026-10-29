@@ -1,6 +1,6 @@
 import { useContext, useId, type ReactNode } from 'react'
-import { CastContext } from './shop/cast'
-import { portraitOf } from './shop/catalog'
+import { CastContext } from './rewards/cast'
+import { levelOf, portraitOf } from './rewards/catalog'
 
 export type Kid = {
   name: string
@@ -13,20 +13,21 @@ export type Kid = {
 }
 
 // Other children are scripted in the prototype. `online` matches who the mentor screen shows as active now. The index of a child is their seat in the class room.
-// Avatars are portraits of the room characters; the child's own follows the character chosen in the shop.
+// Avatars are portraits of the room characters; the child's own follows the character chosen in «Награды».
 export const KIDS: Kid[] = [
-  { name: 'Амир', topic: 'Циклы', done: 3, online: true, me: true },
-  { name: 'Айдана', topic: 'Циклы', done: 4, online: true },
-  { name: 'Эмир', topic: 'Циклы', done: 1, online: false },
-  { name: 'Алина', topic: 'Циклы', done: 4, online: true },
-  { name: 'Нурсултан', topic: 'Алгоритмы', done: 4, online: false },
-  { name: 'Дана', topic: 'Алгоритмы', done: 1, online: false, away: true },
+  { name: 'Амир', topic: 'Информатика', done: 3, online: true, me: true },
+  { name: 'Айдана', topic: 'Информатика', done: 4, online: true },
+  { name: 'Эмир', topic: 'Информатика', done: 1, online: false },
+  { name: 'Алина', topic: 'Информатика', done: 4, online: true },
+  { name: 'Нурсултан', topic: 'Математика', done: 4, online: false },
+  { name: 'Дана', topic: 'Математика', done: 1, online: false, away: true },
 ]
 
 export type IconName =
   | 'check' | 'lock' | 'close' | 'x' | 'arrow' | 'redo' | 'loop' | 'spark'
   | 'steps' | 'branch' | 'box' | 'gate' | 'binary' | 'sort' | 'flame' | 'home' | 'bag' | 'user'
   | 'send' | 'share' | 'back' | 'play' | 'building' | 'sound' | 'mute' | 'users' | 'flag'
+  | 'math' | 'book' | 'scroll' | 'globe' | 'leaf' | 'atom' | 'star' | 'trophy'
 
 export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
   const p = { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, 'aria-hidden': true }
@@ -57,26 +58,35 @@ export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
     case 'redo': return <svg {...p}><path d="M4 12a8 8 0 1 0 2.4-5.7L4 8.5" /><path d="M4 4v4.5h4.5" /></svg>
     case 'lock': return <svg {...p}><rect x="5" y="11" width="14" height="9" rx="2.5" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
     case 'loop': return <svg {...p}><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3" /><path d="M18 3v4h-4M6 21v-4h4" /></svg>
+    case 'math': return <svg {...p}><path d="M7 4v6M4 7h6M14.5 7h5.5M4.5 15.5l5 5M9.5 15.5l-5 5M14.5 16h5.5M14.5 20h5.5" /></svg>
+    case 'book': return <svg {...p}><path d="M12 6.5C10 5 7 4.5 3.5 5v13c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5C17 4.5 14 5 12 6.5z" /><path d="M12 6.5v13" /></svg>
+    case 'scroll': return <svg {...p}><path d="M4 20h16M5 20v-9M9.5 20v-9M14.5 20v-9M19 20v-9M3.5 11h17L12 4z" /></svg>
+    case 'globe': return <svg {...p}><circle cx="12" cy="12" r="8.5" /><path d="M3.5 12h17M12 3.5c2.5 2.5 3.6 5.4 3.6 8.5s-1.1 6-3.6 8.5c-2.5-2.5-3.6-5.4-3.6-8.5S9.5 6 12 3.5z" /></svg>
+    case 'leaf': return <svg {...p}><path d="M5 19c0-8 5-13 15-14-1 10-6 15-14 15" /><path d="M5 19l8-8" /></svg>
+    case 'atom': return <svg {...p}><circle cx="12" cy="12" r="1.6" /><ellipse cx="12" cy="12" rx="9" ry="3.6" /><ellipse cx="12" cy="12" rx="9" ry="3.6" transform="rotate(60 12 12)" /><ellipse cx="12" cy="12" rx="9" ry="3.6" transform="rotate(-60 12 12)" /></svg>
+    case 'star': return <svg {...p}><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z" /></svg>
+    case 'trophy': return <svg {...p}><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H4.5c0 3 1.5 4.5 3.7 4.8M16 6h3.5c0 3-1.5 4.5-3.7 4.8M12 13v4M8.5 20h7M9.5 17h5v3h-5z" /></svg>
     case 'spark': return <svg {...p}><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M18 6l-2.5 2.5M8.5 15.5L6 18" /></svg>
   }
 }
 
-// Codecoin: a flat gold coin with code brackets. No gradient, no glow.
-export function CoinMark({ size = 18 }: { size?: number }) {
+// XP: a flat gold badge with a star. No gradient, no glow.
+export function XpMark({ size = 18 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <circle cx="12" cy="12" r="11" fill="var(--coin)" />
-      <circle cx="12" cy="12" r="8.2" stroke="var(--coin-ring)" strokeWidth="1.4" />
-      <path d="M10 9.2L7.4 12l2.6 2.8M14 9.2l2.6 2.8-2.6 2.8" stroke="var(--coin-mark)" strokeWidth="1.9" />
+      <circle cx="12" cy="12" r="11" fill="var(--xp)" />
+      <circle cx="12" cy="12" r="8.2" stroke="var(--xp-ring)" strokeWidth="1.4" />
+      <path d="M12 7.3l1.5 3 3.3.5-2.4 2.3.6 3.3-3-1.6-3 1.6.6-3.3-2.4-2.3 3.3-.5z" fill="var(--xp-mark)" stroke="var(--xp-mark)" strokeWidth="0.8" />
     </svg>
   )
 }
 
-export function Coins({ amount, big }: { amount: number; big?: boolean }) {
+// The child's XP; `level` shows the level next to it, as in the header.
+export function Xp({ amount, big, level }: { amount: number; big?: boolean; level?: boolean }) {
   return (
-    <span className={'coins' + (big ? ' is-big' : '')} aria-label={`${amount} кодкоинов`}>
-      <CoinMark size={big ? 30 : 20} />
-      {amount}
+    <span className={'xp' + (big ? ' is-big' : '')} aria-label={level ? `Уровень ${levelOf(amount)}, ${amount} XP` : `${amount} XP`}>
+      <XpMark size={big ? 30 : 20} />
+      {level ? <>Ур. {levelOf(amount)}</> : <>{amount} XP</>}
     </span>
   )
 }
@@ -106,11 +116,11 @@ export function TopicNode({ state, children }: { state: 'done' | 'now' | 'locked
   )
 }
 
-// The helper's mark: a screen with two eyes on the brand gradient.
+// Robik's mark: a screen with two eyes on the brand gradient.
 export function HelperMark() {
   const id = useId()
   return (
-    <svg viewBox="0 0 48 48" width="100%" height="100%" role="img" aria-label="Помощник">
+    <svg viewBox="0 0 48 48" width="100%" height="100%" role="img" aria-label="Робик">
       <defs>
         <linearGradient id={id} x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stopColor="#00c4fa" />
@@ -133,7 +143,7 @@ export function AiBubble({ children }: { children: ReactNode }) {
   return (
     <div className="ai">
       <AiFace />
-      <div className="ai-bubble"><b>Помощник</b>{children}</div>
+      <div className="ai-bubble"><b>Робик</b>{children}</div>
     </div>
   )
 }

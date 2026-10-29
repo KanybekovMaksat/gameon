@@ -8,10 +8,8 @@ import { LOOP_VARIANTS } from '../lab/loops'
 import { STATUS } from '../lab/types'
 import './tasks.css'
 
-// Where each kind of task first appears in the lessons. Loops go first, so the demo starts on the topic the
-// forms were built for; «Условия» stays last, since that topic opens only after the office lesson.
-const ORDER = ['loops', 'algorithms', 'variables', 'sorting', 'binary', 'logic', 'conditions']
-const topics = [...TOPICS].sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id))
+// Where each kind of mission first appears in the lessons, in the order of the island's road.
+const topics = TOPICS
 const firstLesson = (kind: string) => {
   for (const t of topics) for (const l of t.lessons) if (l.practice.some((ex) => ex.kind === kind)) return { topic: t, lesson: l }
   return null
@@ -19,7 +17,7 @@ const firstLesson = (kind: string) => {
 
 const go = (to: string) => { sfx('tap'); navigate(to) }
 
-// «Задания»: every form of task in the app, one tap from its start. The loop forms open their mini lessons on
+// «Миссии»: every form of mission in the app, one tap from its start. The loop forms open their mini lessons on
 // the lab page; a kind of task opens the lesson that has it, at that task.
 export function Tasks() {
   const [scrolled, setScrolled] = useState(false)
@@ -27,12 +25,12 @@ export function Tasks() {
     <div className="tasks">
       <div className={'tasks-scroll' + (scrolled ? ' is-scrolled' : '')} onScroll={(e) => setScrolled(e.currentTarget.scrollTop > 4)}>
         <header className="tasks-head">
-          <h1>Задания</h1>
-          <p>Выбери форму и начни.</p>
+          <h1>Миссии</h1>
+          <p>Выбери форму миссии и начни.</p>
         </header>
 
         <section className="tasks-sec" aria-labelledby="tasks-forms">
-          <h2 id="tasks-forms">Формы на циклы</h2>
+          <h2 id="tasks-forms">Информатика: формы на циклы</h2>
           <ul className="tasks-list">
             {LOOP_VARIANTS.filter((v) => v.Component).map((v) => (
               <li key={v.id}>
@@ -47,7 +45,7 @@ export function Tasks() {
         </section>
 
         <section className="tasks-sec" aria-labelledby="tasks-kinds">
-          <h2 id="tasks-kinds">Типы заданий</h2>
+          <h2 id="tasks-kinds">Типы миссий</h2>
           <ul className="tasks-list">
             {KINDS.map((k) => {
               const at = firstLesson(k.kind)

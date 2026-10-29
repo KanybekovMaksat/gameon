@@ -26,7 +26,7 @@ function CellTip({ tip, row, now }: { tip: Tip; row: Row; now: number }) {
       {c.state !== 'none' && (
         <>
           <span className="mt-tip-facts">Решено {c.solved} из {c.total}</span>
-          <span className="mt-tip-facts">{count(c.wrong, 'ошибка', 'ошибки', 'ошибок')} · {count(c.helper, 'вопрос', 'вопроса', 'вопросов')} помощнику</span>
+          <span className="mt-tip-facts">{count(c.wrong, 'ошибка', 'ошибки', 'ошибок')} · {count(c.helper, 'вопрос', 'вопроса', 'вопросов')} Робику</span>
         </>
       )}
       {c.last !== null && <span className="mt-tip-facts">{cap(ago(c.last, now))}</span>}
@@ -50,7 +50,7 @@ export function GroupTable({ board, now, fresh, freshKid, onOpen }: {
     <section className="mt-card" aria-labelledby="mt-table-h">
       <div className="mt-card-head">
         <div>
-          <h2 id="mt-table-h">Группа за неделю</h2>
+          <h2 id="mt-table-h">Класс за неделю</h2>
           <p>Задано {count(ASSIGNED.length, 'урок', 'урока', 'уроков')}, {count(ASSIGNED_EXERCISES, 'задание', 'задания', 'заданий')} · {weekRange(board.weekStart, now)}</p>
         </div>
         <Legend />

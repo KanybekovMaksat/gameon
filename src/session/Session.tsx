@@ -3,17 +3,17 @@ import { leave, useLayer } from '../app/router'
 import { Sheet } from '../app/Sheet'
 import { sfx } from '../app/sfx'
 import { useApp, type SessionVersion } from '../app/store'
-import { Coins, HelperMark, Icon, Progress } from '../components'
+import { HelperMark, Icon, Progress, Xp } from '../components'
 import type { Explain, Lesson, Topic } from '../content/types'
 import type { Answer, Exercise } from '../exercises/kit'
 import { retryMemory } from '../exercises/memory'
 import { kindOf } from '../exercises/registry'
-import { coinsWord } from '../shop/catalog'
+import { XP_FIRST, XP_RETRY } from '../rewards/catalog'
 import { Finish } from './Finish'
 import { Helper, type HelperTarget } from './Helper'
 import { Rich } from './text'
 
-// `again`: the task returns after the explanation; it keeps full coins but is not a first try.
+// `again`: the mission returns after the explanation; it keeps full XP but is not a first try.
 type Step = { type: 'explain'; item: Explain } | { type: 'ex'; item: Exercise; tryFirst?: boolean; again?: boolean }
 
 // explain: explanation cards, then practice. try: the first task comes before the explanation.
@@ -25,8 +25,6 @@ function buildSteps(lesson: Lesson, version: SessionVersion): Step[] {
   return [...exp, ...ex]
 }
 
-const GAIN_FIRST = 5
-const GAIN_RETRY = 2
 const quick = () => matchMedia('(prefers-reduced-motion: reduce)').matches
 
 type Outcome = { ok: boolean; tryFirst: boolean; tries: number; gain: number; fly: number; note?: string }
@@ -40,7 +38,7 @@ function ResultSheet({ r, out, onHelp, onMain }: { r: Outcome; out?: boolean; on
         <span className="sheet-icon"><Icon name={ok ? 'check' : tryFirst ? 'spark' : 'x'} size={20} /></span>
         <div className="sheet-title">
           <h3>{ok ? (tries === 0 ? 'Верно!' : 'Получилось!') : tryFirst ? 'Хорошая попытка' : 'Не совсем'}</h3>
-          {ok && <span className="gain">+{gain} {coinsWord(gain)}</span>}
+          {ok && <span className="gain">+{gain} XP</span>}
           {!ok && (note || tryFirst) && <span className="sheet-sub">{note ?? 'Сейчас разберёмся, как это работает'}</span>}
         </div>
         {!tryFirst && (
@@ -52,7 +50,7 @@ function ResultSheet({ r, out, onHelp, onMain }: { r: Outcome; out?: boolean; on
       <div className="sheet-foot">
         <button className={'btn ' + (ok ? 'btn-ok' : 'btn-bad')} onClick={onMain}>{ok ? 'Дальше' : tryFirst ? 'К объяснению' : 'Ещё раз'}</button>
       </div>
-      {ok && !out && <span className="coin-fly" key={fly} aria-hidden />}
+      {ok && !out && <span className="xp-fly" key={fly} aria-hidden />}
     </div>
   )
 }
@@ -60,8 +58,8 @@ function ResultSheet({ r, out, onHelp, onMain }: { r: Outcome; out?: boolean; on
 // `active` is false while the lesson slides away: it no longer guards the back step.
 export function Session({ topic, lesson, active = true }: { topic: Topic; lesson: Lesson; active?: boolean }) {
   const version = useApp((s) => s.session)
-  const coins = useApp((s) => s.coins)
-  const { addCoins, log, completeLesson, questStep } = useApp.getState()
+  const xp = useApp((s) => s.xp)
+  const { addXp, log, completeLesson, questStep } = useApp.getState()
 
   const [steps, setSteps] = useState(() => buildSteps(lesson, version))
   // `?at=<kind>` opens the lesson at the first task of that kind: the presenter jumps to «Научи Робика».
@@ -75,7 +73,7 @@ export function Session({ topic, lesson, active = true }: { topic: Topic; lesson
   const [round, setRound] = useState(0)
   const [helper, setHelper] = useState<HelperTarget | null>(null)
   const [exit, setExit] = useState(false)
-  const [stats, setStats] = useState({ firstTry: 0, total: 0, coins: 0 })
+  const [stats, setStats] = useState({ firstTry: 0, total: 0, xp: 0 })
   const [fly, setFly] = useState(0)
   const [finished, setFinished] = useState(false)
   // The child did something here: leaving now asks first. `quitting`: the child chose to leave.
@@ -138,7 +136,7 @@ export function Session({ topic, lesson, active = true }: { topic: Topic; lesson
   const ok = checked && answer?.correct === true
   const progress = (i + (ok || step?.type === 'explain' ? 0.5 : 0)) / steps.length
   const Kind = useMemo(() => (step?.type === 'ex' ? kindOf(step.item) : null), [step])
-  const gain = tries === 0 ? GAIN_FIRST : GAIN_RETRY
+  const gain = tries === 0 ? XP_FIRST : XP_RETRY
   const tryFirst = step?.type === 'ex' && !!step.tryFirst
   const outcome: Outcome | null = step?.type === 'ex' && checked && !replaying ? { ok, tryFirst, tries, gain, fly, note: answer?.note } : null
 
@@ -166,14 +164,14 @@ export function Session({ topic, lesson, active = true }: { topic: Topic; lesson
   const result = (correct: boolean) => {
     if (step.type !== 'ex') return
     if (correct) {
-      const gain = tries === 0 ? GAIN_FIRST : GAIN_RETRY
+      const gain = tries === 0 ? XP_FIRST : XP_RETRY
       sfx('ok')
-      setTimeout(() => sfx('coin'), 380)
-      addCoins(gain)
+      setTimeout(() => sfx('xp'), 380)
+      addXp(gain)
       questStep()
       setFly((f) => f + 1)
       const first = tries === 0 && !step.again
-      setStats((s) => ({ firstTry: s.firstTry + (first ? 1 : 0), total: s.total + 1, coins: s.coins + gain }))
+      setStats((s) => ({ firstTry: s.firstTry + (first ? 1 : 0), total: s.total + 1, xp: s.xp + gain }))
     } else {
       sfx('bad')
       setTries((t) => t + 1)
@@ -219,7 +217,7 @@ export function Session({ topic, lesson, active = true }: { topic: Topic; lesson
       <div className="session-top">
         <button className="session-close" aria-label="Выйти из урока" onClick={() => (dirty ? setExit(true) : quit())}><Icon name="close" size={22} /></button>
         <Progress value={progress} />
-        <span className={'coins-wrap' + (fly ? ' is-bump' : '')} key={fly}><Coins amount={coins} /></span>
+        <span className={'xp-wrap' + (fly ? ' is-bump' : '')} key={fly}><Xp amount={xp} /></span>
       </div>
 
       <div className="session-body" ref={body}>
@@ -244,14 +242,14 @@ export function Session({ topic, lesson, active = true }: { topic: Topic; lesson
 
       {step.type === 'explain' && (
         <div className="session-foot">
-          <button className="helper-btn" aria-label="Спросить помощника" onClick={() => setHelper({ type: 'explain', item: step.item })}><HelperMark /></button>
+          <button className="helper-btn" aria-label="Спросить Робика" onClick={() => setHelper({ type: 'explain', item: step.item })}><HelperMark /></button>
           <button className="btn" style={{ flex: 1 }} onClick={advance}>Дальше</button>
         </div>
       )}
 
       {step.type === 'ex' && !checked && (
         <div className="session-foot">
-          <button className="helper-btn" aria-label="Спросить помощника" onClick={() => setHelper({ type: 'ex', ex: step.item, answer, mode: 'hint' })}><HelperMark /></button>
+          <button className="helper-btn" aria-label="Спросить Робика" onClick={() => setHelper({ type: 'ex', ex: step.item, answer, mode: 'hint' })}><HelperMark /></button>
           <button className="btn" style={{ flex: 1 }} disabled={!answer || answer.correct === null} onClick={check}>Проверить</button>
         </div>
       )}
@@ -272,7 +270,7 @@ export function Session({ topic, lesson, active = true }: { topic: Topic; lesson
           {(close) => (
             <>
               <h3>Выйти из урока?</h3>
-              <p>Кодкоины за решённые задания останутся. Урок можно начать заново в любой момент.</p>
+              <p>XP за решённые миссии останутся. Урок можно начать заново в любой момент.</p>
               <button className="btn btn-block" onClick={close}>Продолжить урок</button>
               <button className="btn btn-ghost btn-block" onClick={quit}>Выйти</button>
             </>

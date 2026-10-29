@@ -1,4 +1,4 @@
-/* Brand values come from codifylab.com. The UI is near-monochrome; blue marks selection and progress. */
+/* BilimQuest brand values. The UI is near-monochrome; blue marks selection and progress. */
 :root {
   --navy: #0a1028;
   --blue: #246fff;
@@ -16,9 +16,9 @@
   --bad-fill: #f3c34b;
   --bad-edge: #d09f22;
   --bad-on: #4d3500;
-  --coin: #ffc53d;
-  --coin-ring: #e0a100;
-  --coin-mark: #7a4a00;
+  --xp: #ffc53d;
+  --xp-ring: #e0a100;
+  --xp-mark: #7a4a00;
 
   --grad: linear-gradient(135deg, #00c4fa 0%, #246fff 100%);
   --accent: #246fff;

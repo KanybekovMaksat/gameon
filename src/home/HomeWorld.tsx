@@ -24,7 +24,7 @@ function startLesson(lessonId: string) {
 
 // The status line of a groupmate, as in the class room.
 function kidLine(kid: Kid) {
-  return kid.online ? `Сейчас решает тему «${kid.topic}»` : kid.away ? 'Давно не было в приложении' : `Проходит тему «${kid.topic}»`
+  return kid.online ? `Сейчас на станции «${kid.topic}»` : kid.away ? 'Давно не было на острове' : `Проходит предмет «${kid.topic}»`
 }
 
 function Card({ children, label }: { children: ReactNode; label: string }) {
@@ -44,11 +44,11 @@ function PadCard({ lessonId, onClose }: { lessonId: string; onClose: () => void 
     <Card label={lesson.title}>
       <div className="ex-kind">{topic.title}</div>
       <h3>{lesson.title}</h3>
-      {open && <p className="t-small">{count} {count < 5 ? 'задания' : 'заданий'} · около {lesson.minutes} минут</p>}
-      {state === 'locked' && <p className="t-small">Сначала пройди урок перед этим. Так каждая тема ложится на уже понятную.</p>}
+      {open && <p className="t-small">{count} {count < 5 ? 'миссии' : 'миссий'} · около {lesson.minutes} минут</p>}
+      {state === 'locked' && <p className="t-small">Сначала пройди урок перед этим. Так каждое открытие ложится на уже понятное.</p>}
       {state === 'office' && <p className="t-small">{topic.office}</p>}
       {open
-        ? <button className="btn btn-block" onClick={() => startLesson(lesson.id)}>{state === 'done' ? 'Пройти ещё раз' : 'Начать урок'}</button>
+        ? <button className="btn btn-block" onClick={() => startLesson(lesson.id)}>{state === 'done' ? 'Пройти ещё раз' : 'Начать миссию'}</button>
         : <button className="btn btn-secondary btn-block" onClick={onClose}>Понятно</button>}
     </Card>
   )
@@ -97,7 +97,7 @@ function Label({ id, at, range = 15, prio = 1, mate, className = '', children }:
   )
 }
 
-// The office lessons, as on the mentor screen (Monday and Wednesday at 16:00): «сегодня в 16:00», «завтра в 16:00»
+// The lessons with the teacher, as in the teacher's room (Monday and Wednesday at 10:00): «сегодня в 10:00», «завтра в 10:00»
 // or the day of the next one.
 const DAYS = ['в воскресенье', 'в понедельник', 'во вторник', 'в среду', 'в четверг', 'в пятницу', 'в субботу']
 function officeWhen(now = new Date()) {
@@ -133,11 +133,11 @@ function KeysIcon() {
   return <svg className="isle-hint-icon" width="34" height="22" viewBox="0 0 34 22" aria-hidden>{[key(12, 1, 'W'), key(1, 12, 'A'), key(12, 12, 'S'), key(23, 12, 'D')]}</svg>
 }
 
-const HELPER_HINT = 'Застрял на задании? Нажми «Подсказка». Я спрошу так, чтобы ты догадался сам.'
+const HELPER_HINT = 'Я Робик. Застрял на миссии? Нажми «Подсказка». Я объясню трудное место простыми словами и спрошу так, чтобы ты догадался сам.'
 const touchFirst = () => !matchMedia('(hover: hover) and (pointer: fine)').matches
 
 // The island as the home screen. The 3D scene is a lazy chunk; this HUD shows the header, labels over the scene,
-// the card of what the child stands near, «К уроку», the pointer to the current lesson, the first-time hint, and
+// the card of what the child stands near, «К миссии», the pointer to the current lesson, the first-time hint, and
 // the class room when the child enters the school.
 export function HomeWorld() {
   const states = useLessonStates()
@@ -272,7 +272,7 @@ export function HomeWorld() {
     else leave()
   })
 
-  // A tap on the open «Учёба» tab leads out of the class room, as a phone tab returns to its first screen.
+  // A tap on the open «Остров» tab leads out of the class room, as a phone tab returns to its first screen.
   useEffect(() => {
     if (!inside) return
     const out = () => leave()
@@ -293,9 +293,9 @@ export function HomeWorld() {
     card = (
       <PlaceCard
         icon={openTopic.icon}
-        title={`Тема «${openTopic.title}» открыта`}
-        text={`Урок в офисе прошёл. Первый урок: «${firstOfOpen.lesson.title}».`}
-        action={st === 'now' || st === 'open' || st === 'done' ? 'Начать урок' : undefined}
+        title={`Предмет «${openTopic.title}» открыт`}
+        text={`Урок с учителем прошёл. Первая миссия: «${firstOfOpen.lesson.title}».`}
+        action={st === 'now' || st === 'open' || st === 'done' ? 'Начать миссию' : undefined}
         onAction={() => { setOpened(null); send({ kind: 'release' }); startLesson(firstOfOpen.lesson.id) }}
         second="Позже"
         onSecond={() => { setOpened(null); send({ kind: 'release' }) }}
@@ -306,13 +306,13 @@ export function HomeWorld() {
     card = (
       <PlaceCard
         face={<AiFace />}
-        title="Помощник"
-        text={lessonLine ? `Следующий урок: «${next.title}». Проводить тебя?` : HELPER_HINT}
-        action={lessonLine ? 'К уроку' : undefined}
+        title="Робик"
+        text={lessonLine ? `Следующая миссия: «${next.title}». Проводить тебя?` : HELPER_HINT}
+        action={lessonLine ? 'К миссии' : undefined}
         onAction={goLesson}
       />
     )
-    // Without its own «К уроку», the helper's card keeps the chip above it.
+    // Without its own «К миссии», the helper's card keeps the chip above it.
     placeCard = !lessonLine
   } else if (k) {
     placeCard = true
@@ -333,24 +333,24 @@ export function HomeWorld() {
       const first = LESSONS.find((l) => l.topic.id === near.slice(5))
       if (first) card = <PadCard lessonId={first.lesson.id} onClose={close} />
     } else if (near === 'school') {
-      card = <PlaceCard icon="building" title="Школа Codify" text="Твоя группа уже в классе. Заходи и садись за парту." action="Войти в класс" onAction={() => { sfx('tap'); setEntering(true); send({ kind: 'enter' }) }} />
-    } else if (near === 'shop') {
-      card = <PlaceCard icon="bag" title="Магазин" text="Вещи на парту, новые персонажи и призы за кодкоины." action="Открыть магазин" onAction={() => navigate('/shop')} />
+      card = <PlaceCard icon="building" title="Школа BilimQuest" text="Твой класс уже здесь. Заходи и садись за парту." action="Войти в класс" onAction={() => { sfx('tap'); setEntering(true); send({ kind: 'enter' }) }} />
+    } else if (near === 'rewards') {
+      card = <PlaceCard icon="trophy" title="Награды" text="Твой уровень, достижения и вещи на парту за них." action="Открыть награды" onAction={() => navigate('/rewards')} />
     } else if (near === 'quest') {
       card = <div className="isle-quest"><QuestCard /></div>
     } else if (near === 'office') {
       card = (
         <PlaceCard
           icon="building"
-          title="Офис Codify"
-          text={`Урок в офисе ${officeWhen()}`}
-          sub={nextOffice ? `Тема «${nextOffice.title}». После урока она откроется в телефоне.` : 'Приходи с группой. После уроков в офисе открываются новые темы.'}
+          title="Кабинет учителя"
+          text={`Урок с учителем ${officeWhen()}`}
+          sub={nextOffice ? `Предмет «${nextOffice.title}». После урока он откроется на острове.` : 'Учитель видит твой прогресс и открывает новые предметы.'}
         />
       )
     }
   }
   if (auto || entering) card = null
-  // «К уроку» stays at hand: alone, above a place's card, or as «Идём к уроку» while the child walks there.
+  // «К миссии» stays at hand: alone, above a place's card, or as «Идём к миссии» while the child walks there.
   const showChip = ready && !intro && !inside && !stage && !entering && (!card || placeCard)
   const showHint = !moved && ready && !intro && !inside && !stage && !card && !auto
 
@@ -388,23 +388,23 @@ export function HomeWorld() {
                 </Label>
               )
             })}
-            <Label id="place:school" at={{ x: SCHOOL.x, y: 4.9, z: SCHOOL.z }} range={20}><Icon name="building" size={14} />Школа Codify</Label>
-            <Label id="place:office" at={{ x: OFFICE.x, y: 6.4, z: OFFICE.z }} range={20}><Icon name="building" size={14} />Офис Codify</Label>
-            <Label id="place:shop" at={{ x: KIOSK.x, y: 3.7, z: KIOSK.z }} range={18}><Icon name="bag" size={14} />Магазин</Label>
+            <Label id="place:school" at={{ x: SCHOOL.x, y: 4.9, z: SCHOOL.z }} range={20}><Icon name="building" size={14} />Школа BilimQuest</Label>
+            <Label id="place:office" at={{ x: OFFICE.x, y: 6.4, z: OFFICE.z }} range={20}><Icon name="building" size={14} />Кабинет учителя</Label>
+            <Label id="place:rewards" at={{ x: KIOSK.x, y: 3.7, z: KIOSK.z }} range={18}><Icon name="trophy" size={14} />Награды</Label>
             <Label id="place:quest" at={{ x: QUEST.x, y: 2.9, z: QUEST.z }} range={16}><Icon name="users" size={14} />Квест класса · {quest} из {QUEST_GOAL}</Label>
             {GATES.filter((g) => !officeDone[g.topicId]).map((g) => (
               <Label key={g.topicId} id={'gate:' + g.topicId} at={{ x: g.x, y: 3.6, z: g.z }} range={16} prio={4} className="is-gate">
-                <Icon name="building" size={14} />Откроется после урока в офисе
+                <Icon name="building" size={14} />Откроется после урока с учителем
               </Label>
             ))}
-            <Label id="place:end" at={{ x: ROAD_END.x + 1.6, y: 2.2, z: ROAD_END.z + 0.4 }} range={16}><Icon name="flag" size={14} />Дальше новые темы</Label>
+            <Label id="place:end" at={{ x: ROAD_END.x + 1.6, y: 2.2, z: ROAD_END.z + 0.4 }} range={16}><Icon name="flag" size={14} />Дальше новые квесты</Label>
             {KIDS.filter((x) => x.online && !x.me).map((x) => (
               <Label key={x.name} id={'mate:' + x.name} mate={x.name} at={{ x: 0, y: 1.55, z: 0 }} range={14} prio={2} className="is-tag"><i />{x.name}</Label>
             ))}
           </div>
         )}
         <div className="isle-joy" ref={(el) => { island.joy = el }} aria-hidden><i /></div>
-        <button className="isle-edge" ref={(el) => { island.edge = el }} onClick={goLesson} aria-label="К уроку" tabIndex={-1}>
+        <button className="isle-edge" ref={(el) => { island.edge = el }} onClick={goLesson} aria-label="К миссии" tabIndex={-1}>
           <span><Icon name="arrow" size={20} /></span>
         </button>
       </div>
@@ -419,11 +419,11 @@ export function HomeWorld() {
         {showChip && (auto
           ? (
             <div className="isle-go is-on" role="status">
-              <Icon name="flag" size={18} />Идём к уроку
+              <Icon name="flag" size={18} />Идём к миссии
               <button className="isle-stop" onClick={() => send({ kind: 'stop' })} aria-label="Остановиться"><Icon name="close" size={16} /></button>
             </div>
           )
-          : <button className={'isle-go' + (placeCard ? ' is-small' : '')} onClick={goLesson}><Icon name="flag" size={18} />К уроку</button>)}
+          : <button className={'isle-go' + (placeCard ? ' is-small' : '')} onClick={goLesson}><Icon name="flag" size={18} />К миссии</button>)}
         {!inside && card}
       </div>
       {inside && (
@@ -452,8 +452,8 @@ function ClassView({ picked, onPick, onBack }: { picked: string | null; onPick: 
           <div className="room-pop">
             {kid ? <Avatar kid={kid} /> : <AiFace />}
             <div>
-              <b>{kid ? kid.name : 'Помощник'}</b>
-              <small>{kid ? kidLine(kid) : 'Подскажет, если застрянешь'}</small>
+              <b>{kid ? kid.name : 'Робик'}</b>
+              <small>{kid ? kidLine(kid) : 'Объяснит трудную тему простыми словами'}</small>
             </div>
           </div>
         )}
@@ -462,12 +462,12 @@ function ClassView({ picked, onPick, onBack }: { picked: string | null; onPick: 
         <div className="room-today">
           <span className="map-icon"><Icon name={topic.icon} size={22} /></span>
           <div>
-            <small>{doneAll ? 'Все уроки пройдены' : `Сегодня · ${topic.title}`}</small>
+            <small>{doneAll ? 'Весь остров пройден' : `Сегодня · ${topic.title}`}</small>
             <b>{lesson.title}</b>
           </div>
           <span className="t-small">{lesson.minutes} мин</span>
         </div>
-        <button className="btn btn-block" onClick={() => startLesson(lesson.id)}>{doneAll ? 'Повторить урок' : 'Сесть за парту'}</button>
+        <button className="btn btn-block" onClick={() => startLesson(lesson.id)}>{doneAll ? 'Повторить миссию' : 'Сесть за парту'}</button>
       </div>
     </>
   )

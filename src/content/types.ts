@@ -22,6 +22,6 @@ export type Topic = {
   subtitle: string
   icon: IconName
   lessons: Lesson[]
-  // The topic opens only after its lesson in the office: office and phone unlock each other.
+  // The subject opens only after its lesson with the teacher in class: the teacher and the island unlock each other.
   office?: string
 }

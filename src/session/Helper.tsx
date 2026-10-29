@@ -127,14 +127,14 @@ export function Helper({ target, lessonId, onClose }: { target: HelperTarget; le
   const typing = busy && last?.role === 'user'
 
   return (
-    <Sheet label="Помощник" className="chat" onClose={onClose}>
+    <Sheet label="Робик" className="chat" onClose={onClose}>
       {(close) => (
         <>
           <div className="chat-head">
             <AiFace />
             <div>
-              <b>Помощник</b>
-              <small>Подсказывает, но не решает за тебя</small>
+              <b>Робик</b>
+              <small>Объясняет простыми словами, но не решает за тебя</small>
             </div>
             <button className="chat-x" aria-label="Закрыть" onClick={close}><Icon name="close" size={20} /></button>
           </div>
@@ -142,14 +142,14 @@ export function Helper({ target, lessonId, onClose }: { target: HelperTarget; le
             {msgs.filter((m) => !m.hidden).map((m, i) => (
               <p key={i} className={'chat-msg selectable' + (m.role === 'user' ? ' is-me' : '')}>{inline(m.content)}</p>
             ))}
-            {typing && <p className="chat-msg is-typing" aria-label="Помощник печатает"><i /><i /><i /></p>}
+            {typing && <p className="chat-msg is-typing" aria-label="Робик печатает"><i /><i /><i /></p>}
           </div>
           <div className="chat-replies">
             <button className="btn btn-secondary btn-sm" onClick={close}>Понятно</button>
             <button className="btn btn-secondary btn-sm" disabled={busy} onClick={() => send('Не понятно, подскажи ещё')}>Не понятно</button>
           </div>
           <form className="chat-input" onSubmit={(e) => { e.preventDefault(); send(text) }}>
-            <input value={text} onChange={(e) => setText(e.target.value)} placeholder="Спроси помощника" maxLength={300} enterKeyHint="send" />
+            <input value={text} onChange={(e) => setText(e.target.value)} placeholder="Спроси Робика" maxLength={300} enterKeyHint="send" />
             <button type="submit" aria-label="Отправить" disabled={!text.trim() || busy}><Icon name="send" size={18} /></button>
           </form>
         </>

@@ -66,7 +66,7 @@ function Window({ w, h, position }: { w: number; h: number; position: [number, n
   )
 }
 
-// The Codify school: a light two-storey building with the logo, a canopy over the glass door and planters.
+// The BilimQuest school: a light two-storey building with the logo, a canopy over the glass door and planters.
 export function School() {
   const logo = useLogo()
   const W = SCHOOL.w, D = SCHOOL.d
@@ -130,7 +130,7 @@ export function School() {
   )
 }
 
-// The Codify office by the conditions gate: a glass front, the logo on the roof.
+// The teacher's room by the gate of «Русский язык»: a glass front, the logo on the roof.
 export function Office() {
   const logo = useLogo()
   const W = OFFICE.w, D = OFFICE.d
@@ -209,9 +209,9 @@ export function Office() {
   )
 }
 
-// The shop kiosk: a counter with the shop's own items, a striped awning and a codecoin turning above.
+// The rewards pavilion: a counter with desk items the achievements bring, a striped awning and an XP medal turning above.
 export function Kiosk() {
-  const sign = useMemo(() => glyphTexture('bag', '#26304f'), [])
+  const sign = useMemo(() => glyphTexture('trophy', '#26304f'), [])
   useEffect(() => () => sign.dispose(), [sign])
   const coin = useRef<Group>(null)
   useFrame(() => {
@@ -258,7 +258,7 @@ export function Kiosk() {
           <meshBasicMaterial map={sign} transparent toneMapped={false} />
         </mesh>
       </group>
-      {/* The shop's desk items on the counter. */}
+      {/* Desk items that achievements bring, on the counter. */}
       <Furniture file="books" height={0.22} position={[-0.95, 0.95, 0.35]} rotation={[0, 0.4, 0]} />
       <Furniture file="lampRoundTable" height={0.5} position={[-0.4, 0.95, 0.2]} />
       <Furniture file="bear" height={0.4} position={[0.25, 0.95, 0.35]} rotation={[0, -0.3, 0]} />

@@ -75,8 +75,8 @@ export function HomeRoom() {
           <div className="room-pop">
             {kid ? <Avatar kid={kid} /> : <AiFace />}
             <div>
-              <b>{kid ? kid.name : 'Помощник'}</b>
-              <small>{kid ? (kid.online ? `Сейчас решает тему «${kid.topic}»` : kid.away ? 'Давно не было в приложении' : `Проходит тему «${kid.topic}»`) : 'Подскажет, если застрянешь'}</small>
+              <b>{kid ? kid.name : 'Робик'}</b>
+              <small>{kid ? (kid.online ? `Сейчас на станции «${kid.topic}»` : kid.away ? 'Давно не было на острове' : `Проходит предмет «${kid.topic}»`) : 'Объяснит трудную тему простыми словами'}</small>
             </div>
           </div>
         )}

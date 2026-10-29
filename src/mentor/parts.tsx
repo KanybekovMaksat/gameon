@@ -3,9 +3,9 @@ import { HelperMark, Icon } from '../components'
 import { inline } from '../session/text'
 import { STATE_LABEL, type Cell, type CellState } from './analyze'
 import { EXERCISES, LESSON_INFO, STUDENTS, type MEvent } from './data'
-import { cap, count } from './format'
-import { CastContext } from '../shop/cast'
-import { portraitOf } from '../shop/catalog'
+import { cap } from './format'
+import { CastContext } from '../rewards/cast'
+import { portraitOf } from '../rewards/catalog'
 
 // The portrait follows each child's character, as in the app.
 export function Face({ idx, size = 36, active }: { idx: number; size?: number; active?: boolean }) {
@@ -73,12 +73,12 @@ export function EventBody({ e, compact }: { e: MEvent; compact?: boolean }) {
       if (compact) detail = detail ? <>{title} · {detail}</> : title
       break
     case 'helper':
-      head = `${f ? 'Спросила' : 'Спросил'} помощника про ${task}`
+      head = `${f ? 'Спросила' : 'Спросил'} Робика про ${task}`
       detail = compact ? <>{title} · «{e.question}»</> : <span className="mt-ev-quote">{inline(e.question)}</span>
       break
     case 'lesson-done': {
       tone = 'is-ok'
-      const result = `с первого раза ${e.firstTry} из ${e.total}${e.coins > 0 ? `, +${count(e.coins, 'кодкоин', 'кодкоина', 'кодкоинов')}` : ''}`
+      const result = `с первого раза ${e.firstTry} из ${e.total}${e.xp > 0 ? `, +${e.xp} XP` : ''}`
       head = `${f ? 'Прошла' : 'Прошёл'} урок`
       detail = compact ? `${title}: ${result}` : cap(result)
       break

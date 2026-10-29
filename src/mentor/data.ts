@@ -6,8 +6,8 @@ import type { Lesson, Topic } from '../content/types'
 import type { Exercise } from '../exercises/kit'
 import { DAY, MIN, startOfDay } from './format'
 
-// The group on the mentor screen. Office lessons are on Monday and Wednesday at 16:00 and last 90 minutes.
-export const GROUP = { name: 'Группа ПН, СР · 16:00', mentor: 'Тимур Асанов', ...SCHEDULE }
+// The class in the teacher's room. Lessons with the teacher are on Monday and Wednesday at 10:00 and last 45 minutes.
+export const GROUP = { name: '7 «Б» класс', mentor: 'Гульнара Асановна', ...SCHEDULE }
 
 export type Student = { idx: number; kid: Kid; name: string; female: boolean; real: boolean }
 
@@ -55,7 +55,7 @@ export function parseEvent(v: unknown): LearnEvent | null {
       const question = text(o.question)
       return exId && question ? { type: 'helper', lessonId, exId, question, at } : null
     }
-    case 'lesson-done': return { type: 'lesson-done', lessonId, firstTry: num(o.firstTry), total: num(o.total), coins: num(o.coins), at }
+    case 'lesson-done': return { type: 'lesson-done', lessonId, firstTry: num(o.firstTry), total: num(o.total), xp: num(o.xp), at }
   }
   return null
 }
@@ -271,7 +271,7 @@ function session(kid: Student, plan: Plan, mistakes: Mistakes, r: Rand, used: Ma
   const push = (e: LearnEvent, dt: number) => out.push({ e: { ...e, kid: kid.idx }, dt })
   push({ type: 'lesson-start', lessonId, at: 0 }, 0)
   let firstTry = 0
-  let coins = 0
+  let xp = 0
   // A question not typed yet this week; when the pool runs out, one not typed yet about this task.
   const ask = (ex: Exercise, lastWrong: string | undefined) => {
     const asked = used.get(ex.id) ?? new Set<string>()
@@ -311,9 +311,9 @@ function session(kid: Student, plan: Plan, mistakes: Mistakes, r: Rand, used: Ma
     if (stuck || trying) break
     push({ type: 'attempt', lessonId, exId: ex.id, correct: true, answer: answerText(ex, true, kid.female, 0, 0), at: 0 }, dt)
     if (wrong === 0) firstTry++
-    coins += wrong === 0 ? 5 : 2
+    xp += wrong === 0 ? 10 : 5
   }
-  if (plan.end === 'done') push({ type: 'lesson-done', lessonId, firstTry, total: tasks.length, coins, at: 0 }, between(r, 6, 14))
+  if (plan.end === 'done') push({ type: 'lesson-done', lessonId, firstTry, total: tasks.length, xp, at: 0 }, between(r, 6, 14))
   return out
 }
 

@@ -53,10 +53,10 @@ function Header({ now, status }: { now: number; status: LiveStatus }) {
     <header className="mt-top">
       <div className="mt-top-in">
         <div className="mt-group">
-          <img src="/logo-gradient.png" alt="Codify" />
+          <img src="/logo-gradient.png" alt="BilimQuest" />
           <div>
             <h1>{GROUP.name}</h1>
-            <p>Ментор {GROUP.mentor} · {count(STUDENTS.length, 'ученик', 'ученика', 'учеников')}</p>
+            <p>Учитель {GROUP.mentor} · {count(STUDENTS.length, 'ученик', 'ученика', 'учеников')}</p>
           </div>
         </div>
         <dl className="mt-meta">
@@ -65,7 +65,7 @@ function Header({ now, status }: { now: number; status: LiveStatus }) {
             <dd>{cap(weekday(now))}, {dateLong(now)}</dd>
           </div>
           <div>
-            <dt><Icon name="building" size={14} />Следующий урок в офисе</dt>
+            <dt><Icon name="building" size={14} />Следующий урок в классе</dt>
             <dd>{officeWhen(now)} · {OFFICE_TOPIC.title}</dd>
           </div>
         </dl>
@@ -120,7 +120,7 @@ function Summary({ board, armed }: { board: Board; armed: boolean }) {
         <div className="mt-tile-value"><Num g={gLessons} /><span className="mt-of">из {s.lessonsAssigned}</span></div>
         <p className="mt-tile-note">По {count(ASSIGNED.length, 'уроку', 'урока', 'уроков')} на каждого ученика</p>
       </Tile>
-      <Tile label="Вопросы помощнику" g={gHelper}>
+      <Tile label="Вопросы Робику" g={gHelper}>
         <div className="mt-tile-value"><Num g={gHelper} /></div>
         <p className="mt-tile-note">От {count(s.helperKids, 'ученика', 'учеников', 'учеников')} за неделю</p>
       </Tile>
@@ -132,7 +132,7 @@ function Summary({ board, armed }: { board: Board; armed: boolean }) {
 export default function MentorPage() {
   useEffect(() => {
     const title = document.title
-    document.title = 'Codify: экран ментора'
+    document.title = 'BilimQuest: кабинет учителя'
     return () => { document.title = title }
   }, [])
 

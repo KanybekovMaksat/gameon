@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { leave } from '../app/router'
 import { Sheet } from '../app/Sheet'
 import { QUEST_GOAL, useApp } from '../app/store'
-import { CoinMark, Icon, Progress } from '../components'
+import { Icon, Progress, XpMark } from '../components'
 import type { Lesson, Topic } from '../content/types'
-import { coinsWord } from '../shop/catalog'
+import { levelOf } from '../rewards/catalog'
 
 // Counts a number up from zero; the reward reads as earned, not given.
 function useCount(to: number, ms = 700) {
@@ -69,13 +69,15 @@ function ShareSheet({ text, onDone, onClose }: { text: string; onDone: () => voi
   )
 }
 
-export function Finish({ topic, lesson, stats }: { topic: Topic; lesson: Lesson; stats: { firstTry: number; total: number; coins: number } }) {
+export function Finish({ topic, lesson, stats }: { topic: Topic; lesson: Lesson; stats: { firstTry: number; total: number; xp: number } }) {
   const streak = useApp((s) => s.streak)
   const quest = useApp((s) => s.quest)
-  const coins = useCount(stats.coins)
+  const gained = useCount(stats.xp)
+  const total = useApp((s) => s.xp)
+  const levelUp = levelOf(total) > levelOf(total - stats.xp)
   const [shared, setShared] = useState(false)
   const [sheet, setSheet] = useState(false)
-  const text = `Задание от ребёнка из Codify: ${lesson.parentTask}`
+  const text = `Задание от ребёнка из BilimQuest: ${lesson.parentTask}`
 
   const share = async () => {
     if (!navigator.share) { setSheet(true); return }
@@ -90,11 +92,11 @@ export function Finish({ topic, lesson, stats }: { topic: Topic; lesson: Lesson;
       <div className="finish-body">
         <div className="finish-badge"><Icon name="check" size={44} /></div>
         <div className="finish-kicker">{topic.title}</div>
-        <h1 className="finish-title">Урок пройден</h1>
+        <h1 className="finish-title">{levelUp ? `Уровень ${levelOf(total)}!` : 'Миссия выполнена'}</h1>
         <p className="finish-sub">{lesson.title}</p>
 
         <div className="finish-stats">
-          <div><span className="finish-num"><CoinMark size={22} />+{coins}</span><small>{coinsWord(stats.coins)}</small></div>
+          <div><span className="finish-num"><XpMark size={22} />+{gained}</span><small>XP</small></div>
           <div><span className="finish-num">{stats.firstTry} из {stats.total}</span><small>с первой попытки</small></div>
           <div><span className="finish-num"><span className="flame"><Icon name="flame" size={20} /></span>{streak}</span><small>дней подряд</small></div>
         </div>
@@ -102,7 +104,7 @@ export function Finish({ topic, lesson, stats }: { topic: Topic; lesson: Lesson;
         <div className="card quest">
           <div className="card-row"><Icon name="users" size={18} /><b>Квест класса</b><span className="t-small">{quest} из {QUEST_GOAL}</span></div>
           <Progress value={quest / QUEST_GOAL} />
-          <p className="t-small">Твой вклад: {stats.total} {stats.total === 1 ? 'задание' : stats.total < 5 ? 'задания' : 'заданий'}. Когда класс дойдёт до {QUEST_GOAL}, на уроке в офисе откроется игра «Робо-гонки».</p>
+          <p className="t-small">Твой вклад: {stats.total} {stats.total === 1 ? 'миссия' : stats.total < 5 ? 'миссии' : 'миссий'}. Когда класс дойдёт до {QUEST_GOAL}, учитель откроет на уроке игру-викторину «Битва знатоков».</p>
         </div>
 
         {lesson.parentTask && (

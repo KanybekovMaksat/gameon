@@ -9,7 +9,7 @@ const FONT = '"Inter Variable", Inter, system-ui, sans-serif'
 const INK = '#0a1028'
 export const BLUE = '#246fff'
 
-const ICONS: IconName[] = ['check', 'lock', 'building', 'steps', 'loop', 'branch', 'box', 'gate', 'binary', 'sort', 'flag', 'bag', 'users', 'spark']
+const ICONS: IconName[] = ['check', 'lock', 'building', 'loop', 'math', 'book', 'scroll', 'globe', 'leaf', 'atom', 'flag', 'trophy', 'users', 'spark']
 const COLORS = ['#ffffff', BLUE, '#1f66e5', '#8a909e', INK]
 
 // The markup of each icon, rendered once with React when this chunk loads (outside any render).

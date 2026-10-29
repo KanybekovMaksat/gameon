@@ -1,5 +1,6 @@
 import { blocks } from './blocks'
 import { bug } from './bug'
+import { choice } from './choice'
 import { gap } from './gap'
 import { gates } from './gates'
 import { grid } from './grid'
@@ -14,7 +15,7 @@ import { trace } from './trace'
 
 // One line per exercise kind. A new kind is added here and nowhere else.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const KINDS: Kind<any>[] = [predict, order, bug, teach, grid, gap, trace, blocks, gates, sort, pixels, pattern]
+export const KINDS: Kind<any>[] = [choice, predict, order, bug, teach, grid, gap, trace, blocks, gates, sort, pixels, pattern]
 
 const BY_KIND = new Map(KINDS.map((k) => [k.kind, k]))
 

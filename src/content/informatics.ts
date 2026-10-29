@@ -8,10 +8,11 @@ import { trace } from '../exercises/trace'
 import type { Topic } from './types'
 import { LoopCounter, LoopIndent, LoopRobot, RangeLine } from './visuals'
 
-export const loops: Topic = {
-  id: 'loops',
-  title: 'Циклы',
-  subtitle: 'Повторяй, а не переписывай',
+// Informatics on the island: loops, the topic the task forms of the lab were built for.
+export const informatics: Topic = {
+  id: 'informatics',
+  title: 'Информатика',
+  subtitle: 'Циклы: повторяй, а не переписывай',
   icon: 'loop',
   lessons: [
     {

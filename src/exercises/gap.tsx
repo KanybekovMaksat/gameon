@@ -5,7 +5,8 @@ import './exercises.css'
 
 // In `code`, `__` marks a blank. `answer[i]` is the right token for blank i, or a list of tokens that are all right.
 // `bank` holds the tokens to choose from; each token goes into one blank at a time.
-export type GapData = { text?: string; code: string; bank: string[]; answer: (string | string[])[] }
+// `prose`: the blanks are in a plain sentence (a rule, a date, a word), not in code.
+export type GapData = { text?: string; code: string; bank: string[]; answer: (string | string[])[]; prose?: boolean }
 
 const accepts = (a: string | string[], token: string) => (Array.isArray(a) ? a.includes(token) : a === token)
 
@@ -60,7 +61,7 @@ function Gap({ data, checked, onAnswer }: ExProps<GapData>) {
       + markOf(i)
     return (
       <button key={`b${i}`} className={cls} onClick={() => tapBlank(i)} aria-label={b === null ? `Пропуск ${i + 1}, пустой` : `Пропуск ${i + 1}: ${data.bank[b]}`}>
-        {b === null ? null : highlight(data.bank[b])}
+        {b === null ? null : data.prose ? data.bank[b] : highlight(data.bank[b])}
       </button>
     )
   }
@@ -71,8 +72,12 @@ function Gap({ data, checked, onAnswer }: ExProps<GapData>) {
       label={gap.label}
       text={data.text ?? 'Нажми на пропуск, а потом на подходящий ответ.'}
     >
-      <div className="gap">
-        <pre className="code gap-code">
+      <div className={'gap' + (data.prose ? ' is-prose' : '')}>
+        {data.prose ? (
+          <p className="gap-prose">
+            {data.code.split('__').map((p, pi, all) => <Fragment key={pi}>{p}{pi < all.length - 1 && blank()}</Fragment>)}
+          </p>
+        ) : <pre className="code gap-code">
           {data.code.split('\n').map((line, li) => {
             const parts = line.split('__')
             return (
@@ -81,11 +86,11 @@ function Gap({ data, checked, onAnswer }: ExProps<GapData>) {
               </div>
             )
           })}
-        </pre>
+        </pre>}
         <div className="gap-bank" aria-label="Варианты">
           {data.bank.map((t, b) => (
             <button key={b} className={'chip gap-token' + (fill.includes(b) ? ' is-taken' : '')} disabled={fill.includes(b)} onClick={() => tapToken(b)}>
-              <code>{t}</code>
+              {data.prose ? t : <code>{t}</code>}
             </button>
           ))}
         </div>

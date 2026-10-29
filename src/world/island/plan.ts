@@ -35,7 +35,7 @@ export function spotAfter(lessonId: string): Spot | null {
   return { x: p.x, z: p.z, face: p.heading }
 }
 
-// Where «К уроку» leads: the current lesson; when the next lesson waits for the office, the gate before it;
+// Where «К миссии» leads: the current lesson; when the next lesson waits for the office, the gate before it;
 // when everything is done, the last pad.
 export function goalOf(states: Record<string, LessonState>): { key: string; s: number; x: number; z: number } {
   const now = LESSONS.find(({ lesson }) => states[lesson.id] === 'now')
@@ -54,10 +54,10 @@ export function goalOf(states: Record<string, LessonState>): { key: string; s: n
 }
 
 // Places the child can walk up to and use. `at` is where the child stands; `r` how close counts as near.
-export type PlaceId = 'school' | 'shop' | 'quest' | 'office'
+export type PlaceId = 'school' | 'rewards' | 'quest' | 'office'
 export const PLACES: { id: PlaceId; at: P; face: number; r: number }[] = [
   { id: 'school', at: frontOf(SCHOOL, 0.9), face: SCHOOL.rot + Math.PI, r: 1.8 },
-  { id: 'shop', at: frontOf(KIOSK, 1.0), face: KIOSK.rot + Math.PI, r: 1.9 },
+  { id: 'rewards', at: frontOf(KIOSK, 1.0), face: KIOSK.rot + Math.PI, r: 1.9 },
   { id: 'quest', at: frontOf(QUEST, 1.3), face: QUEST.rot + Math.PI, r: 2 },
   { id: 'office', at: frontOf(OFFICE, 0.9), face: OFFICE.rot + Math.PI, r: 2 },
 ]

@@ -88,10 +88,10 @@
 .options { display: grid; gap: 10px; }
 @keyframes shake { 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
 
-/* Codecoins: an outline mark and a number, no fill or glow */
-.coins { display: inline-flex; align-items: center; gap: 5px; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--text); }
-.coins svg { flex: none; }
-.coins.is-big { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; gap: 8px; }
+/* XP: a badge and a number, no fill or glow */
+.xp { display: inline-flex; align-items: center; gap: 5px; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--text); white-space: nowrap; }
+.xp svg { flex: none; }
+.xp.is-big { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; gap: 8px; }
 
 .progress { height: 8px; border-radius: 999px; background: #e9eaee; overflow: hidden; flex: 1; }
 .progress > div { height: 100%; border-radius: inherit; background: var(--accent); transition: width 0.4s cubic-bezier(.3,1.2,.6,1); }

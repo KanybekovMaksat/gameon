@@ -5,9 +5,9 @@ import { HomeRoom } from '../home/HomeRoom'
 import { HomeWorld } from '../home/HomeWorld'
 import { Profile } from '../profile/Profile'
 import { Session } from '../session/Session'
-import { CastContext } from '../shop/cast'
-import { castOf } from '../shop/catalog'
-import { Shop } from '../shop/Shop'
+import { CastContext } from '../rewards/cast'
+import { castOf } from '../rewards/catalog'
+import { Rewards } from '../rewards/Rewards'
 import { LabPanel, LabScreen } from '../lab/LabPage'
 import { DemoPanel } from './DemoPanel'
 import { useKeyboard } from './keyboard'
@@ -37,17 +37,17 @@ function Home() {
   return home === 'room' ? <HomeRoom /> : home === 'map' ? <HomeMap /> : <HomeWorld />
 }
 
-// Home, tasks, shop and profile share one screen. Each tab stays mounted once opened, so it keeps its place and the
+// Home, tasks, rewards and profile share one screen. Each tab stays mounted once opened, so it keeps its place and the
 // class room is not rebuilt; tabs switch at once, as on a phone.
 function Tabs({ path, wide }: { path: string; wide: boolean }) {
-  const tab = path === '/tasks' ? 'tasks' : path === '/shop' ? 'shop' : path === '/profile' ? 'profile' : 'home'
+  const tab = path === '/tasks' ? 'tasks' : path === '/rewards' ? 'rewards' : path === '/profile' ? 'profile' : 'home'
   const [seen, setSeen] = useState(() => [tab])
   if (!seen.includes(tab)) setSeen([...seen, tab])
   return (
     <>
       <div className="tab-pane" hidden={tab !== 'home'}><Home /></div>
       {seen.includes('tasks') && <div className="tab-pane" hidden={tab !== 'tasks'}><Tasks /></div>}
-      {seen.includes('shop') && <div className="tab-pane" hidden={tab !== 'shop'}><Shop /></div>}
+      {seen.includes('rewards') && <div className="tab-pane" hidden={tab !== 'rewards'}><Rewards /></div>}
       {/* The demo panel is beside the phone on a wide screen; on a phone its controls are on the profile. */}
       {seen.includes('profile') && <div className="tab-pane" hidden={tab !== 'profile'}><Profile demo={!wide} /></div>}
     </>
@@ -143,7 +143,7 @@ function Shell({ path }: { path: string }) {
     return () => clearTimeout(t)
   }, [layer])
 
-  const phoneApp = !wide && path !== '/design' && path !== '/mentor'
+  const phoneApp = !wide && path !== '/design' && path !== '/teacher'
   useKeyboard(mobile, phoneApp)
   useThemeColor(`${tabPath}|${layer?.phase}|${home}|${inLab}`, phoneApp)
 
@@ -158,7 +158,7 @@ function Shell({ path }: { path: string }) {
   if (path === '/design') {
     return <Suspense fallback={null}><DesignPage /></Suspense>
   }
-  if (path === '/mentor') {
+  if (path === '/teacher') {
     return <Suspense fallback={null}><MentorPage /></Suspense>
   }
   // Once the lesson has fully come up, the tabs under it are hidden, not only covered: the class room stops drawing.

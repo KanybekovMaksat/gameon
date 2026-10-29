@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState } from 'react'
-import { AiBubble, AiFace, Avatar, Coins, Icon, KIDS, Progress, TopicNode } from '../components'
+import { AiBubble, AiFace, Avatar, Icon, KIDS, Progress, TopicNode, Xp } from '../components'
 import { LESSONS } from '../content'
 import type { Answer, Exercise } from '../exercises/kit'
 import { kindOf } from '../exercises/registry'
@@ -20,7 +20,7 @@ function ExerciseCard({ ex }: { ex: Exercise }) {
       {checked && (
         <div className={'feedback ' + (ok ? 'is-ok' : 'is-bad')}>
           <Icon name={ok ? 'check' : 'x'} size={18} />
-          {ok ? 'Верно! +5 кодкоинов' : 'Не совсем'}
+          {ok ? 'Верно! +10 XP' : 'Не совсем'}
         </div>
       )}
       <div className="ex-card-foot">
@@ -58,7 +58,7 @@ export default function DesignPage() {
     <>
       <div className="page">
         <header className="header">
-          <img src="/logo-gradient.png" alt="Codify" />
+          <img src="/logo-gradient.png" alt="BilimQuest" />
           <div>
             <h1>Дизайн-система приложения</h1>
             <p>Принята 27 сентября</p>
@@ -70,7 +70,7 @@ export default function DesignPage() {
 
         <section className="section">
           <h2>Цвета</h2>
-          <p className="lead">Бренд с codifylab.com. Градиент остаётся для знаков бренда, в интерфейсе его нет.</p>
+          <p className="lead">Бренд BilimQuest: градиент от бирюзового острова к синему. Он остаётся для знаков бренда, в интерфейсе его нет.</p>
           <div className="panel colors">
             <div className="brand-bar" />
               <div className="brand-caption">Градиент бренда: #00c4fa → #246fff</div>
@@ -111,7 +111,7 @@ export default function DesignPage() {
             <div className="sub">Варианты ответа: обычный, выбран, верно, ошибка</div>
             <div className="options">
               <div className="option"><span className="key">1</span>Повторить 3 раза</div>
-              <div className="option is-selected"><span className="key">2</span>Повторить, пока есть кодкоины</div>
+              <div className="option is-selected"><span className="key">2</span>Повторить, пока есть XP</div>
               <div className="option is-ok"><span className="key">3</span>Если стена, повернуть</div>
               <div className="option is-bad" style={{ animation: 'none' }}><span className="key">4</span>Идти всегда</div>
             </div>
@@ -122,8 +122,8 @@ export default function DesignPage() {
           <h2>Мелкие элементы</h2>
           <div className="grid-wide">
             <div className="panel">
-              <div className="sub" style={{ marginTop: 0 }}>Кодкоины: в шапке сессии и в магазине</div>
-              <div className="row" style={{ gap: 24 }}><Coins amount={120} /><Coins amount={1450} big /></div>
+              <div className="sub" style={{ marginTop: 0 }}>XP: в шапке сессии, на острове и в наградах</div>
+              <div className="row" style={{ gap: 24 }}><Xp amount={140} /><Xp amount={1450} big /></div>
               <div className="sub">Прогресс сессии</div>
               <div className="row" style={{ flexWrap: 'nowrap' }}><Progress value={0.6} /><span className="t-small">3 из 5</span></div>
             </div>
@@ -140,7 +140,7 @@ export default function DesignPage() {
               </div>
             </div>
             <div className="panel">
-              <div className="sub" style={{ marginTop: 0 }}>Помощник задаёт наводящий вопрос</div>
+              <div className="sub" style={{ marginTop: 0 }}>Робик задаёт наводящий вопрос</div>
               <AiBubble>Что сделает робот, если впереди стена? Попробуй пройти программу шаг за шагом.</AiBubble>
             </div>
           </div>
@@ -148,7 +148,7 @@ export default function DesignPage() {
 
         <section className="section">
           <h2>Экран сессии</h2>
-          <p className="lead">Одно задание на экране. Карточка задания меняет цвет: синяя в работе, янтарная при ошибке, зелёная при верном ответе. Ошибка янтарная, а не красная: ошибаться нормально. Слева внизу помощник, он отвечает вопросом на вопрос.</p>
+          <p className="lead">Одно задание на экране. Карточка задания меняет цвет: синяя в работе, янтарная при ошибке, зелёная при верном ответе. Ошибка янтарная, а не красная: ошибаться нормально. Слева внизу Робик, он отвечает вопросом на вопрос.</p>
           <a className="btn" href="/lesson/loops-1">Открыть урок в приложении</a>
         </section>
 
@@ -162,7 +162,7 @@ export default function DesignPage() {
 
         <section className="section">
           <h2>Комната класса</h2>
-          <p className="lead">Игровой мир снаружи сессий. Дети из набора Kenney Mini Characters, мебель из Kenney Furniture Kit, робот-помощник собран из скруглённых кубов в стиле значка помощника. Наборы бесплатные, лицензия CC0. Нажми на ребёнка или на робота. Комнату можно поворачивать пальцем.</p>
+          <p className="lead">Игровой мир снаружи сессий. Дети из набора Kenney Mini Characters, мебель из Kenney Furniture Kit, робот Робик собран из скруглённых кубов в стиле своего значка. Наборы бесплатные, лицензия CC0. Нажми на ребёнка или на робота. Комнату можно поворачивать пальцем.</p>
           <div className="world">
             <Suspense fallback={<div className="world-loading">Загружаю комнату…</div>}>
               <ClassRoom selected={picked} onSelect={setPicked} />
@@ -172,7 +172,7 @@ export default function DesignPage() {
                 <div className="world-card">
                   {kid ? <Avatar kid={kid} /> : <AiFace />}
                   <div>
-                    <b>{kid ? kid.name : 'Помощник'}</b>
+                    <b>{kid ? kid.name : 'Робик'}</b>
                     <div className="t-small">{kid ? `${kid.me ? 'Это ты' : 'Решает тему'} «${kid.topic}» · ${kid.done} из 5` : 'Отвечает вопросом на вопрос, готовых ответов не даёт'}</div>
                   </div>
                 </div>

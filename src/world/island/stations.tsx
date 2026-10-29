@@ -11,8 +11,8 @@ import { GATE_HALF, YAW, type Sim } from './sim'
 import { clock as time, flare, reduced } from './uniforms'
 import { BLUE, codeTexture, glyphTexture, signTexture } from './textures'
 
-// Topic stations along the road: a sign, a landmark that shows the idea of the topic, a pad per lesson,
-// and the gate before a topic that waits for the office lesson.
+// Subject stations along the road: a sign, a landmark that shows the idea of the subject, a pad per lesson,
+// and the gate before a subject that waits for the lesson with the teacher.
 
 export const WHITE = '#fbfcfe'
 export const NAVY = '#26304f'
@@ -172,7 +172,7 @@ function Plinth({ current, children, x, z }: { current: boolean; children: React
   )
 }
 
-// Algorithms: steps, and a small cube that climbs them one by one.
+// History: the steps of the ages, and a small cube that climbs them one by one.
 function Steps() {
   const cube = useRef<Mesh>(null)
   useFrame(() => {
@@ -219,7 +219,7 @@ function Steps() {
   )
 }
 
-// Loops: an upright ring with a ball that goes round and round.
+// Informatics: a loop, an upright ring with a ball that goes round and round.
 function Loop() {
   const balls = useRef<(Mesh | null)[]>([])
   useFrame(() => {
@@ -258,7 +258,7 @@ const arrowShape = (() => {
   return s
 })()
 
-// Conditions: a signpost with two ways; the way that is chosen lights up in turn.
+// Geography: a signpost with two ways; the way that is chosen lights up in turn.
 function Fork() {
   const a = useRef<MeshStandardMaterial>(null)
   const b = useRef<MeshStandardMaterial>(null)
@@ -289,10 +289,10 @@ function Fork() {
   )
 }
 
-// Variables: boxes with names on them, and a value that jumps in and out of one.
+// Russian: boxes for the parts of speech, and a letter that jumps in and out of one.
 function Boxes() {
-  const labels = useMemo(() => [codeTexture('x'), codeTexture('score'), codeTexture('name')], [])
-  const value = useMemo(() => codeTexture('5', true), [])
+  const labels = useMemo(() => [codeTexture('сущ.'), codeTexture('прил.'), codeTexture('глаг.')], [])
+  const value = useMemo(() => codeTexture('Я', true), [])
   useEffect(() => () => { labels.forEach((t) => t.dispose()); value.dispose() }, [labels, value])
   const cube = useRef<Group>(null)
   useFrame(() => {
@@ -329,7 +329,7 @@ function Boxes() {
   )
 }
 
-// Logic: two switches and a lamp that lights only when both are on.
+// Physics: a circuit, two switches and a lamp that lights only when both are on.
 function Logic() {
   const levers = useRef<(Group | null)[]>([])
   const bulb = useRef<MeshStandardMaterial>(null)
@@ -378,37 +378,38 @@ function Logic() {
   )
 }
 
-// Binary: four pillars count in bits; a lit cap is a one.
-function Bits() {
-  const caps = useRef<(MeshStandardMaterial | null)[]>([])
+// Biology: a young tree that breathes, its crown growing and settling, with a leaf circling it.
+function Tree() {
+  const crown = useRef<Group>(null)
+  const leaf = useRef<Mesh>(null)
   useFrame(() => {
-    const n = Math.floor(time.value / 0.9) % 16
-    caps.current.forEach((m, i) => {
-      if (!m) return
-      const on = (n >> (3 - i)) & 1
-      m.emissiveIntensity += ((on ? 0.7 : 0) - m.emissiveIntensity) * 0.25
-      m.color.set(on ? BLUE : '#dfe2e8')
-    })
+    const t = time.value
+    if (crown.current) crown.current.scale.setScalar(1 + Math.sin(t * 1.6) * 0.05)
+    if (leaf.current) leaf.current.position.set(Math.cos(t * 1.2) * 1.05, 1.2 + Math.sin(t * 2.4) * 0.2, Math.sin(t * 1.2) * 1.05)
   })
   return (
     <>
-      {[0, 1, 2, 3].map((i) => (
-        <group key={i} position={[-0.9 + i * 0.6, 0, 0]}>
-          <mesh position={[0, 0.55, 0]} castShadow receiveShadow>
-            <boxGeometry args={[0.42, 1.1, 0.42]} />
-            <meshStandardMaterial color={WHITE} />
+      <mesh position={[0, 0.6, 0]} castShadow>
+        <cylinderGeometry args={[0.1, 0.15, 1.2, 12]} />
+        <meshStandardMaterial color={NAVY} />
+      </mesh>
+      <group userData={DYN} ref={crown} position={[0, 1.55, 0]}>
+        {([[0, 0, 0, 0.62], [-0.4, -0.15, 0.1, 0.4], [0.42, -0.1, -0.05, 0.42], [0.05, 0.38, -0.1, 0.38]] as const).map(([x, y, z, r], i) => (
+          <mesh key={i} position={[x, y, z]} castShadow>
+            <sphereGeometry args={[r, 22, 16]} />
+            <meshStandardMaterial color={i ? WHITE : '#e9f7ef'} />
           </mesh>
-          <mesh userData={DYN} position={[0, 1.27, 0]} castShadow>
-            <boxGeometry args={[0.46, 0.34, 0.46]} />
-            <meshStandardMaterial ref={(m) => { caps.current[i] = m }} color="#dfe2e8" emissive={BLUE} emissiveIntensity={0} />
-          </mesh>
-        </group>
-      ))}
+        ))}
+      </group>
+      <mesh userData={DYN} ref={leaf} castShadow>
+        <sphereGeometry args={[0.13, 14, 10]} />
+        <meshStandardMaterial color={BLUE} />
+      </mesh>
     </>
   )
 }
 
-// Sorting: bars that sort themselves by bubble sort, then shuffle and start again.
+// Mathematics: a bar chart that puts its bars in order, then shuffles and starts again.
 function Sort() {
   const bars = useRef<(Group | null)[]>([])
   const mats = useRef<(MeshStandardMaterial | null)[]>([])
@@ -454,17 +455,17 @@ function Sort() {
 }
 
 const LANDMARKS: Record<string, () => ReactNode> = {
-  algorithms: () => <Steps />,
-  loops: () => <Loop />,
-  conditions: () => <Fork />,
-  variables: () => <Boxes />,
-  logic: () => <Logic />,
-  binary: () => <Bits />,
-  sorting: () => <Sort />,
+  math: () => <Sort />,
+  informatics: () => <Loop />,
+  russian: () => <Boxes />,
+  history: () => <Steps />,
+  geography: () => <Fork />,
+  biology: () => <Tree />,
+  physics: () => <Logic />,
 }
 
 export function Landmark({ station, current }: { station: Station; current: boolean }) {
-  const make = LANDMARKS[station.topicId] ?? LANDMARKS.algorithms
+  const make = LANDMARKS[station.topicId] ?? LANDMARKS.math
   return <Plinth x={station.landmark.x} z={station.landmark.z} current={current}>{make()}</Plinth>
 }
 

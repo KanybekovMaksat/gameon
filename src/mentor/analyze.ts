@@ -194,7 +194,7 @@ export function evidence(it: StuckItem) {
   const parts = [`${it.erred} из ${it.attempted} ${plural(it.erred, 'ошибся', 'ошиблись', 'ошиблись')} хотя бы раз`]
   const common = it.common && commonPhrase(it.common.text)
   if (common) parts.push(common)
-  if (it.helper) parts.push(`${count(it.helper, 'вопрос', 'вопроса', 'вопросов')} помощнику`)
+  if (it.helper) parts.push(`${count(it.helper, 'вопрос', 'вопроса', 'вопросов')} Робику`)
   return cap(parts.join(', ')) + '.'
 }
 
@@ -217,7 +217,7 @@ function suggestions(rows: Row[], stuck: StuckItem[], now: number): Suggestion[]
     const info = EXERCISES.get(c.stuckEx!)!
     // The counts of the task itself, not of the whole lesson.
     const k = stuck.find((it) => it.info.ex.id === c.stuckEx)?.kids.find((x) => x.idx === s.idx) ?? c
-    const help = k.helper ? ` и ${count(k.helper, 'вопрос', 'вопроса', 'вопросов')} помощнику` : ''
+    const help = k.helper ? ` и ${count(k.helper, 'вопрос', 'вопроса', 'вопросов')} Робику` : ''
     out.push({
       lead: `Подойдите к ${dative(s.name)} в начале урока.`,
       why: `${s.name} ${s.female ? 'застряла' : 'застрял'} на задании «${label(info)}» в уроке «${info.lesson.title}»: ${count(k.wrong, 'неверная попытка', 'неверные попытки', 'неверных попыток')}${help}. Урок не закончен.`,

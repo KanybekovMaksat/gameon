@@ -79,7 +79,7 @@ function LevelView({ level, index, onNext }: { level: DialLevel; index: number; 
         setHint(level.hint(run.outcome, tries + 1))
         return
       }
-      if (run.frames[frame + 1].got.length > run.frames[frame].got.length) sfx('coin')
+      if (run.frames[frame + 1].got.length > run.frames[frame].got.length) sfx('xp')
       setFrame(frame + 1)
     }, frame === 0 ? FIRST_MS : STEP_MS)
     return () => clearTimeout(t)

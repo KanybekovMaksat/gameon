@@ -65,7 +65,7 @@ function StuckRow({ it, rank, now, hot, onOpen }: { it: StuckItem; rank: number;
           })}
         </div>
         {quotes.length > 0 && (
-          <ul className="mt-quotes" aria-label="Вопросы помощнику">
+          <ul className="mt-quotes" aria-label="Вопросы Робику">
             {quotes.map((q) => (
               <li key={q.at + q.text}>
                 <Face idx={q.kid} size={24} />
@@ -97,7 +97,7 @@ export function StuckList({ board, now, fresh, onOpen }: { board: Board; now: nu
       <div className="mt-card-head">
         <div>
           <h2 id="mt-stuck-h">Где застряли</h2>
-          <p>Задания недели с ошибками и вопросами помощнику, сначала самые трудные</p>
+          <p>Задания недели с ошибками и вопросами Робику, сначала самые трудные</p>
         </div>
       </div>
       {board.stuck.length === 0
@@ -129,7 +129,7 @@ export function Suggestions({ board, now, onOpen }: { board: Board; now: number;
     <section className="mt-card mt-plan" aria-labelledby="mt-plan-h">
       <div className="mt-card-head">
         <div>
-          <h2 id="mt-plan-h">К уроку в офисе</h2>
+          <h2 id="mt-plan-h">К уроку в классе</h2>
           <p>{officeWhen(now)} · тема «{OFFICE_TOPIC.title}»</p>
         </div>
       </div>
@@ -163,7 +163,7 @@ export function Feed({ board, now }: { board: Board; now: number }) {
       <div className="mt-card-head">
         <div>
           <h2 id="mt-feed-h">Последние действия</h2>
-          <p>Вся группа, новые сверху</p>
+          <p>Весь класс, новые сверху</p>
         </div>
       </div>
       <ul className="mt-feed" aria-live="polite">

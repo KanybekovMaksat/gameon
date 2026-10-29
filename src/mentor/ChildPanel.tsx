@@ -92,7 +92,7 @@ export function ChildPanel({ board, idx, now, fresh, onClose }: { board: Board; 
             <div><b>{row.solved}<small> из {ASSIGNED_EXERCISES}</small></b><span>заданий недели</span></div>
             <div><b>{row.firstTry}</b><span>с первого раза</span></div>
             <div><b>{row.wrong}</b><span>{count(row.wrong, 'ошибка', 'ошибки', 'ошибок').replace(/^\d+ /, '')}</span></div>
-            <div><b>{row.helper}</b><span>{count(row.helper, 'вопрос', 'вопроса', 'вопросов').replace(/^\d+ /, '')} помощнику</span></div>
+            <div><b>{row.helper}</b><span>{count(row.helper, 'вопрос', 'вопроса', 'вопросов').replace(/^\d+ /, '')} Робику</span></div>
           </div>
 
           <h3 className="mt-panel-h3">Уроки недели</h3>

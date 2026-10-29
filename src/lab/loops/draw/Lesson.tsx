@@ -208,7 +208,7 @@ function LevelView({ level, index, total, onNext }: { level: DrawLevel; index: n
     if (phase !== 'ok' || !fold) return
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches
     const t1 = setTimeout(() => { setReveal(1); if (!still) sfx('tick') }, still ? 0 : REVEAL_AT)
-    const t2 = setTimeout(() => { setReveal(2); sfx('coin') }, still ? 0 : REVEAL_AT + fold.n * COPY_MS + FOLD_AFTER)
+    const t2 = setTimeout(() => { setReveal(2); sfx('xp') }, still ? 0 : REVEAL_AT + fold.n * COPY_MS + FOLD_AFTER)
     return () => { clearTimeout(t1); clearTimeout(t2) }
   }, [phase, fold])
 
@@ -284,7 +284,7 @@ function LevelView({ level, index, total, onNext }: { level: DrawLevel; index: n
     if (p !== pathRef.current) setP(p)
     if (added) {
       s.wall = null
-      sfx(same(p[p.length - 1], goal) ? 'coin' : 'tick')
+      sfx(same(p[p.length - 1], goal) ? 'xp' : 'tick')
     } else if (wall) {
       const k = `${wall.x},${wall.y}`
       if (s.wall !== k) {

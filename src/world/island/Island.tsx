@@ -7,7 +7,7 @@ import { useApp, useLessonStates, type LessonState } from '../../app/store'
 import { KIDS } from '../../components'
 import { TOPICS } from '../../content'
 import { kidsAt } from '../../home/kids'
-import { castOf, modelOf } from '../../shop/catalog'
+import { castOf, modelOf } from '../../rewards/catalog'
 import { PauseWhenHidden } from '../pause'
 import { Mate, Player } from './actors'
 import { island, playScene, type Command, type Scene } from './bus'
@@ -344,7 +344,7 @@ function Controller({ sim, states, props }: { sim: Sim; states: Record<string, L
     const places: [PlaceId, Rect, number][] = [
       ['school', { x: SCHOOL.x, z: SCHOOL.z, hw: SCHOOL.w / 2, hd: SCHOOL.d / 2, rot: SCHOOL.rot }, 4.3],
       ['office', { x: OFFICE.x, z: OFFICE.z, hw: OFFICE.w / 2, hd: OFFICE.d / 2, rot: OFFICE.rot }, 5.2],
-      ['shop', { x: KIOSK.x, z: KIOSK.z, hw: KIOSK.w / 2, hd: KIOSK.d / 2 + 0.4, rot: KIOSK.rot }, 3.4],
+      ['rewards', { x: KIOSK.x, z: KIOSK.z, hw: KIOSK.w / 2, hd: KIOSK.d / 2 + 0.4, rot: KIOSK.rot }, 3.4],
       ['quest', { x: QUEST.x, z: QUEST.z, hw: 1.6, hd: 0.3, rot: QUEST.rot }, 2.6],
     ]
     for (const [id, r, h] of places) consider(rayBox(o, d, r, h), () => { showKid(null); walkToPlace(id) })
@@ -505,7 +505,7 @@ function Controller({ sim, states, props }: { sim: Sim; states: Record<string, L
     if (c.enterWalk && !sim.path.length && c.entering < 0) { c.enterWalk = false; cb.current.onEnterEnd() }
     sim.applyRigs()
 
-    // «К уроку» state for the HUD.
+    // «К миссии» state for the HUD.
     if (sim.auto !== c.autoWas) { c.autoWas = sim.auto; cb.current.onAuto(sim.auto) }
 
     // What the child is near shows its card; not while walking to a lesson, and a moment after arriving.

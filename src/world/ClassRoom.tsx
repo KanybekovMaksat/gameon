@@ -5,7 +5,7 @@ import { Box3, Group, Vector3, type Mesh, type MeshBasicMaterial, type MeshStand
 import { clone as cloneSkinned } from 'three/examples/jsm/utils/SkeletonUtils.js'
 import { useApp } from '../app/store'
 import { KIDS } from '../components'
-import { castOf, modelOf } from '../shop/catalog'
+import { castOf, modelOf } from '../rewards/catalog'
 import { PauseWhenHidden } from './pause'
 import { HelperBot } from './HelperBot'
 import { RoomLoading } from './RoomLoading'

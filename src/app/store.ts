@@ -1,21 +1,22 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { LESSONS, TOPICS } from '../content'
-import { DEFAULT_CHARACTER, ITEMS, type Order } from '../shop/catalog'
+import { achievementOf } from '../rewards/achievements'
+import { DEFAULT_CHARACTER, ITEMS, levelOf } from '../rewards/catalog'
 
 export type HomeVersion = 'world' | 'map' | 'room'
 // explain: the explanation comes first. try: the child first tries the task alone, then sees the explanation.
 export type SessionVersion = 'explain' | 'try'
 
-// An event the mentor screen reads. The app also posts each one to the local server for a live mentor screen.
+// An event the teacher's room reads. The app also posts each one to the local server for a live mentor screen.
 export type LearnEvent =
   | { type: 'lesson-start'; lessonId: string; at: number }
   | { type: 'attempt'; lessonId: string; exId: string; correct: boolean; answer?: string; at: number }
   | { type: 'helper'; lessonId: string; exId: string; question: string; at: number }
-  | { type: 'lesson-done'; lessonId: string; firstTry: number; total: number; coins: number; at: number }
+  | { type: 'lesson-done'; lessonId: string; firstTry: number; total: number; xp: number; at: number }
 
 type Data = {
-  coins: number
+  xp: number
   streak: number
   done: Record<string, true>
   officeDone: Record<string, true>
@@ -25,43 +26,43 @@ type Data = {
   sound: boolean
   // The streak grows by one on the first finished lesson of a day.
   lastDay: string
-  // The weekly class quest: exercises the whole class did this week, toward a shared goal.
+  // The weekly class quest: missions the whole class did this week, toward a shared goal.
   quest: number
   events: LearnEvent[]
-  // Shop: bought desk items and characters, desk items at the child's desk, the chosen character, real prize orders.
-  owned: Record<string, true>
+  // Rewards: desk items from achievements standing at the child's desk, the chosen character.
   desk: string[]
   character: string
-  orders: Order[]
   // Grows with each «Сбросить прогресс»: the island starts fresh when it changes.
   resets: number
 }
 
 type Actions = {
-  addCoins: (n: number) => void
+  addXp: (n: number) => void
   completeLesson: (lessonId: string) => void
   // One right answer is one step of the class quest.
   questStep: () => void
   log: (e: LearnEvent) => void
   set: (patch: Partial<Pick<Data, 'home' | 'session' | 'unlockAll' | 'sound'>>) => void
   toggleOffice: (topicId: string) => void
-  // Spends codecoins; false when the balance is short. A prize becomes an order.
-  buy: (itemId: string) => boolean
   putOnDesk: (itemId: string) => void
   takeFromDesk: (itemId: string) => void
   chooseCharacter: (id: string) => void
   reset: () => void
 }
 
-const SHOP_SEED: Pick<Data, 'owned' | 'desk' | 'character' | 'orders'> = { owned: {}, desk: [], character: DEFAULT_CHARACTER, orders: [] }
+// A desk item is the child's once its achievement is earned; a character once the child reaches its level.
+export function ownsItem(s: Pick<Data, 'xp' | 'streak' | 'done' | 'events'>, id: string) {
+  const item = ITEMS[id]
+  if (!item) return false
+  if (item.kind === 'character') return levelOf(s.xp) >= (item.level ?? 1)
+  return !!achievementOf(id)?.test(s)
+}
 
-export const ownsItem = (s: Pick<Data, 'owned'>, id: string) => ITEMS[id]?.price === 0 || !!s.owned[id]
-
-// The demo starts in the middle of a course: the first topic is done, loops are next.
+// The demo starts in the middle of the island: mathematics is done, informatics is next.
 const SEED: Data = {
-  coins: 120,
+  xp: 140,
   streak: 4,
-  done: { 'algorithms-1': true, 'algorithms-2': true },
+  done: { 'math-1': true, 'math-2': true },
   officeDone: {},
   unlockAll: false,
   home: 'world',
@@ -71,7 +72,8 @@ const SEED: Data = {
   quest: 142,
   events: [],
   resets: 0,
-  ...SHOP_SEED,
+  desk: [],
+  character: DEFAULT_CHARACTER,
 }
 
 export const QUEST_GOAL = 200
@@ -79,9 +81,9 @@ const today = () => new Date().toDateString()
 
 export const useApp = create<Data & Actions>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       ...SEED,
-      addCoins: (n) => set((s) => ({ coins: s.coins + n })),
+      addXp: (n) => set((s) => ({ xp: s.xp + n })),
       questStep: () => set((s) => ({ quest: s.quest + 1 })),
       completeLesson: (id) => set((s) => ({
         done: { ...s.done, [id]: true },
@@ -99,28 +101,14 @@ export const useApp = create<Data & Actions>()(
         else next[id] = true
         return { officeDone: next }
       }),
-      buy: (id) => {
-        const item = ITEMS[id]
-        const s = get()
-        if (!item || s.coins < item.price || (item.kind !== 'prize' && ownsItem(s, id))) return false
-        if (item.kind === 'prize') set({ coins: s.coins - item.price, orders: [...s.orders, { no: 1041 + s.orders.length, prize: id, at: Date.now() }] })
-        else set({ coins: s.coins - item.price, owned: { ...s.owned, [id]: true } })
-        return true
-      },
-      putOnDesk: (id) => set((s) => (s.owned[id] && !s.desk.includes(id) ? { desk: [...s.desk, id] } : s)),
+      putOnDesk: (id) => set((s) => (ITEMS[id]?.kind === 'desk' && ownsItem(s, id) && !s.desk.includes(id) ? { desk: [...s.desk, id] } : s)),
       takeFromDesk: (id) => set((s) => ({ desk: s.desk.filter((d) => d !== id) })),
       chooseCharacter: (id) => set((s) => (ITEMS[id]?.kind === 'character' && ownsItem(s, id) ? { character: id } : s)),
       reset: () => set((s) => ({ ...SEED, home: s.home, session: s.session, sound: s.sound, resets: s.resets + 1 })),
     }),
     {
-      name: 'codify-proto',
-      version: 3,
-      // Version 2 adds the shop; saved progress keeps its fields. Version 3 makes the island the home once.
-      migrate: (saved, version) => {
-        const s = { ...SHOP_SEED, ...(saved as Partial<Data>) }
-        if (version < 3) s.home = 'world'
-        return s as Data & Actions
-      },
+      name: 'bilimquest',
+      version: 1,
     },
   ),
 )

@@ -42,10 +42,11 @@ function systemPrompt(r: HelperRequest) {
         'Если ребёнок просит подсказать ещё, не повторяй свой прошлый вопрос: подойди на шаг ближе к месту ошибки, возьми следующую подсказку методиста или предложи проверить один конкретный шаг.',
       ]
   return [
-    'Ты помощник в приложении Codify. Дети 11–14 лет учатся думать как программисты.',
+    'Ты Робик, помощник в BilimQuest, 3D-острове знаний. Ученики 5–9 классов кыргызских школ проходят там миссии по математике, информатике, русскому языку, истории, географии, биологии и физике.',
+    'Объясняй трудную тему простыми словами и учи рассуждать, а не давай готовый ответ.',
     'Говори по-русски, на «ты», просто и тепло, без сюсюканья. Без markdown, без списков, без эмодзи, без тире. Код пиши в `обратных кавычках`.',
     ...rules,
-    'Говори только про это задание и программирование. Если ребёнок уходит в сторону, мягко верни его к заданию.',
+    'Говори только про это задание и его предмет. Если ребёнок уходит в сторону, мягко верни его к заданию.',
     '',
     `Задание:\n${r.task}`,
     r.answer ? `Текущий ответ ребёнка: ${r.answer}` : 'Ребёнок ещё не ответил.',
@@ -73,7 +74,7 @@ function upstreamCall(key: string, body: object, res: ServerResponse) {
   res.on('close', () => ctrl.abort())
   return fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
-    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', 'X-Title': 'Codify prototype' },
+    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', 'X-Title': 'BilimQuest prototype' },
     body: JSON.stringify({ models: MODELS, reasoning: { enabled: false }, ...body }),
     signal: ctrl.signal,
   }).catch(() => null).finally(() => clearTimeout(timer))
@@ -160,7 +161,7 @@ function parseStudent(v: unknown): StudentRequest | null {
 
 function studentPrompt(r: StudentRequest, turns: number) {
   return [
-    'Ты Робик, робот-ученик. Ребёнок 11–14 лет учит тебя программированию. Ты сам ничего не знаешь про тему, кроме того, что тебе объяснил ребёнок.',
+    'Ты Робик, робот-ученик. Ученик 5–9 класса учит тебя информатике. Ты сам ничего не знаешь про тему, кроме того, что тебе объяснил ребёнок.',
     'Главное правило: ты не добавляешь к словам ребёнка ничего от себя. Нельзя уточнять, дополнять или пересказывать его объяснение точнее, чем он сказал. Нельзя подсказывать, как правильно. Если он сказал расплывчато, ты понял ровно так же расплывчато.',
     `Тема: ${r.concept}`,
     `Верное понимание (ты его не знаешь и никогда не произносишь, это только для оценки): ${r.understanding}`,
@@ -266,7 +267,7 @@ function middleware(key: string | undefined): Connect.NextHandleFunction {
 
 export function api(key: string | undefined): Plugin {
   return {
-    name: 'codify-api',
+    name: 'bilimquest-api',
     configureServer: (s) => { s.middlewares.use(middleware(key)) },
     configurePreviewServer: (s) => { s.middlewares.use(middleware(key)) },
   }

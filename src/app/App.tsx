@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo, useRef, useState, type MouseEvent, type ReactNode } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useRef, useState, type MouseEvent } from 'react'
 import { findLesson } from '../content'
 import { HomeMap } from '../home/HomeMap'
 import { HomeRoom } from '../home/HomeRoom'
@@ -8,8 +8,7 @@ import { Session } from '../session/Session'
 import { CastContext } from '../rewards/cast'
 import { castOf } from '../rewards/catalog'
 import { Rewards } from '../rewards/Rewards'
-import { LabPanel, LabScreen } from '../lab/LabPage'
-import { DemoPanel } from './DemoPanel'
+import { LabScreen } from '../lab/LabPage'
 import { useKeyboard } from './keyboard'
 import { match, navigate, useHref, usePath } from './router'
 import { useApp } from './store'
@@ -19,19 +18,6 @@ import { Tasks } from '../tasks/Tasks'
 const DesignPage = lazy(() => import('../design/DesignPage'))
 const MentorPage = lazy(() => import('../mentor/MentorPage'))
 
-// Wide screens show the app in a phone frame next to the demo panel. Phones show the app full screen.
-function useWide() {
-  const q = '(min-width: 900px)'
-  const [wide, setWide] = useState(() => matchMedia(q).matches)
-  useEffect(() => {
-    const m = matchMedia(q)
-    const on = () => setWide(m.matches)
-    m.addEventListener('change', on)
-    return () => m.removeEventListener('change', on)
-  }, [])
-  return wide
-}
-
 function Home() {
   const home = useApp((s) => s.home)
   return home === 'room' ? <HomeRoom /> : home === 'map' ? <HomeMap /> : <HomeWorld />
@@ -39,7 +25,7 @@ function Home() {
 
 // Home, tasks, rewards and profile share one screen. Each tab stays mounted once opened, so it keeps its place and the
 // class room is not rebuilt; tabs switch at once, as on a phone.
-function Tabs({ path, wide }: { path: string; wide: boolean }) {
+function Tabs({ path }: { path: string }) {
   const tab = path === '/tasks' ? 'tasks' : path === '/rewards' ? 'rewards' : path === '/profile' ? 'profile' : 'home'
   const [seen, setSeen] = useState(() => [tab])
   if (!seen.includes(tab)) setSeen([...seen, tab])
@@ -48,8 +34,8 @@ function Tabs({ path, wide }: { path: string; wide: boolean }) {
       <div className="tab-pane" hidden={tab !== 'home'}><Home /></div>
       {seen.includes('tasks') && <div className="tab-pane" hidden={tab !== 'tasks'}><Tasks /></div>}
       {seen.includes('rewards') && <div className="tab-pane" hidden={tab !== 'rewards'}><Rewards /></div>}
-      {/* The demo panel is beside the phone on a wide screen; on a phone its controls are on the profile. */}
-      {seen.includes('profile') && <div className="tab-pane" hidden={tab !== 'profile'}><Profile demo={!wide} /></div>}
+      {/* The demo controls are on the profile. */}
+      {seen.includes('profile') && <div className="tab-pane" hidden={tab !== 'profile'}><Profile demo /></div>}
     </>
   )
 }
@@ -65,25 +51,6 @@ function LessonScreen({ href, active }: { href: string; active: boolean }) {
   const found = findLesson(match('/lesson/:id', href.split('?')[0])?.id ?? '')
   if (!found) return null
   return <Session topic={found.topic} lesson={found.lesson} active={active} />
-}
-
-function Frame({ children }: { children: ReactNode }) {
-  const [time, setTime] = useState(() => new Date())
-  useEffect(() => {
-    const id = setInterval(() => setTime(new Date()), 20_000)
-    return () => clearInterval(id)
-  }, [])
-  return (
-    <div className="device">
-      <div className="device-status" aria-hidden>
-        <b>{time.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}</b>
-        <span className="device-island" />
-        <span className="device-icons"><i /><i /><i /></span>
-      </div>
-      <div className="device-screen">{children}</div>
-      <span className="device-home" aria-hidden />
-    </div>
-  )
 }
 
 // The lesson comes up over the tabs like a full-screen modal and goes down the same way.
@@ -110,7 +77,6 @@ function onContextMenu(e: MouseEvent) {
 }
 
 function Shell({ path }: { path: string }) {
-  const wide = useWide()
   const href = useHref()
   const home = useApp((s) => s.home)
   const mobile = useRef<HTMLDivElement>(null)
@@ -143,7 +109,7 @@ function Shell({ path }: { path: string }) {
     return () => clearTimeout(t)
   }, [layer])
 
-  const phoneApp = !wide && path !== '/design' && path !== '/teacher'
+  const phoneApp = path !== '/design' && path !== '/teacher'
   useKeyboard(mobile, phoneApp)
   useThemeColor(`${tabPath}|${layer?.phase}|${home}|${inLab}`, phoneApp)
 
@@ -168,7 +134,7 @@ function Shell({ path }: { path: string }) {
       {tabsOn && (
         <div className="tabs-layer" hidden={covered} inert={(!!layer && layer.phase !== 'leave') || inLab}>
           <div className="screen has-tabs">
-            <Tabs path={tabPath} wide={wide} />
+            <Tabs path={tabPath} />
             {inLesson && !lessonHref && <Redirect to="/" />}
           </div>
           <TabBar path={tabPath} />
@@ -180,19 +146,13 @@ function Shell({ path }: { path: string }) {
           <LessonScreen key={layer.href} href={layer.href} active={layer.phase !== 'leave'} />
         </div>
       )}
-      {/* The lab of task forms: full screen in the phone, its notes beside it on a wide screen. */}
-      {inLab && <div className="lesson-layer is-on"><div className="screen"><LabScreen path={path} wide={wide} /></div></div>}
+      {/* The lab of task forms, full screen. */}
+      {inLab && <div className="lesson-layer is-on"><div className="screen"><LabScreen path={path} wide={false} /></div></div>}
     </div>
   )
 
-  if (!wide) return <div className="app-mobile" ref={mobile} onContextMenu={onContextMenu}>{screen}</div>
-
-  return (
-    <div className="stage">
-      {inLab ? <LabPanel path={path} /> : <DemoPanel />}
-      <Frame>{screen}</Frame>
-    </div>
-  )
+  // The game opens at once: full screen on a phone, a phone-wide column in the middle of a wide screen.
+  return <div className="app-host"><div className="app-mobile" ref={mobile} onContextMenu={onContextMenu}>{screen}</div></div>
 }
 
 export default function App() {

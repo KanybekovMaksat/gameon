@@ -1,21 +1,26 @@
 /* App screens: the shell, home, session, helper, finish. Tokens come from tokens.css; shared controls from app.css. */
 
 /* Shell. Screens run under the status bar and the home indicator; each keeps the insets as inner padding
-   (--safe-t, --safe-b), so bars, sheets and dims reach the edges. The phone frame draws its status bar over
-   the screen the same way. */
+   (--safe-t, --safe-b), so bars, sheets and dims reach the edges. */
 .app-mobile { --safe-t: env(safe-area-inset-top, 0px); --safe-b: env(safe-area-inset-bottom, 0px); height: 100dvh; display: flex; flex-direction: column; background: var(--bg); }
 /* The on-screen keyboard is open (keyboard.ts): the app takes the visible part above it. */
 .app-mobile.is-kb { --safe-b: 0px; height: var(--vvh); transform: translateY(var(--vvtop)); }
 .app-mobile .screen { flex: 1; min-height: 0; }
+/* A wide screen keeps the app phone-wide in the middle, with calm fields on both sides. */
+.app-host { min-height: 100dvh; background: var(--bg); }
+@media (min-width: 600px) {
+  .app-host { display: flex; justify-content: center; background: radial-gradient(1200px 600px at 70% 20%, #eef4ff 0%, transparent 60%), var(--surface); }
+  .app-mobile { width: 100%; max-width: 480px; position: relative; box-shadow: 0 0 0 1px var(--border), 0 30px 80px -30px #0a102840; }
+}
 .screen { position: relative; height: 100%; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); }
 .tab-pane > *, .lesson-layer > * { padding-top: var(--safe-t, 0px); }
 
 /* A phone app, not a page: no text selection, callouts, image drags, zoom or rubber-banding of the whole app.
    Fields, the helper's messages and the parent task stay selectable. */
 html:has(.app-mobile), html:has(.app-mobile) body { overscroll-behavior: none; }
-.app-mobile, .device-screen { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
-.app-mobile :is(input, textarea, .selectable), .device-screen :is(input, textarea, .selectable) { -webkit-user-select: text; user-select: text; -webkit-touch-callout: default; }
-.app-mobile img, .device-screen img { -webkit-user-drag: none; }
+.app-mobile { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.app-mobile :is(input, textarea, .selectable) { -webkit-user-select: text; user-select: text; -webkit-touch-callout: default; }
+.app-mobile img { -webkit-user-drag: none; }
 .app-mobile, .app-mobile * { touch-action: pan-x pan-y; }
 .home-scroll, .shop-scroll, .prof-scroll, .session-body, .finish-body, .chat-log, .teach-log { overscroll-behavior: contain; }
 
@@ -30,28 +35,6 @@ html:has(.app-mobile), html:has(.app-mobile) body { overscroll-behavior: none; }
 .lesson-dim { position: absolute; inset: 0; z-index: 39; background: #0a102833; pointer-events: none; animation: fade 0.34s both; }
 .lesson-dim.is-leave { animation: fade-out 0.34s both; }
 @keyframes fade-out { to { opacity: 0; } }
-
-.stage {
-  min-height: 100vh; display: flex; align-items: center; justify-content: center; gap: 56px; padding: 24px;
-  background: radial-gradient(1200px 600px at 70% 20%, #eef4ff 0%, transparent 60%), var(--surface);
-}
-.device {
-  --dh: min(844px, calc(100vh - 48px));
-  --safe-t: 50px; --safe-b: 22px;
-  position: relative; height: var(--dh); aspect-ratio: 390 / 844; flex: none;
-  border-radius: 54px; background: var(--bg); padding: 0;
-  box-shadow: 0 0 0 10px #0a1028, 0 0 0 11px #2a3150, 0 40px 90px -20px #0a102866;
-  display: flex; flex-direction: column; overflow: hidden;
-}
-.device-status { height: 50px; display: flex; align-items: center; justify-content: space-between; padding: 6px 30px 0 34px; font-size: 15px; position: absolute; top: 0; left: 0; right: 0; z-index: 50; pointer-events: none; }
-.device-island { position: absolute; left: 50%; top: 11px; width: 120px; height: 34px; border-radius: 20px; background: #0a1028; transform: translateX(-50%); }
-.device-icons { display: flex; gap: 5px; align-items: center; }
-.device-icons i { display: block; width: 17px; height: 11px; border-radius: 3px; background: var(--ink); }
-.device-icons i:nth-child(1) { width: 16px; clip-path: polygon(0 100%, 25% 100%, 25% 70%, 50% 70%, 50% 40%, 75% 40%, 75% 0, 100% 0, 100% 100%); border-radius: 1px; }
-.device-icons i:nth-child(2) { width: 15px; border-radius: 8px 8px 2px 2px; clip-path: polygon(50% 100%, 0 20%, 100% 20%); }
-.device-icons i:nth-child(3) { width: 25px; border-radius: 4px; box-shadow: inset 0 0 0 1.5px var(--ink); background: linear-gradient(90deg, var(--ink) 70%, transparent 70%); background-clip: content-box; padding: 2.5px; }
-.device-screen { flex: 1; min-height: 0; position: relative; }
-.device-home { position: absolute; left: 50%; bottom: 8px; width: 134px; height: 5px; border-radius: 3px; background: var(--ink); transform: translateX(-50%); z-index: 50; opacity: 0.9; pointer-events: none; }
 
 /* Demo panel */
 .demo { width: 300px; flex: none; display: flex; flex-direction: column; gap: 22px; }
@@ -270,7 +253,6 @@ html:has(.app-mobile), html:has(.app-mobile) body { overscroll-behavior: none; }
 
 /* The panel has the phone's height, so switching its tabs never moves the phone or the panel. */
 .demo { height: var(--dh, min(844px, calc(100vh - 48px))); max-height: none; }
-.stage { --dh: min(844px, calc(100vh - 48px)); }
 .demo .qr { margin-top: auto; flex: none; }
 .demo-pane { flex: 0 1 auto; min-height: 0; overflow-y: auto; scrollbar-width: none; display: flex; flex-direction: column; gap: 22px; margin: -2px; padding: 2px; }
 .demo-links button.is-armed { color: var(--bad); }
